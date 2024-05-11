@@ -1,0 +1,31 @@
+{
+  "name": "redsquirrel-website",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "dependencies": {
+    "@mdi/font": "^7.4.47",
+    "@nuxt/eslint": "^0.3.12",
+    "@nuxtjs/i18n": "^8.3.1",
+    "@tresjs/cientos": "^3.9.0",
+    "@tresjs/nuxt": "^2.1.2",
+    "@tresjs/post-processing": "^0.7.1",
+    "nuxt": "^3.11.2",
+    "three": "^0.164.1",
+    "vue": "^3.4.27",
+    "vue-router": "^4.3.2"
+  },
+  "devDependencies": {
+    "@hypernym/nuxt-gsap": "^2.4.2",
+    "vite-plugin-vuetify": "^2.0.3",
+    "vuetify": "^3.6.5"
+  }
+}
