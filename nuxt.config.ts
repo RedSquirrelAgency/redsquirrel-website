@@ -2,6 +2,7 @@
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 export default defineNuxtConfig({
+  ssr: false,
   app: {
     baseURL: '/redsquirrel-website/',
     buildAssetsDir: 'assets'
@@ -18,7 +19,8 @@ export default defineNuxtConfig({
     '@tresjs/nuxt',
     '@hypernym/nuxt-gsap',
     '@nuxtjs/i18n',
-    '@nuxt/eslint'
+    '@nuxt/eslint',
+    '@nuxtjs/google-fonts'
   ],
   vite: {
     vue: {
@@ -34,5 +36,15 @@ export default defineNuxtConfig({
     config: {
       stylistic: true
     }
+  },
+  googleFonts: {
+    families: {
+      'Poppins': true,
+      'Style Script': true
+    },
+    download: true,
+    preload: true,
+    inject: true,
+    display: 'swap'
   }
 })

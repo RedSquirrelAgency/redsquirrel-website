@@ -1,10 +1,22 @@
 import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
-import { createVuetify } from 'vuetify'
+import { createVuetify, type ThemeDefinition } from 'vuetify'
+
+const sunrise: ThemeDefinition = {
+  dark: false,
+  colors: {
+    background: '#000000'
+  }
+}
 
 export default defineNuxtPlugin((app) => {
   const vuetify = createVuetify({
-    // ... your configuration
+    theme: {
+      defaultTheme: 'sunrise',
+      themes: {
+        sunrise
+      }
+    }
   })
   app.vueApp.use(vuetify)
 })
