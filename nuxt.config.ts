@@ -13,7 +13,12 @@ export default defineNuxtConfig({
   modules: [
     (_options: any, nuxt: any) => {
       nuxt.hooks.hook('vite:extendConfig', (config: any) => {
-        config.plugins.push(vuetify({ autoImport: true }))
+        config.plugins.push(vuetify({
+          autoImport: true,
+          styles: {
+            configFile: 'styles/settings.scss'
+          }
+        }))
       })
     },
     '@tresjs/nuxt',
@@ -42,9 +47,6 @@ export default defineNuxtConfig({
       'Poppins': true,
       'Style Script': true
     },
-    download: true,
-    preload: true,
-    inject: true,
-    display: 'swap'
+    download: true
   }
 })

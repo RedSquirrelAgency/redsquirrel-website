@@ -1,0 +1,7 @@
+@use 'colors' as *;
+@use 'vuetify/settings' with (
+  $button-font-size: 12px,
+  $body-font-family: "Poppins",
+  $button-color: $redsquirrel-black,
+  $button-background: $redsquirrel-peach-p1
+);
