@@ -2,47 +2,106 @@
   <v-app>
     <v-main>
       <div class="container fill-height">
-        <!-- Benefits, consultation and rating -->
-        <div class="d-flex justify-end">
-          <div class="benefit d-flex align-start flex-column">
-            <p>Conducting in-depth research on the target audience and market, crafting modern design solutions, and writing compelling texts to ensure <span class="highlights">the website effectively sells</span> to your audience and achieves business objectives</p>
-            <v-btn class="consultation-button"
-                   rounded="xl"
-                   append-icon="mdi-arrow-right">
-              {{ $t("Book a consultation") }}
-            </v-btn>
-            <div class="facebook-rating">{{ $t("5/5 rating on Facebook") }}</div>
-          </div>
-        </div>
         <!-- Canvas -->
         <div class="canvas">
           <TresCanvas>
-            <TresPerspectiveCamera :args="[45, 1, 0.1, 1000]"/>
-            <TresMesh>
-              <TresTorusGeometry :args="[1, 0.5, 16, 32]" />
-              <TresMeshBasicMaterial color="orange" />
-            </TresMesh>
+            <Stars
+              :rotation="[0, yRotation, 0]"
+              :radius="50"
+              :depth="20"
+              :count="2000"
+              :size="0.3"
+              :size-attenuation="true"
+            />
+            <TresPerspectiveCamera
+              :fov="60"
+              :rotate-x="0.15"
+              :rotate-z="0"
+            />
+            <Suspense>
+              <primitive :object="mesh">
+                <Sparkles />
+              </primitive>
+            </Suspense>
+            <TresDirectionalLight
+              :position="new Vector3(0, 0, 30)"
+              :intensity="10"
+            />
           </TresCanvas>
         </div>
-        <!-- Main offer -->
-        <h1>
-          <div>
-            <span>A website with</span>
-            <span class="spacer"/>
-            <span>a cr<span class="style-script">e</span>ative</span>
+        <!-- Overlay elements -->
+        <div
+          class="overlay"
+          @mousemove="mouseMove"
+        >
+          <div class="content">
+            <!-- Benefits, consultation and rating -->
+            <div class="d-flex justify-end">
+              <div class="benefit d-flex align-start flex-column">
+                <p>Conducting in-depth research on the target audience and market, crafting modern design solutions, and writing compelling texts to ensure <span class="highlights">the website effectively sells</span> to your audience and achieves business objectives</p>
+                <v-btn
+                  class="consultation-button"
+                  rounded="xl"
+                  append-icon="mdi-arrow-right"
+                >
+                  {{ $t("Book a consultation") }}
+                </v-btn>
+                <div class="facebook-rating">
+                  {{ $t("5/5 rating on Facebook") }}
+                </div>
+              </div>
+            </div>
+            <!-- Main offer -->
+            <h1>
+              <div>
+                <span>A website with</span>
+                <span class="spacer" />
+                <span>a cr<span class="style-script">e</span>ative</span>
+              </div>
+              <div>d<span class="style-script">e</span>sign and persuasive content</div>
+            </h1>
           </div>
-          <div>d<span class="style-script">e</span>sign and persuasive content</div>
-        </h1>
+        </div>
       </div>
     </v-main>
   </v-app>
-
 </template>
 
-<script setup>
-</script>
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useLoader } from '@tresjs/core'
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
+import type { Mesh } from 'three'
+import { EquirectangularReflectionMapping, MeshPhysicalMaterial, Vector3 } from 'three'
+import { RGBELoader } from 'three-stdlib'
+import {degToRad} from "three/src/math/MathUtils";
 
-<script>
+const hdrEquirect = new RGBELoader().load('/redsquirrel-website/empty_warehouse_01_2k.hdr', () => {
+  hdrEquirect.mapping = EquirectangularReflectionMapping
+})
+const material = new MeshPhysicalMaterial({
+  roughness: 0,
+  transmission: 1, // Add transparency
+  thickness: 1, // Add refraction!
+  envMap: hdrEquirect
+})
+
+const { children } = await useLoader(OBJLoader, '/redsquirrel-website/Squirrel.obj')
+const mesh = children[0]
+
+mesh.material = material
+mesh.scale.set(0.025, 0.025, 0.025)
+mesh.rotateY(2.5)
+
+const yRotation = shallowRef(0)
+useRenderLoop().onLoop(({ delta }) => {
+  yRotation.value += 0.02 * delta
+})
+
+function mouseMove(e: MouseEvent) {
+  const percentage = e.screenX / window.innerWidth
+  mesh.rotation.y = degToRad(180 * percentage)
+}
 </script>
 
 <style lang="scss">
@@ -50,21 +109,24 @@
 
   .container {
     position: relative;
-    margin: 120px 100px;
   }
 
-  .container .canvas, h1 {
-    position: absolute;
+  .overlay {
+    width: 100%;
+    height: 100%;
   }
 
   .canvas {
-    top: 30px;
-    left: 0;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    width: 500px;
-    height: 500px;
+    width: 100%;
+    height: 100%;
+  }
+
+  .container .canvas, .overlay {
+    position: absolute;
+  }
+
+  .content {
+    margin: 120px 100px;
   }
 
   h1 {

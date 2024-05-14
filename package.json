@@ -16,6 +16,7 @@
     "@nuxt/eslint": "^0.3.12",
     "@nuxtjs/i18n": "^8.3.1",
     "@tresjs/cientos": "^3.9.0",
+    "@tresjs/core": "^3.9.0",
     "@tresjs/nuxt": "^2.1.2",
     "@tresjs/post-processing": "^0.7.1",
     "nuxt": "^3.11.2",
@@ -26,6 +27,7 @@
   "devDependencies": {
     "@hypernym/nuxt-gsap": "^2.4.2",
     "@nuxtjs/google-fonts": "^3.2.0",
+    "@types/three": "^0.164.0",
     "sass": "^1.77.1",
     "vite-plugin-vuetify": "^2.0.3",
     "vuetify": "^3.6.5"
