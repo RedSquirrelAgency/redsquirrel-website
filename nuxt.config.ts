@@ -48,5 +48,11 @@ export default defineNuxtConfig({
       'Style Script': true
     },
     download: true
-  }
+  },
+  components: [
+    {
+      path: '~/components',
+      pathPrefix: false
+    }
+  ]
 })
