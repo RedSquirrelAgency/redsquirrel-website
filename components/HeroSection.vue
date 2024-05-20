@@ -9,7 +9,10 @@
       </TresCanvas>
     </div>
     <!-- Overlay elements -->
-    <div class="overlay">
+    <div
+      class="overlay"
+      :style="overlayStyle"
+    >
       <div class="content">
         <!-- Benefits, consultation and rating -->
         <div class="d-flex justify-end">
@@ -47,25 +50,47 @@ import SquirrelTresScene from '~/components/SquirrelTresScene.vue'
 
 const emit = defineEmits(['next'])
 const zoom = shallowRef(1)
+const overlayStyle = shallowRef({})
+
+const overlayTween = new TWEEN.Tween({ opacity: 1, blur: 0 })
+  .to({ opacity: 0, blur: 20 }, 1500)
+  .easing(TWEEN.Easing.Sinusoidal.In)
+  .onUpdate(({ opacity, blur }) => {
+    overlayStyle.value = {
+      opacity,
+      filter: `blur(${blur}px)`
+    }
+  })
+
+const squirrelTween = new TWEEN.Tween({ zoom: 0 })
+  .to({ zoom: 4 }, 1500)
+  .easing(TWEEN.Easing.Sinusoidal.In)
+  .onStart(() => {
+    overlayTween.start()
+  })
+  .onUpdate(({ zoom: updatedZoom }) => {
+    zoom.value = updatedZoom
+  })
+  .onComplete(() => {
+    emit('next')
+  })
 
 let transitionStarted = false
-const wheelEventListener = (e: Event) => {
+const wheelEventListener = (e: WheelEvent) => {
   e.preventDefault()
+  if (e.deltaY <= 10) return
   if (transitionStarted) return
   transitionStarted = true
-  new TWEEN.Tween({ zoom: 0 })
-    .to({ zoom: 4 }, 1500)
-    .easing(TWEEN.Easing.Sinusoidal.In)
-    .onUpdate(({ zoom: updatedZoom }) => {
-      zoom.value = updatedZoom
-    })
-    .onComplete(() => {
-      emit('next')
-    })
-    .start()
+  squirrelTween.start()
 }
 
-document.addEventListener('wheel', wheelEventListener, { passive: false })
+onMounted(() => {
+  document.addEventListener('wheel', wheelEventListener, { passive: false })
+})
+
+onUnmounted(() => {
+  document.removeEventListener('wheel', wheelEventListener)
+})
 </script>
 
 <style scoped lang="scss">

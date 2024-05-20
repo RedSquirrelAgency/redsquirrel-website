@@ -1,44 +1,38 @@
 <template>
   <v-app>
     <v-main>
-      <Transition
-        name="fade"
-        mode="out-in"
-      >
-        <component
-          :is="activeComponent"
-          @next="onNext"
-        />
-      </Transition>
+      <component
+        :is="activeComponent"
+        @next="onNext"
+        @back="onBack"
+      />
     </v-main>
   </v-app>
 </template>
 
 <script setup lang="ts">
 import HeroSection from '~/components/HeroSection.vue'
-import SecondSection from '~/components/SecondSection.vue'
+import TestimonialsSection from '~/components/TestimonialsSection.vue'
 
 const componentsOrder = [
   HeroSection,
-  SecondSection
+  TestimonialsSection
 ]
 
 const activeComponent = shallowRef(componentsOrder[0])
 
 function onNext() {
   const index = componentsOrder.indexOf(activeComponent.value)
+  if (index + 1 > componentsOrder.length - 1) return
   activeComponent.value = componentsOrder[index + 1]
+}
+
+function onBack() {
+  const index = componentsOrder.indexOf(activeComponent.value)
+  if (index < 0) return
+  activeComponent.value = componentsOrder[index - 1]
 }
 </script>
 
 <style lang="scss">
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
 </style>
