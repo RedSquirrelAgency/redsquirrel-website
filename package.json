@@ -20,11 +20,11 @@
     "@tresjs/nuxt": "^2.1.2",
     "@tresjs/post-processing": "^0.7.1",
     "@tweenjs/tween.js": "^23.1.2",
+    "mitt": "^3.0.1",
     "nuxt": "^3.11.2",
     "three": "^0.164.1",
     "vue": "^3.4.27",
-    "vue-router": "^4.3.2",
-    "vue3-marquee": "^4.2.0"
+    "vue-router": "^4.3.2"
   },
   "devDependencies": {
     "@hypernym/nuxt-gsap": "^2.4.2",

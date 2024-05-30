@@ -10,6 +10,7 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify']
   },
+  css: ['~/styles/main.scss'],
   modules: [
     (_options: any, nuxt: any) => {
       nuxt.hooks.hook('vite:extendConfig', (config: any) => {

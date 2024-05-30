@@ -1,31 +1,89 @@
 <template>
-  <div class="container fill-height">
-    <div class="header-wrapper">
-      <h1 class="header">
-        <div>Cli<span class="style-script">e</span>nts' word<span class="style-script">s</span></div>
-        <div>inspire us t<span class="style-script">o</span> new</div>
-        <div>m<span class="style-script">a</span>sterpie<span class="style-script">c</span>es</div>
-      </h1>
-    </div>
-    <div
-      class="quotes-container"
-      :style="quotesContainerStyle"
-    >
-      <TickerTape
-        v-for="quote in quotes"
-        :key="quote.text"
-        :direction="quote.direction"
-        :duration="30"
-        class="quote"
+  <v-main>
+    <div class="container fill-height">
+      <div class="header-wrapper">
+        <h1 class="header">
+          <div>Cli<span class="style-script">e</span>nts' word<span class="style-script">s</span></div>
+          <div>inspire us t<span class="style-script">o</span> new</div>
+          <div>m<span class="style-script">a</span>sterpie<span class="style-script">c</span>es</div>
+        </h1>
+      </div>
+      <div
+        class="quotes-container"
+        :style="quotesContainerStyle"
       >
-        <span class="quote">{{ quote.text }}</span>
-      </TickerTape>
+        <TickerTape
+          v-for="quote in quotes"
+          :key="quote.text"
+          :direction="quote.direction"
+          :duration="30"
+          class="quote"
+        >
+          <span class="quote">{{ quote.text }}</span>
+        </TickerTape>
+      </div>
     </div>
-  </div>
+  </v-main>
 </template>
 
 <script setup lang="ts">
 const emit = defineEmits(['next', 'back'])
+const props = defineProps({
+  enter: { type: Object },
+  afterEnter: { type: Object },
+  beforeLeave: { type: Object },
+  leave: { type: Object }
+})
+
+watch(() => props.enter, onEnter)
+watch(() => props.afterEnter, onAfterEnter)
+watch(() => props.beforeLeave, onBeforeLeave)
+watch(() => props.leave, onLeave)
+
+function onEnter(params: any) {
+  const { el, done } = params
+  $gsap.fromTo(el,
+    {
+      transform: 'scale(1)',
+      filter: 'blur(0px)',
+      opacity: 0
+    },
+    {
+      transform: 'scale(2)',
+      filter: 'blur(4px)',
+      opacity: 1,
+      duration: 3,
+      ease: 'power4.out',
+      onComplete: done
+    })
+}
+
+function onAfterEnter(params: any) {
+  containerInAnimation()
+}
+
+function onBeforeLeave(params: any) {
+}
+
+function onLeave(params: any) {
+  const { el, done } = params
+  console.log('Testimonials: Im leaving', params)
+  $gsap.fromTo(el,
+    {
+      transform: 'scale(1)',
+      filter: 'blur(0px)',
+      opacity: 1
+    },
+    {
+      transform: 'scale(2)',
+      filter: 'blur(4px)',
+      opacity: 0,
+      duration: 3,
+      ease: 'power4.out',
+      onComplete: done
+    })
+}
+
 const { $gsap } = useNuxtApp()
 
 const quotes = [
@@ -66,6 +124,7 @@ function wheelEventListener(e: WheelEvent) {
   e.preventDefault()
   const result = moveTickers(-e.deltaY / 10)
   if (result === 1) {
+    containerOutAnimation()
     emit('next')
   }
   if (result === -1) {
@@ -100,8 +159,24 @@ function containerInAnimation() {
     }, '>-4')
 }
 
+function containerOutAnimation() {
+  $gsap.fromTo(
+    '.container',
+    {
+      transform: 'scale(1)',
+      filter: 'blur(0px)',
+      opacity: 1
+    },
+    {
+      transform: 'scale(2)',
+      filter: 'blur(4px)',
+      opacity: 0,
+      duration: 5,
+      ease: 'power4.out'
+    })
+}
+
 onMounted(() => {
-  containerInAnimation()
   document.addEventListener('wheel', wheelEventListener, { passive: false })
 })
 
@@ -160,12 +235,6 @@ $backdrop-color: #a25b29;
   font-weight: 200;
 }
 
-.style-script {
-  font-family: "Style Script", cursive;
-  font-weight: 400;
-  font-style: normal;
-}
-
 .quotes-container {
   position: absolute;
   top: 0;
@@ -178,20 +247,7 @@ $backdrop-color: #a25b29;
 .quote {
   text-transform: uppercase;
   font-size: 7.4vh;
-  background-color: #CA4246;
-  background-image: linear-gradient(
-          45deg,
-          #CA4246 16.666%,
-          #E16541 16.666%,
-          #E16541 33.333%,
-          #F18F43 33.333%,
-          #F18F43 50%,
-          #8B9862 50%,
-          #8B9862 66.666%,
-          #476098 66.666%,
-          #476098 83.333%,
-          #A7489B 83.333%);
-
+  background-color: $redsquirrel-peach;
   background-size: 100%;
   background-repeat: repeat;
   background-attachment: scroll;
