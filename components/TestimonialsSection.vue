@@ -27,21 +27,45 @@
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits(['next', 'back'])
-const props = defineProps({
-  enter: { type: Object },
-  afterEnter: { type: Object },
-  beforeLeave: { type: Object },
-  leave: { type: Object }
+import { navigationEmits, useSectionNavigation } from '~/composables/sectionNavigation'
+import { transitionProps, useSectionTransition } from '~/composables/sectionTransition'
+import { useWheel } from '~/composables/wheel'
+
+const emit = defineEmits([...navigationEmits])
+const { next, back } = useSectionNavigation(emit)
+
+const props = defineProps({ ...transitionProps })
+useSectionTransition(props, { onEnter, onLeave, onAfterEnter })
+
+const { setScrollAnimation } = useWheel()
+const quotesContainerStyle = shallowRef({})
+setScrollAnimation({
+  valueFrom: 100,
+  valueTo: 0,
+  onChange: (value: number) => {
+    quotesContainerStyle.value = {
+      transform: `translateY(${value}%)`
+    }
+  },
+  onScrollUpOverflow: back,
+  onScrollDownOverflow: next
 })
 
-watch(() => props.enter, onEnter)
-watch(() => props.afterEnter, onAfterEnter)
-watch(() => props.beforeLeave, onBeforeLeave)
-watch(() => props.leave, onLeave)
+const { $gsap } = useNuxtApp()
 
-function onEnter(params: any) {
-  const { el, done } = params
+const quotes = [
+  { text: 'Listening to the client\'s desires and vision', direction: 'normal' },
+  { text: 'Able to listen without imposing personal opinions ', direction: 'reverse' },
+  { text: 'Clearly explaining and organizing everything', direction: 'normal' },
+  { text: 'Immersing deeply into the project from the first meeting', direction: 'reverse' },
+  { text: 'Prompt responses in messenger and timely delivery', direction: 'normal' },
+  { text: 'Showing great enthusiasm to work', direction: 'reverse' },
+  { text: 'Working with great interest on the project', direction: 'normal' },
+  { text: 'Taking calls seriously and being punctual', direction: 'reverse' },
+  { text: 'Able to meet our expectations', direction: 'normal' }
+]
+
+function onEnter(el: any, done: any) {
   $gsap.fromTo(el,
     {
       transform: 'scale(1)',
@@ -58,16 +82,11 @@ function onEnter(params: any) {
     })
 }
 
-function onAfterEnter(params: any) {
+function onAfterEnter() {
   containerInAnimation()
 }
 
-function onBeforeLeave(params: any) {
-}
-
-function onLeave(params: any) {
-  const { el, done } = params
-  console.log('Testimonials: Im leaving', params)
+function onLeave(el: any, done: any) {
   $gsap.fromTo(el,
     {
       transform: 'scale(1)',
@@ -82,54 +101,6 @@ function onLeave(params: any) {
       ease: 'power4.out',
       onComplete: done
     })
-}
-
-const { $gsap } = useNuxtApp()
-
-const quotes = [
-  { text: 'Listening to the client\'s desires and vision', direction: 'normal' },
-  { text: 'Able to listen without imposing personal opinions ', direction: 'reverse' },
-  { text: 'Clearly explaining and organizing everything', direction: 'normal' },
-  { text: 'Immersing deeply into the project from the first meeting', direction: 'reverse' },
-  { text: 'Prompt responses in messenger and timely delivery', direction: 'normal' },
-  { text: 'Showing great enthusiasm to work', direction: 'reverse' },
-  { text: 'Working with great interest on the project', direction: 'normal' },
-  { text: 'Taking calls seriously and being punctual', direction: 'reverse' },
-  { text: 'Able to meet our expectations', direction: 'normal' }
-]
-
-let quotesContainerPosition = 100
-const quotesContainerStyle = shallowRef({
-  transform: `translateY(${quotesContainerPosition}%)`
-})
-
-function moveTickers(shift: number): number {
-  let returnValue = 0
-  quotesContainerPosition += shift
-  if (quotesContainerPosition >= 100) {
-    quotesContainerPosition = 100
-    returnValue = -1
-  }
-  if (quotesContainerPosition <= 0) {
-    quotesContainerPosition = 0
-    returnValue = 1
-  }
-  quotesContainerStyle.value = {
-    transform: `translateY(${quotesContainerPosition}%)`
-  }
-  return returnValue
-}
-
-function wheelEventListener(e: WheelEvent) {
-  e.preventDefault()
-  const result = moveTickers(-e.deltaY / 10)
-  if (result === 1) {
-    containerOutAnimation()
-    emit('next')
-  }
-  if (result === -1) {
-    emit('back')
-  }
 }
 
 function containerInAnimation() {
@@ -175,14 +146,6 @@ function containerOutAnimation() {
       ease: 'power4.out'
     })
 }
-
-onMounted(() => {
-  document.addEventListener('wheel', wheelEventListener, { passive: false })
-})
-
-onUnmounted(() => {
-  document.removeEventListener('wheel', wheelEventListener)
-})
 </script>
 
 <style scoped lang="scss">
@@ -251,6 +214,7 @@ $backdrop-color: #a25b29;
   background-size: 100%;
   background-repeat: repeat;
   background-attachment: scroll;
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

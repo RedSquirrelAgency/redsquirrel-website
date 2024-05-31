@@ -69,6 +69,30 @@
 </template>
 
 <script setup lang="ts">
+import { transitionProps, useSectionTransition } from '~/composables/sectionTransition'
+import { navigationEmits, useSectionNavigation } from '~/composables/sectionNavigation'
+import { useWheel } from '~/composables/wheel'
+
+const emit = defineEmits([...navigationEmits])
+const { next, back } = useSectionNavigation(emit)
+
+const props = defineProps({ ...transitionProps })
+useSectionTransition(props, {})
+
+const { setScrollAnimation } = useWheel()
+const cardsStyle = shallowRef({})
+setScrollAnimation({
+  valueFrom: 60,
+  valueTo: -60,
+  onChange: (value: number) => {
+    cardsStyle.value = {
+      transform: `translateX(${value}%)`
+    }
+  },
+  onScrollUpOverflow: back,
+  onScrollDownOverflow: next
+})
+
 const cases = [
   {
     title: 'Natalie Herzel Praxis',
@@ -103,28 +127,6 @@ const cases = [
     image: 'banners/bigmishka.png'
   }
 ]
-
-let cardsPosition = 60
-const cardsStyle = shallowRef({
-  transform: `translateX(${cardsPosition}%)`
-})
-
-function wheelEventListener(e: WheelEvent) {
-  e.preventDefault()
-  const shift = -e.deltaY / 10
-  cardsPosition += shift
-  cardsStyle.value = {
-    transform: `translateX(${cardsPosition}%)`
-  }
-}
-
-onMounted(() => {
-  document.addEventListener('wheel', wheelEventListener, { passive: false })
-})
-
-onUnmounted(() => {
-  document.removeEventListener('wheel', wheelEventListener)
-})
 </script>
 
 <style scoped lang="scss">

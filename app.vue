@@ -1,6 +1,15 @@
 <template>
   <v-app class="app">
-    <transition>
+    <transition
+      @before-enter="() => { console.log('before-enter') }"
+      @enter="() => { console.log('enter') }"
+      @after-enter="() => { console.log('after-enter') }"
+      @enter-cancelled="() => { console.log('enter-cancelled') }"
+      @before-leave="() => { console.log('before-leave') }"
+      @leave="() => { console.log('leave') }"
+      @after-leave="() => { console.log('after-leave') }"
+      @leave-cancelled="() => { console.log('leave-cancelled') }"
+    >
       <component
         :is="activeComponent"
         v-bind="currentProps"
@@ -49,6 +58,8 @@ function onLeave(el: Element, done: () => void) {
   currentProps.value = {
     leave: { el, done }
   }
+  console.log(activeComponent.value)
+  console.log(currentProps.value)
 }
 
 function onEnter(el: Element, done: () => void) {
@@ -56,6 +67,8 @@ function onEnter(el: Element, done: () => void) {
   currentProps.value = {
     enter: { el, done }
   }
+  console.log(activeComponent.value)
+  console.log(currentProps.value)
 }
 
 function onAfterEnter(el: Element) {

@@ -49,20 +49,21 @@
 <script setup lang="ts">
 import * as TWEEN from '@tweenjs/tween.js'
 import SquirrelTresScene from '~/components/SquirrelTresScene.vue'
+import { navigationEmits, useSectionNavigation } from '~/composables/sectionNavigation'
+import { useWheel } from '~/composables/wheel'
 
-const emit = defineEmits(['next'])
+const emit = defineEmits([...navigationEmits])
+const { next } = useSectionNavigation(emit)
+
+const { disableWheelHandler, setWheelEventHandler } = useWheel()
+setWheelEventHandler((e: WheelEvent) => {
+  if (e.deltaY <= 10) return
+  disableWheelHandler()
+  squirrelTween.start()
+})
+
 const zoom = shallowRef(1)
 const overlayStyle = shallowRef({})
-
-const overlayTween = new TWEEN.Tween({ opacity: 1, blur: 0 })
-  .to({ opacity: 0, blur: 20 }, 1500)
-  .easing(TWEEN.Easing.Sinusoidal.In)
-  .onUpdate(({ opacity, blur }) => {
-    overlayStyle.value = {
-      opacity,
-      filter: `blur(${blur}px)`
-    }
-  })
 
 const squirrelTween = new TWEEN.Tween({ zoom: 0 })
   .to({ zoom: 4 }, 1500)
@@ -74,31 +75,18 @@ const squirrelTween = new TWEEN.Tween({ zoom: 0 })
     zoom.value = updatedZoom
   })
   .onComplete(() => {
-    emit('next')
+    next()
   })
 
-let transitionStarted = false
-const wheelEventListener = (e: WheelEvent) => {
-  e.preventDefault()
-  if (e.deltaY <= 10) return
-  if (transitionStarted) return
-  transitionStarted = true
-  squirrelTween.start()
-}
-
-function onLeave() {
-  console.log('Hero: Im leaving')
-}
-
-onMounted(() => {
-  document.addEventListener('wheel', wheelEventListener, { passive: false })
-})
-
-onUnmounted(() => {
-  document.removeEventListener('wheel', wheelEventListener)
-})
-
-defineExpose({ onLeave })
+const overlayTween = new TWEEN.Tween({ opacity: 1, blur: 0 })
+  .to({ opacity: 0, blur: 20 }, 1500)
+  .easing(TWEEN.Easing.Sinusoidal.In)
+  .onUpdate(({ opacity, blur }) => {
+    overlayStyle.value = {
+      opacity,
+      filter: `blur(${blur}px)`
+    }
+  })
 </script>
 
 <style scoped lang="scss">
