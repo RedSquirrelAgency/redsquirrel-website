@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 import { degToRad } from 'three/src/math/MathUtils'
-import { Color, type PerspectiveCamera, TextureLoader } from 'three'
+import { Clock, Color, type PerspectiveCamera, TextureLoader } from 'three'
 import {
   EquirectangularReflectionMapping,
   MeshPhysicalMaterial,
@@ -61,6 +61,7 @@ const yRotation = shallowRef(0)
 onMounted(() => {
   const { camera } = useTresContext()
   const perspectiveCamera = camera.value as PerspectiveCamera
+  const clock = new Clock()
 
   const direction = new Vector3()
   const startPosition = new Vector3()
@@ -76,6 +77,10 @@ onMounted(() => {
 
   useRenderLoop().onLoop(({ delta }) => {
     yRotation.value += 0.02 * delta
+
+    const time = clock.getElapsedTime()
+    mesh.position.y = Math.cos(time) * 0.1
+
     TWEEN.update()
   })
 

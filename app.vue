@@ -36,35 +36,34 @@ import HeroSection from '~/sections/HeroSection.vue'
 import TestimonialsSection from '~/sections/TestimonialsSection.vue'
 import PortfolioSection from '~/sections/PortfolioSection.vue'
 import AdvantagesSection from '~/sections/AdvantagesSection.vue'
+import GoalSection from '~/sections/GoalSection.vue'
 
 const sectionsOrder = [
-  { component: HeroSection, background: false },
-  { component: TestimonialsSection, background: false },
-  { component: PortfolioSection, background: true },
-  { component: AdvantagesSection, background: true }
+  { hash: 'hero', component: HeroSection, background: false },
+  { hash: 'testimonials', component: TestimonialsSection, background: false },
+  { hash: 'cases', component: PortfolioSection, background: true },
+  { hash: 'advantages', component: AdvantagesSection, background: true },
+  { hash: 'goal', component: GoalSection, background: true }
 ]
 
 const index = shallowRef(0)
 const activeSection = computed(() => (sectionsOrder[index.value]))
 const currentProps = shallowRef({})
 const { $gsap } = useNuxtApp()
+const router = useRouter()
 
 function onNext() {
   if (index.value + 1 > sectionsOrder.length - 1) return
   index.value++
+  router.replace(`#${activeSection.value.hash}`)
   console.log('next')
 }
 
 function onBack() {
   if (index.value < 0) return
   index.value--
+  router.replace(`#${activeSection.value.hash}`)
   console.log('back')
-}
-
-function onBeforeLeave(el: Element) {
-  currentProps.value = {
-    beforeLeave: { el }
-  }
 }
 
 function onLeave(el: Element, done: () => void) {
@@ -103,12 +102,6 @@ function onEnter(el: Element, done: () => void) {
       ease: 'power4.out',
       onComplete: done
     })
-}
-
-function onAfterEnter(el: Element) {
-  currentProps.value = {
-    afterEnter: { el }
-  }
 }
 
 onMounted(() => {

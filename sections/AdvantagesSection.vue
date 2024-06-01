@@ -71,7 +71,8 @@ useScrollAnimation({
       rotate: `${factor * 10}deg`
     }
   },
-  onScrollUpOverflow: back
+  onScrollUpOverflow: back,
+  onScrollDownOverflow: next
 })
 
 const advantages = [

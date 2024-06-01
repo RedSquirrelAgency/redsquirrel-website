@@ -11,6 +11,10 @@ interface ScrollAnimationOptions {
   onScrollUpOverflow?: () => void
 }
 
+const OVERFLOW_THRESHOLD = 10
+const SCROLL_COOLDOWN = 1
+const DELTA_DIVISION_FACTOR = 10
+
 export function useScrollAnimation(scrollAnimationOptions: ScrollAnimationOptions) {
   const {
     valueFrom,
@@ -24,22 +28,32 @@ export function useScrollAnimation(scrollAnimationOptions: ScrollAnimationOption
 
   const onScroll = (event: WheelEvent) => {
     const { deltaY } = event
-    const shift = -deltaY / 10
+    const reverse = valueFrom > valueTo
+    const shift = deltaY / DELTA_DIVISION_FACTOR * (reverse ? -1 : 1)
     scrollAnimation.scrollPosition += shift
-    if (scrollAnimation.scrollPosition > valueFrom) {
+
+    const fromCondition = reverse
+      ? scrollAnimation.scrollPosition > valueFrom
+      : scrollAnimation.scrollPosition < valueFrom
+    if (fromCondition) {
       scrollAnimation.scrollPosition = valueFrom
       if (onScrollUpOverflow && checkOverflow(event.deltaY)) {
         wheelHandlerDisabled = true
         onScrollUpOverflow()
       }
     }
-    if (scrollAnimation.scrollPosition <= valueTo) {
+
+    const toCondition = reverse
+      ? scrollAnimation.scrollPosition <= valueTo
+      : scrollAnimation.scrollPosition >= valueTo
+    if (toCondition) {
       scrollAnimation.scrollPosition = valueTo
       if (onScrollDownOverflow && checkOverflow(event.deltaY)) {
         wheelHandlerDisabled = true
         onScrollDownOverflow()
       }
     }
+
     onChange(scrollAnimation.scrollPosition)
   }
 
@@ -54,13 +68,14 @@ export function useScrollAnimation(scrollAnimationOptions: ScrollAnimationOption
   }
 
   function checkOverflow(deltaY: number) {
-    return Math.abs(deltaY) > 8
+    return Math.abs(deltaY) > OVERFLOW_THRESHOLD
   }
 
   function init() {
+    scrollAnimation.scrollPosition
     onChange(valueFrom)
     const waitForCooldownCallback = (event: WheelEvent) => {
-      if (Math.abs(event.deltaY) < 3) {
+      if (Math.abs(event.deltaY) < SCROLL_COOLDOWN) {
         document.removeEventListener('wheel', waitForCooldownCallback)
         document.addEventListener('wheel', onWheel, { passive: false })
       }
