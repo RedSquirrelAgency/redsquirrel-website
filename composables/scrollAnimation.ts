@@ -54,7 +54,7 @@ export function useScrollAnimation(scrollAnimationOptions: ScrollAnimationOption
   }
 
   function checkOverflow(deltaY: number) {
-    return Math.abs(deltaY) > 3
+    return Math.abs(deltaY) > 8
   }
 
   function init() {

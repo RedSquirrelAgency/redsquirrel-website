@@ -4,11 +4,14 @@
       <div><span class="style-script">W</span>e value y<span class="style-script">o</span>ur time</div>
       <div>and k<span class="style-script">e</span>ep our promi<span class="style-script">s</span>es</div>
     </h1>
-    <v-container class="d-flex justify-center">
+    <v-container
+      class="d-flex justify-center"
+    >
       <v-card
         class="card"
         min-width="100%"
         flat
+        :style="cardStyle"
         @mouseout="hoveredItem = -1"
       >
         <v-sheet class="bg-transparent">
@@ -18,18 +21,18 @@
             class="item"
             :class="(hoveredItem === index) && 'hovered'"
             @mouseover="hoveredItem = index"
-            @mouseenter="hoveredItem = index"
           >
-            <v-col class="title">
+            <v-col class="title d-flex h-100 align-center">
               <p>{{ item.title }}<span class="index">{{ formatIndex(index) }}</span></p>
             </v-col>
             <v-col
               cols="3"
-              class="subtitle d-flex justify-end"
+              class="subtitle d-flex h-100 justify-end align-center"
             >
-              <p v-if="hoveredItem === index">
-                {{ item.subtitle }}
-              </p>
+              <p
+                :class="(hoveredItem === index) && 'show'"
+                v-html="item.subtitle"
+              />
             </v-col>
             <v-divider
               v-if="index < advantages.length - 1"
@@ -57,39 +60,40 @@ useSectionTransition(props, {})
 
 const hoveredItem = ref(-1)
 
-const cardsStyle = shallowRef({})
+const cardStyle = shallowRef({})
 useScrollAnimation({
-  valueFrom: 60,
-  valueTo: -60,
+  valueFrom: 100,
+  valueTo: 0,
   onChange: (value: number) => {
-    cardsStyle.value = {
-      transform: `translateX(${value}%)`
+    const factor = value / 100
+    cardStyle.value = {
+      transform: `translateY(${factor * 150}%) rotateY(${factor * 50}deg)`,
+      rotate: `${factor * 10}deg`
     }
   },
-  onScrollUpOverflow: back,
-  onScrollDownOverflow: next
+  onScrollUpOverflow: back
 })
 
 const advantages = [
   {
     title: 'Expertise',
-    subtitle: 'Our 12 years of experience in design and development help us create effective strategies and optimal solutions'
+    subtitle: 'Our <b>12 years</b> of experience in design and development help us create effective strategies and optimal solutions'
   },
   {
     title: 'Comfortable Service',
-    subtitle: 'We are trusted because we can explain complex things, stand by our decisions, and exceed expectations'
+    subtitle: 'We are trusted because we can explain complex things, stand by our decisions, and <b>exceed expectations</b>'
   },
   {
     title: 'Fast Communication',
-    subtitle: 'We respond within 20 minutes during business hours, deliver on time, and aim to manage all website-related queries'
+    subtitle: 'We <b>respond within 20 minutes</b> during business hours, deliver on time, and aim to manage all website-related queries'
   },
   {
     title: 'Full Immersion',
-    subtitle: 'We love what we do and dive headfirst into each project to ensure our work meets your expectations and becomes an interesting case study in our portfolio'
+    subtitle: '<b>We love what we do</b> and dive headfirst into each project to ensure our work meets your expectations and becomes an interesting case study in our portfolio'
   },
   {
     title: 'Transparent Contract',
-    subtitle: 'We outline all guarantees, deadlines, and technical implementation details in the contract and provide invoices'
+    subtitle: 'We outline <b>all guarantees</b>, deadlines, and technical implementation details in the contract and provide invoices'
   }
 ]
 
@@ -123,11 +127,11 @@ function formatIndex(index: number) {
   -webkit-backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.3);
   color: $redsquirrel-chocolate;
-  padding: 30px 30px;
+  padding: 20px 30px 20px;
 
   .item {
     height: 100px;
-    transition: height .4s ease-in-out;
+    transition: height .6s ease-in-out;
 
     &.hovered {
       transition: height .4s ease-in-out;
@@ -151,6 +155,15 @@ function formatIndex(index: number) {
   .subtitle p {
     font-size: 14px;
     width: 300px;
+    filter: blur(12px);
+    opacity: 0;
+
+    &.show {
+      filter: blur(0px);
+      transition: filter .4s ease, opacity .4s ease;
+      transition-delay: .1s;
+      opacity: 1;
+    }
   }
 }
 </style>
