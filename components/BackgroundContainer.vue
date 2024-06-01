@@ -1,27 +1,29 @@
 <template>
-  <div class="container fill-height">
-    <div class="background">
-      <img
-        class="star"
-        src="/figures/star.svg"
-      >
-      <img
-        class="vector"
-        src="/figures/vector.svg"
-      >
-      <img
-        class="ellipse"
-        src="/figures/ellipse.svg"
-      >
-      <img
-        class="rectangle"
-        src="/figures/rectangle.svg"
-      >
+  <v-main>
+    <div class="container fill-height">
+      <div class="background">
+        <img
+          class="star"
+          src="/figures/star.svg"
+        >
+        <img
+          class="vector"
+          src="/figures/vector.svg"
+        >
+        <img
+          class="ellipse"
+          src="/figures/ellipse.svg"
+        >
+        <img
+          class="rectangle"
+          src="/figures/rectangle.svg"
+        >
+      </div>
+      <div class="content">
+        <slot />
+      </div>
     </div>
-    <div class="content">
-      <slot />
-    </div>
-  </div>
+  </v-main>
 </template>
 
 <script setup lang="ts">

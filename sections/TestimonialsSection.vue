@@ -1,27 +1,29 @@
 <template>
-  <div class="container fill-height">
-    <div class="content">
-      <h1 class="header">
-        <div>Cli<span class="style-script">e</span>nts' word<span class="style-script">s</span></div>
-        <div>inspire us t<span class="style-script">o</span> new</div>
-        <div>m<span class="style-script">a</span>sterpie<span class="style-script">c</span>es</div>
-      </h1>
-    </div>
-    <div
-      class="quotes"
-      :style="quotesStyle"
-    >
-      <TickerTape
-        v-for="quote in quotes"
-        :key="quote.text"
-        :direction="quote.direction"
-        :duration="30"
-        class="quote"
+  <v-main>
+    <div class="container fill-height">
+      <div class="content">
+        <h1 class="header">
+          <div>Cli<span class="style-script">e</span>nts' word<span class="style-script">s</span></div>
+          <div>inspire us t<span class="style-script">o</span> new</div>
+          <div>m<span class="style-script">a</span>sterpie<span class="style-script">c</span>es</div>
+        </h1>
+      </div>
+      <div
+        class="quotes"
+        :style="quotesStyle"
       >
-        <span class="quote">{{ quote.text }}</span>
-      </TickerTape>
+        <TickerTape
+          v-for="quote in quotes"
+          :key="quote.text"
+          :direction="quote.direction"
+          :duration="30"
+          class="quote"
+        >
+          <span class="quote">{{ quote.text }}</span>
+        </TickerTape>
+      </div>
     </div>
-  </div>
+  </v-main>
 </template>
 
 <script setup lang="ts">
@@ -58,44 +60,6 @@ const quotes = [
   { text: 'Able to meet our expectations', direction: 'normal' }
 ]
 
-function onEnter(el: any, done: any) {
-  $gsap.fromTo(el,
-    {
-      transform: 'scale(1)',
-      filter: 'blur(0px)',
-      opacity: 0
-    },
-    {
-      transform: 'scale(2)',
-      filter: 'blur(4px)',
-      opacity: 1,
-      duration: 3,
-      ease: 'power4.out',
-      onComplete: done
-    })
-}
-
-function onAfterEnter() {
-  containerInAnimation()
-}
-
-function onLeave(el: any, done: any) {
-  $gsap.fromTo(el,
-    {
-      transform: 'scale(1)',
-      filter: 'blur(0px)',
-      opacity: 1
-    },
-    {
-      transform: 'scale(2)',
-      filter: 'blur(4px)',
-      opacity: 0,
-      duration: 3,
-      ease: 'power4.out',
-      onComplete: done
-    })
-}
-
 function containerInAnimation() {
   const tl = $gsap.timeline()
   tl.fromTo(
@@ -121,23 +85,6 @@ function containerInAnimation() {
       duration: 2,
       ease: 'power4.out'
     }, '>-4')
-}
-
-function containerOutAnimation() {
-  $gsap.fromTo(
-    '.container',
-    {
-      transform: 'scale(1)',
-      filter: 'blur(0px)',
-      opacity: 1
-    },
-    {
-      transform: 'scale(2)',
-      filter: 'blur(4px)',
-      opacity: 0,
-      duration: 5,
-      ease: 'power4.out'
-    })
 }
 </script>
 

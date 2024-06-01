@@ -1,47 +1,49 @@
 <template>
-  <h1 class="header">
-    <div class="first-line">
-      Imme<span class="style-script">r</span>sing deeply
-    </div>
-    <div>into each pr<span class="style-script">o</span>ject and</div>
-    <div>finding <span class="style-script">s</span>uccessful solutions</div>
-  </h1>
-  <v-row
-    class="cards"
-    :style="cardsStyle"
-  >
-    <v-col
-      v-for="(item, index) in cases"
-      :key="index"
-    >
-      <div v-if="item">
-        <v-card
-          class="card"
-          min-width="357px"
-          max-width="357px"
-          height="400px"
-          flat
-          link
-        >
-          <v-img
-            class="card-image"
-            :src="item.image"
-            cover
-          />
-        </v-card>
-        <div class="text-uppercase">
-          {{ item.title }}
-        </div>
-        <div class="text-left text-caption">
-          {{ item.subtitle }}
-        </div>
+  <div>
+    <h1 class="header">
+      <div class="first-line">
+        Imme<span class="style-script">r</span>sing deeply
       </div>
-      <div
-        v-else
-        style="width: 357px; height: 400px;"
-      />
-    </v-col>
-  </v-row>
+      <div>into each pr<span class="style-script">o</span>ject and</div>
+      <div>finding <span class="style-script">s</span>uccessful solutions</div>
+    </h1>
+    <v-row
+      class="cards"
+      :style="cardsStyle"
+    >
+      <v-col
+        v-for="(item, index) in cases"
+        :key="index"
+      >
+        <div v-if="item">
+          <v-card
+            class="card"
+            min-width="357px"
+            max-width="357px"
+            height="400px"
+            flat
+            link
+          >
+            <v-img
+              class="card-image"
+              :src="item.image"
+              cover
+            />
+          </v-card>
+          <div class="text-uppercase">
+            {{ item.title }}
+          </div>
+          <div class="text-left text-caption">
+            {{ item.subtitle }}
+          </div>
+        </div>
+        <div
+          v-else
+          style="width: 357px; height: 400px;"
+        />
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script setup lang="ts">

@@ -48,16 +48,16 @@
 import * as TWEEN from '@tweenjs/tween.js'
 import SquirrelTresScene from '~/components/SquirrelTresScene.vue'
 import { navigationEmits, useSectionNavigation } from '~/composables/sectionNavigation'
-import { useWheel } from '~/composables/wheel'
+import { useScrollAnimation } from '~/composables/scrollAnimation'
 
 const emit = defineEmits([...navigationEmits])
 const { next } = useSectionNavigation(emit)
 
-const { disableWheelHandler, setWheelEventHandler } = useWheel()
-setWheelEventHandler((e: WheelEvent) => {
-  if (e.deltaY <= 10) return
-  disableWheelHandler()
-  squirrelTween.start()
+useScrollAnimation({
+  valueFrom: 20,
+  valueTo: 0,
+  onChange: () => {},
+  onScrollDownOverflow: () => { squirrelTween.start() }
 })
 
 const zoom = shallowRef(1)
@@ -90,26 +90,23 @@ const overlayTween = new TWEEN.Tween({ opacity: 1, blur: 0 })
 <style scoped lang="scss">
 @import "styles/variables";
 
-.container {
-  position: relative;
+.container .canvas, .overlay {
+  position: absolute;
 }
 
 .overlay {
   width: 100%;
   height: 100%;
+
+  .content {
+    margin: 120px 100px;
+  }
 }
 
 .canvas {
+  position: absolute;
   width: 100%;
   height: 100%;
-}
-
-.container .canvas, .overlay {
-  position: absolute;
-}
-
-.content {
-  margin: 120px 100px;
 }
 
 h1 {

@@ -1,32 +1,32 @@
 <template>
   <v-app class="app">
     <transition
-      @before-enter="() => { console.log('before-enter') }"
-      @enter="() => { console.log('enter') }"
-      @after-enter="() => { console.log('after-enter') }"
-      @enter-cancelled="() => { console.log('enter-cancelled') }"
-      @before-leave="() => { console.log('before-leave') }"
-      @leave="() => { console.log('leave') }"
-      @after-leave="() => { console.log('after-leave') }"
-      @leave-cancelled="() => { console.log('leave-cancelled') }"
+      :css="false"
+      appear
+      @enter="onEnter"
+      @leave="onLeave"
     >
-      <v-main>
-        <BackgroundContainer v-if="activeSection.background">
+      <BackgroundContainer v-if="activeSection.background">
+        <transition
+          :css="false"
+          @enter="onEnter"
+          @leave="onLeave"
+        >
           <component
             :is="activeSection.component"
             v-bind="currentProps"
             @next="onNext"
             @back="onBack"
           />
-        </BackgroundContainer>
-        <component
-          :is="activeSection.component"
-          v-else
-          v-bind="currentProps"
-          @next="onNext"
-          @back="onBack"
-        />
-      </v-main>
+        </transition>
+      </BackgroundContainer>
+      <component
+        :is="activeSection.component"
+        v-else
+        v-bind="currentProps"
+        @next="onNext"
+        @back="onBack"
+      />
     </transition>
   </v-app>
 </template>
@@ -47,6 +47,7 @@ const sectionsOrder = [
 const index = shallowRef(0)
 const activeSection = computed(() => (sectionsOrder[index.value]))
 const currentProps = shallowRef({})
+const { $gsap } = useNuxtApp()
 
 function onNext() {
   if (index.value + 1 > sectionsOrder.length - 1) return
@@ -68,16 +69,40 @@ function onBeforeLeave(el: Element) {
 
 function onLeave(el: Element, done: () => void) {
   el.className = 'current-section'
-  currentProps.value = {
-    leave: { el, done }
-  }
+  console.log('onEnter')
+  $gsap.fromTo(el,
+    {
+      transform: 'scale(1)',
+      filter: 'blur(0px)',
+      opacity: 1
+    },
+    {
+      transform: 'scale(2)',
+      filter: 'blur(4px)',
+      opacity: 0,
+      duration: 3,
+      ease: 'power4.out',
+      onComplete: done
+    })
 }
 
 function onEnter(el: Element, done: () => void) {
   el.className = 'next-section'
-  currentProps.value = {
-    enter: { el, done }
-  }
+  console.log('onEnter')
+  $gsap.fromTo(el,
+    {
+      transform: 'scale(2)',
+      filter: 'blur(4px)',
+      opacity: 0
+    },
+    {
+      transform: 'scale(1)',
+      filter: 'blur(0px)',
+      opacity: 1,
+      duration: 3,
+      ease: 'power4.out',
+      onComplete: done
+    })
 }
 
 function onAfterEnter(el: Element) {
@@ -85,6 +110,10 @@ function onAfterEnter(el: Element) {
     afterEnter: { el }
   }
 }
+
+onMounted(() => {
+  document.addEventListener('wheel', (e: WheelEvent) => e.preventDefault(), { passive: false })
+})
 </script>
 
 <style lang="scss">

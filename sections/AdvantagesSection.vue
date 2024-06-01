@@ -1,45 +1,47 @@
 <template>
-  <h1 class="header text-center">
-    <div><span class="style-script">W</span>e value y<span class="style-script">o</span>ur time</div>
-    <div>and k<span class="style-script">e</span>ep our promi<span class="style-script">s</span>es</div>
-  </h1>
-  <v-container class="d-flex justify-center">
-    <v-card
-      class="card"
-      min-width="100%"
-      flat
-      @mouseout="hoveredItem = -1"
-    >
-      <v-sheet class="bg-transparent">
-        <v-row
-          v-for="(item, index) in advantages"
-          :key="index"
-          class="item"
-          :class="(hoveredItem === index) && 'hovered'"
-          @mouseover="hoveredItem = index"
-          @mouseenter="hoveredItem = index"
-        >
-          <v-col class="title">
-            <p>{{ item.title }}<span class="index">{{ formatIndex(index) }}</span></p>
-          </v-col>
-          <v-col
-            cols="3"
-            class="subtitle d-flex justify-end"
+  <div>
+    <h1 class="header text-center">
+      <div><span class="style-script">W</span>e value y<span class="style-script">o</span>ur time</div>
+      <div>and k<span class="style-script">e</span>ep our promi<span class="style-script">s</span>es</div>
+    </h1>
+    <v-container class="d-flex justify-center">
+      <v-card
+        class="card"
+        min-width="100%"
+        flat
+        @mouseout="hoveredItem = -1"
+      >
+        <v-sheet class="bg-transparent">
+          <v-row
+            v-for="(item, index) in advantages"
+            :key="index"
+            class="item"
+            :class="(hoveredItem === index) && 'hovered'"
+            @mouseover="hoveredItem = index"
+            @mouseenter="hoveredItem = index"
           >
-            <p v-if="hoveredItem === index">
-              {{ item.subtitle }}
-            </p>
-          </v-col>
-          <v-divider
-            v-if="index < advantages.length - 1"
-            class="d-flex align-self-end"
-            thickness="1"
-            opacity="1"
-          />
-        </v-row>
-      </v-sheet>
-    </v-card>
-  </v-container>
+            <v-col class="title">
+              <p>{{ item.title }}<span class="index">{{ formatIndex(index) }}</span></p>
+            </v-col>
+            <v-col
+              cols="3"
+              class="subtitle d-flex justify-end"
+            >
+              <p v-if="hoveredItem === index">
+                {{ item.subtitle }}
+              </p>
+            </v-col>
+            <v-divider
+              v-if="index < advantages.length - 1"
+              class="d-flex align-self-end"
+              thickness="1"
+              opacity="1"
+            />
+          </v-row>
+        </v-sheet>
+      </v-card>
+    </v-container>
+  </div>
 </template>
 
 <script setup lang="ts">
