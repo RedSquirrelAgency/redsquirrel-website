@@ -1,49 +1,47 @@
 <template>
-  <v-main>
-    <div class="container fill-height">
-      <!-- Canvas -->
-      <div class="canvas">
-        <TresCanvas>
-          <Suspense>
-            <SquirrelTresScene :zoom="zoom" />
-          </Suspense>
-        </TresCanvas>
-      </div>
-      <!-- Overlay elements -->
-      <div
-        class="overlay"
-        :style="overlayStyle"
-      >
-        <div class="content">
-          <!-- Benefits, consultation and rating -->
-          <div class="d-flex justify-end">
-            <div class="benefit d-flex align-start flex-column">
-              <p>Conducting in-depth research on the target audience and market, crafting modern design solutions, and writing compelling texts to ensure <span class="highlights">the website effectively sells</span> to your audience and achieves business objectives</p>
-              <v-btn
-                class="consultation-button"
-                rounded="xl"
-                append-icon="mdi-arrow-right"
-              >
-                {{ $t("Book a consultation") }}
-              </v-btn>
-              <div class="facebook-rating">
-                {{ $t("5/5 rating on Facebook") }}
-              </div>
+  <div class="container fill-height">
+    <!-- Canvas -->
+    <div class="canvas">
+      <TresCanvas>
+        <Suspense>
+          <SquirrelTresScene :zoom="zoom" />
+        </Suspense>
+      </TresCanvas>
+    </div>
+    <!-- Overlay elements -->
+    <div
+      class="overlay"
+      :style="overlayStyle"
+    >
+      <div class="content">
+        <!-- Benefits, consultation and rating -->
+        <div class="d-flex justify-end">
+          <div class="benefit d-flex align-start flex-column">
+            <p>Conducting in-depth research on the target audience and market, crafting modern design solutions, and writing compelling texts to ensure <span class="highlights">the website effectively sells</span> to your audience and achieves business objectives</p>
+            <v-btn
+              class="consultation-button"
+              rounded="xl"
+              append-icon="mdi-arrow-right"
+            >
+              {{ $t("Book a consultation") }}
+            </v-btn>
+            <div class="facebook-rating">
+              {{ $t("5/5 rating on Facebook") }}
             </div>
           </div>
-          <!-- Main offer -->
-          <h1>
-            <div>
-              <span>A website with</span>
-              <span class="spacer" />
-              <span>a cr<span class="style-script">e</span>ative</span>
-            </div>
-            <div>d<span class="style-script">e</span>sign and persuasive content</div>
-          </h1>
         </div>
+        <!-- Main offer -->
+        <h1>
+          <div>
+            <span>A website with</span>
+            <span class="spacer" />
+            <span>a cr<span class="style-script">e</span>ative</span>
+          </div>
+          <div>d<span class="style-script">e</span>sign and persuasive content</div>
+        </h1>
       </div>
     </div>
-  </v-main>
+  </div>
 </template>
 
 <script setup lang="ts">

@@ -10,33 +10,46 @@
       @after-leave="() => { console.log('after-leave') }"
       @leave-cancelled="() => { console.log('leave-cancelled') }"
     >
-      <component
-        :is="activeComponent"
-        v-bind="currentProps"
-        @next="onNext"
-        @back="onBack"
-      />
+      <v-main>
+        <BackgroundContainer v-if="activeSection.background">
+          <component
+            :is="activeSection.component"
+            v-bind="currentProps"
+            @next="onNext"
+            @back="onBack"
+          />
+        </BackgroundContainer>
+        <component
+          :is="activeSection.component"
+          v-else
+          v-bind="currentProps"
+          @next="onNext"
+          @back="onBack"
+        />
+      </v-main>
     </transition>
   </v-app>
 </template>
 
 <script setup lang="ts">
-import HeroSection from '~/components/HeroSection.vue'
-import TestimonialsSection from '~/components/TestimonialsSection.vue'
-import PortfolioSection from '~/components/PortfolioSection.vue'
+import HeroSection from '~/sections/HeroSection.vue'
+import TestimonialsSection from '~/sections/TestimonialsSection.vue'
+import PortfolioSection from '~/sections/PortfolioSection.vue'
+import AdvantagesSection from '~/sections/AdvantagesSection.vue'
 
-const componentsOrder = [
-  HeroSection,
-  TestimonialsSection,
-  PortfolioSection
+const sectionsOrder = [
+  { component: HeroSection, background: false },
+  { component: TestimonialsSection, background: false },
+  { component: PortfolioSection, background: true },
+  { component: AdvantagesSection, background: true }
 ]
 
 const index = shallowRef(0)
-const activeComponent = computed(() => (componentsOrder[index.value]))
+const activeSection = computed(() => (sectionsOrder[index.value]))
 const currentProps = shallowRef({})
 
 function onNext() {
-  if (index.value + 1 > componentsOrder.length - 1) return
+  if (index.value + 1 > sectionsOrder.length - 1) return
   index.value++
   console.log('next')
 }
@@ -58,8 +71,6 @@ function onLeave(el: Element, done: () => void) {
   currentProps.value = {
     leave: { el, done }
   }
-  console.log(activeComponent.value)
-  console.log(currentProps.value)
 }
 
 function onEnter(el: Element, done: () => void) {
@@ -67,8 +78,6 @@ function onEnter(el: Element, done: () => void) {
   currentProps.value = {
     enter: { el, done }
   }
-  console.log(activeComponent.value)
-  console.log(currentProps.value)
 }
 
 function onAfterEnter(el: Element) {

@@ -1,49 +1,42 @@
 <template>
-  <v-main>
-    <div class="container fill-height">
-      <div class="header-wrapper">
-        <h1 class="header">
-          <div>Cli<span class="style-script">e</span>nts' word<span class="style-script">s</span></div>
-          <div>inspire us t<span class="style-script">o</span> new</div>
-          <div>m<span class="style-script">a</span>sterpie<span class="style-script">c</span>es</div>
-        </h1>
-      </div>
-      <div
-        class="quotes-container"
-        :style="quotesContainerStyle"
-      >
-        <TickerTape
-          v-for="quote in quotes"
-          :key="quote.text"
-          :direction="quote.direction"
-          :duration="30"
-          class="quote"
-        >
-          <span class="quote">{{ quote.text }}</span>
-        </TickerTape>
-      </div>
+  <div class="container fill-height">
+    <div class="content">
+      <h1 class="header">
+        <div>Cli<span class="style-script">e</span>nts' word<span class="style-script">s</span></div>
+        <div>inspire us t<span class="style-script">o</span> new</div>
+        <div>m<span class="style-script">a</span>sterpie<span class="style-script">c</span>es</div>
+      </h1>
     </div>
-  </v-main>
+    <div
+      class="quotes"
+      :style="quotesStyle"
+    >
+      <TickerTape
+        v-for="quote in quotes"
+        :key="quote.text"
+        :direction="quote.direction"
+        :duration="30"
+        class="quote"
+      >
+        <span class="quote">{{ quote.text }}</span>
+      </TickerTape>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { navigationEmits, useSectionNavigation } from '~/composables/sectionNavigation'
-import { transitionProps, useSectionTransition } from '~/composables/sectionTransition'
-import { useWheel } from '~/composables/wheel'
+import { useScrollAnimation } from '~/composables/scrollAnimation'
 
 const emit = defineEmits([...navigationEmits])
 const { next, back } = useSectionNavigation(emit)
 
-const props = defineProps({ ...transitionProps })
-useSectionTransition(props, { onEnter, onLeave, onAfterEnter })
-
-const { setScrollAnimation } = useWheel()
-const quotesContainerStyle = shallowRef({})
-setScrollAnimation({
+const quotesStyle = shallowRef({})
+useScrollAnimation({
   valueFrom: 100,
   valueTo: 0,
   onChange: (value: number) => {
-    quotesContainerStyle.value = {
+    quotesStyle.value = {
       transform: `translateY(${value}%)`
     }
   },
@@ -152,6 +145,10 @@ function containerOutAnimation() {
 @import "styles/variables";
 $backdrop-color: #a25b29;
 
+.container .content, .quotes {
+  position: absolute;
+}
+
 .container {
   background-image:
     radial-gradient(transparent 0, transparent 70%),
@@ -162,9 +159,45 @@ $backdrop-color: #a25b29;
     radial-gradient(at 78% 92%, $backdrop-color 0px, transparent 50%);
   background-size: 150% 150%;
   animation: aura 15s linear infinite;
-  overscroll-behavior: none;
-  padding-top: 120px;
-  padding-left: 120px;
+}
+
+.content {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  margin-left: 120px;
+  height: 100%;
+  width: 100%;
+  opacity: 60%;
+
+  .header {
+    font-size: 120px;
+    line-height: 144px;
+    text-transform: uppercase;
+    color: $redsquirrel-peach;
+    font-weight: 200;
+  }
+}
+
+.quotes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #10151B;
+
+  .quote {
+    text-transform: uppercase;
+    font-size: 7.4vh;
+    background-color: $redsquirrel-peach;
+    background-size: 100%;
+    background-repeat: repeat;
+    background-attachment: scroll;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 }
 
 @keyframes aura {
@@ -180,42 +213,5 @@ $backdrop-color: #a25b29;
   100% {
     background-position: center, 50% 50%, 30% 100%, 100% 10%, 23% 23%, 0% 80%;
   }
-}
-
-.header-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 70%;
-  opacity: 60%;
-}
-
-.header {
-  font-size: 120px;
-  line-height: 144px;
-  text-transform: uppercase;
-  color: $redsquirrel-peach;
-  font-weight: 200;
-}
-
-.quotes-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background-color: #10151B;
-}
-
-.quote {
-  text-transform: uppercase;
-  font-size: 7.4vh;
-  background-color: $redsquirrel-peach;
-  background-size: 100%;
-  background-repeat: repeat;
-  background-attachment: scroll;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 </style>
