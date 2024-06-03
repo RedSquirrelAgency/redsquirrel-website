@@ -37,13 +37,15 @@ import TestimonialsSection from '~/sections/TestimonialsSection.vue'
 import PortfolioSection from '~/sections/PortfolioSection.vue'
 import AdvantagesSection from '~/sections/AdvantagesSection.vue'
 import GoalSection from '~/sections/GoalSection.vue'
+import StagesSection from '~/sections/StagesSection.vue'
 
 const sectionsOrder = [
   { hash: 'hero', component: HeroSection, background: false },
   { hash: 'testimonials', component: TestimonialsSection, background: false },
   { hash: 'cases', component: PortfolioSection, background: true },
   { hash: 'advantages', component: AdvantagesSection, background: true },
-  { hash: 'goal', component: GoalSection, background: true }
+  { hash: 'goal', component: GoalSection, background: true },
+  { hash: 'stages', component: StagesSection, background: true }
 ]
 
 const index = shallowRef(0)

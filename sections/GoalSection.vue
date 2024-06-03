@@ -13,15 +13,11 @@
 </template>
 
 <script setup lang="ts">
-import { transitionProps, useSectionTransition } from '~/composables/sectionTransition'
 import { navigationEmits, useSectionNavigation } from '~/composables/sectionNavigation'
 import { useScrollAnimation } from '~/composables/scrollAnimation'
 
 const emit = defineEmits([...navigationEmits])
 const { next, back } = useSectionNavigation(emit)
-
-const props = defineProps({ ...transitionProps })
-useSectionTransition(props, {})
 
 const text
     = 'Our goal is to be a beneficial partner for you and develop a solution that helps achieve your business goals and automate processes. We value eco-friendly interaction with our clients.'
@@ -34,7 +30,8 @@ useScrollAnimation({
   onChange: (value: number) => {
     progress.value = value
   },
-  onScrollUpOverflow: back
+  onScrollUpOverflow: back,
+  onScrollDownOverflow: next
 })
 </script>
 

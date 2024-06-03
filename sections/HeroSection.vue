@@ -116,10 +116,6 @@ h1 {
   margin-right: auto;
   margin-top: 20px;
   text-align: center;
-  font-weight: 300;
-  font-size: 72px;
-  text-transform: uppercase;
-  color: $redsquirrel-cream-p1;
 
   .spacer {
     margin-left: 250px;

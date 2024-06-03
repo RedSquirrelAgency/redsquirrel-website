@@ -1,12 +1,10 @@
 <template>
   <div>
-    <h1 class="header">
-      <div class="first-line">
-        Imme<span class="style-script">r</span>sing deeply
-      </div>
-      <div>into each pr<span class="style-script">o</span>ject and</div>
-      <div>finding <span class="style-script">s</span>uccessful solutions</div>
-    </h1>
+    <h2>
+      <span class="line">Imme<span class="style-script">r</span>sing deeply</span>
+      <span class="line">into each pr<span class="style-script">o</span>ject and</span>
+      <span class="line">finding <span class="style-script">s</span>uccessful solutions</span>
+    </h2>
     <v-row
       class="cards"
       :style="cardsStyle"
@@ -47,16 +45,11 @@
 </template>
 
 <script setup lang="ts">
-import { shallowRef, type ShallowRef } from 'vue'
-import { transitionProps, useSectionTransition } from '~/composables/sectionTransition'
 import { navigationEmits, useSectionNavigation } from '~/composables/sectionNavigation'
 import { useScrollAnimation } from '~/composables/scrollAnimation'
 
 const emit = defineEmits([...navigationEmits])
 const { next, back } = useSectionNavigation(emit)
-
-const props = defineProps({ ...transitionProps })
-useSectionTransition(props, {})
 
 const cardsStyle = shallowRef({})
 useScrollAnimation({
@@ -110,23 +103,8 @@ const cases = [
 <style scoped lang="scss">
 @import "styles/variables";
 
-.header {
+h2 {
   margin: 120px 100px;
-  font-size: 77px;
-  line-height: 92.4px;
-  text-transform: uppercase;
-  font-weight: 200;
-
-  div {
-    background: -webkit-linear-gradient($redsquirrel-cream-m1, $redsquirrel-peach);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-
-    &.first-line {
-      margin-left: 500px;
-    }
-  }
 }
 
 .cards {

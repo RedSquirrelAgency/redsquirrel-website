@@ -1,14 +1,14 @@
 <template>
   <div>
-    <h1 class="header text-center">
-      <div><span class="style-script">W</span>e value y<span class="style-script">o</span>ur time</div>
-      <div>and k<span class="style-script">e</span>ep our promi<span class="style-script">s</span>es</div>
-    </h1>
+    <h2 class="text-center">
+      <span class="line"><span class="style-script">W</span>e value y<span class="style-script">o</span>ur time</span>
+      <span class="line">and k<span class="style-script">e</span>ep our promi<span class="style-script">s</span>es</span>
+    </h2>
     <v-container
       class="d-flex justify-center"
     >
       <v-card
-        class="card"
+        class="advantages glass"
         min-width="100%"
         flat
         :style="cardStyle"
@@ -48,15 +48,11 @@
 </template>
 
 <script setup lang="ts">
-import { transitionProps, useSectionTransition } from '~/composables/sectionTransition'
 import { navigationEmits, useSectionNavigation } from '~/composables/sectionNavigation'
 import { useScrollAnimation } from '~/composables/scrollAnimation'
 
 const emit = defineEmits([...navigationEmits])
 const { next, back } = useSectionNavigation(emit)
-
-const props = defineProps({ ...transitionProps })
-useSectionTransition(props, {})
 
 const hoveredItem = ref(-1)
 
@@ -106,27 +102,16 @@ function formatIndex(index: number) {
 <style scoped lang="scss">
 @import "styles/variables";
 
-.header {
-  font-size: 77px;
-  line-height: 92.4px;
-  text-transform: uppercase;
-  font-weight: 200;
-
-  div {
-    background: -webkit-linear-gradient($redsquirrel-cream-m1, $redsquirrel-peach);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-}
-
-.card {
+.glass {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 60px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.advantages {
   color: $redsquirrel-chocolate;
   padding: 20px 30px 20px;
 

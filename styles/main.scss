@@ -1,5 +1,32 @@
-.style-script {
-	font-family: "Style Script", cursive;
-	font-weight: 400;
-	font-style: normal;
+@import "styles/variables";
+
+h1 {
+	font-size: 72px;
+	font-weight: 300;
+	text-transform: uppercase;
+	color: $redsquirrel-cream-p1;
+
+	.style-script {
+		font-family: "Style Script", cursive;
+		font-weight: 400;
+		font-style: normal;
+	}
+}
+
+h2 {
+	font-size: 77px;
+	font-weight: 200;
+	line-height: 92.4px;
+	text-transform: uppercase;
+
+	.line {
+		background: -webkit-linear-gradient($redsquirrel-cream-m1, $redsquirrel-peach);
+		background-clip: text;
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+	}
+}
+
+.line {
+	display: block;
 }
