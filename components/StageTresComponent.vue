@@ -1,15 +1,15 @@
 <template>
-  <TresMesh :position="props.position">
-    <primitive :object="mesh">
-      <MeshGlassMaterial />
-    </primitive>
+  <primitive
+    v-if="props.visible"
+    :position="props.position"
+    :object="mesh"
+  >
     <Html
       center
       transform
       :distance-factor="1"
       :position="[0, 0, 0.025]"
       :scale="[0.75, 0.75, 0.75]"
-      wrapper-class="stage"
     >
       <div class="item">
         <div class="index">
@@ -35,24 +35,30 @@
         </div>
       </div>
     </Html>
-  </TresMesh>
+  </primitive>
 </template>
 
 <script setup lang="ts">
 import { Html } from '@tresjs/cientos'
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry'
-import { Mesh } from 'three'
+import { Mesh, MeshPhysicalMaterial } from 'three'
 
 const props = defineProps(
   {
     index: Number,
     title: String,
     subtitle: { type: [String, Array] },
-    position: Array
+    position: Array,
+    visible: Boolean
   })
 
 const geometry = new RoundedBoxGeometry(1, 1, 0.2, 6, 2)
-const mesh = new Mesh(geometry)
+const material = new MeshPhysicalMaterial({
+  roughness: 0,
+  transmission: 1,
+  thickness: 1
+})
+const mesh = new Mesh(geometry, material)
 
 function formatIndex(index: number | undefined) {
   if (index === undefined) return ''

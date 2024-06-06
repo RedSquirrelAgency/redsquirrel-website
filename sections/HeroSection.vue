@@ -25,9 +25,7 @@
             >
               {{ $t("Book a consultation") }}
             </v-btn>
-            <div class="facebook-rating">
-              {{ $t("5/5 rating on Facebook") }}
-            </div>
+            <FacebookRating class="facebook-rating" />
           </div>
         </div>
         <!-- Main offer -->
@@ -122,12 +120,6 @@ h1 {
   }
 }
 
-.facebook-rating {
-  margin-top: 135px;
-  text-transform: uppercase;
-  color: $redsquirrel-cream-p1;
-}
-
 .benefit {
   width: 372px;
 
@@ -140,8 +132,13 @@ h1 {
     color: $redsquirrel-cream-p1;
   }
 
+  .facebook-rating {
+    color: $redsquirrel-cream-p1;
+  }
+
   .consultation-button {
     margin-top: 40px;
+    margin-bottom: 135px;
   }
 }
 </style>

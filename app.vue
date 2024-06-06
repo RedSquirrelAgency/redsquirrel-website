@@ -38,6 +38,7 @@ import PortfolioSection from '~/sections/PortfolioSection.vue'
 import AdvantagesSection from '~/sections/AdvantagesSection.vue'
 import GoalSection from '~/sections/GoalSection.vue'
 import StagesSection from '~/sections/StagesSection.vue'
+import ReviewsSection from '~/sections/ReviewsSection.vue'
 
 const sectionsOrder = [
   { hash: 'hero', component: HeroSection, background: false },
@@ -45,7 +46,8 @@ const sectionsOrder = [
   { hash: 'cases', component: PortfolioSection, background: true },
   { hash: 'advantages', component: AdvantagesSection, background: true },
   { hash: 'goal', component: GoalSection, background: true },
-  { hash: 'stages', component: StagesSection, background: true }
+  { hash: 'stages', component: StagesSection, background: true },
+  { hash: 'reviews', component: ReviewsSection, background: true }
 ]
 
 const index = shallowRef(0)
@@ -70,7 +72,6 @@ function onBack() {
 
 function onLeave(el: Element, done: () => void) {
   el.className = 'current-section'
-  console.log('onEnter')
   $gsap.fromTo(el,
     {
       transform: 'scale(1)',
@@ -89,7 +90,6 @@ function onLeave(el: Element, done: () => void) {
 
 function onEnter(el: Element, done: () => void) {
   el.className = 'next-section'
-  console.log('onEnter')
   $gsap.fromTo(el,
     {
       transform: 'scale(2)',
@@ -108,6 +108,18 @@ function onEnter(el: Element, done: () => void) {
 
 onMounted(() => {
   document.addEventListener('wheel', (e: WheelEvent) => e.preventDefault(), { passive: false })
+})
+
+onBeforeMount(() => {
+  const hash = router.currentRoute.value.hash
+  const sectionIndex = sectionsOrder.findIndex(section => `#${section.hash}` === hash)
+  if (sectionIndex != -1) {
+    console.log(sectionIndex)
+    index.value = sectionIndex
+  }
+  else {
+    index.value = 0
+  }
 })
 </script>
 

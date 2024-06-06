@@ -12,7 +12,7 @@ interface ScrollAnimationOptions {
 }
 
 const OVERFLOW_THRESHOLD = 10
-const SCROLL_COOLDOWN = 1
+const SCROLL_COOLDOWN = 3
 const DELTA_DIVISION_FACTOR = 10
 
 export function useScrollAnimation(scrollAnimationOptions: ScrollAnimationOptions) {
@@ -63,6 +63,7 @@ export function useScrollAnimation(scrollAnimationOptions: ScrollAnimationOption
   }
 
   function onWheel(event: WheelEvent) {
+    console.log(event)
     if (wheelHandlerDisabled) return
     scrollAnimation.onScroll(event)
   }
@@ -71,23 +72,22 @@ export function useScrollAnimation(scrollAnimationOptions: ScrollAnimationOption
     return Math.abs(deltaY) > OVERFLOW_THRESHOLD
   }
 
-  function init() {
+  onUnmounted(() => {
+    document.removeEventListener('wheel', onWheel)
+  })
+
+  onMounted(() => {
     scrollAnimation.scrollPosition
     onChange(valueFrom)
     const waitForCooldownCallback = (event: WheelEvent) => {
+      console.log(event.deltaY)
       if (Math.abs(event.deltaY) < SCROLL_COOLDOWN) {
         document.removeEventListener('wheel', waitForCooldownCallback)
         document.addEventListener('wheel', onWheel, { passive: false })
       }
     }
     document.addEventListener('wheel', waitForCooldownCallback, { passive: false })
-  }
-
-  onUnmounted(() => {
-    document.removeEventListener('wheel', onWheel)
   })
-
-  init()
 
   return {}
 }

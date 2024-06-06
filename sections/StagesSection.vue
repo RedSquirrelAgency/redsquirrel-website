@@ -4,10 +4,10 @@
       <h2 class="text-center">
         <span class="line">St<span class="style-script">a</span>ges tran<span class="style-script">s</span>paren<span class="style-script">c</span>y</span>
       </h2>
-      <div class="subtitle text-center text-uppercase">
+      <h4 class="text-center">
         <span class="line">Thanks to aligning important stages and safeguarding our decisions,</span>
         <span class="line">we can manage to fully meet your expectations</span>
-      </div>
+      </h4>
     </div>
     <div class="canvas">
       <TresCanvas v-bind="gl">
@@ -16,6 +16,7 @@
           v-for="(stage, index) in stages"
           v-bind="stage"
           :key="index"
+          :visible="stage.position[2] >= cameraPosition[2] - 7"
           :index="index"
         />
         <TresAmbientLight />
@@ -38,6 +39,7 @@ const gl = {
   clearColor: 0x000000,
   shadows: true,
   alpha: true,
+  antialias: true,
   shadowMapType: BasicShadowMap,
   outputColorSpace: SRGBColorSpace,
   toneMapping: NoToneMapping
@@ -45,19 +47,20 @@ const gl = {
 
 useScrollAnimation({
   valueFrom: 300,
-  valueTo: -500,
+  valueTo: -2000,
   onChange: (value: number) => {
     const z = value / 100
     cameraPosition.value = [0, 0, z]
   },
-  onScrollUpOverflow: back
+  onScrollUpOverflow: back,
+  onScrollDownOverflow: next
 })
 
 const stages = [
   {
     title: 'Free Consultation',
     subtitle: 'We introduce ourselves, delve into your task, ask crucial questions, provide a price proposal (up to 3 working days), and sign the contract',
-    position: [-1.5, -0.4, 0]
+    position: [-1.5, 0, 0]
   },
   {
     title: 'Analytics',
@@ -66,7 +69,7 @@ const stages = [
       'Market and Competitor Analysis',
       'Audience research and creation of audience personas'
     ],
-    position: [1.5, 0, -1]
+    position: [1.5, 0, -2.5]
   },
   {
     title: 'Prototyping',
@@ -74,7 +77,38 @@ const stages = [
       'Writing understandable texts',
       'Prototype development + approval'
     ],
-    position: [-1, 0.4, -5]
+    position: [-1, 0, -5]
+  },
+  {
+    title: 'Design',
+    subtitle: [
+      'Selection of design references',
+      'Preparation of mood board + approval',
+      'Drawing up design concept + approval',
+      'Drawing up the mobile version and UI kit'
+    ],
+    position: [1, 0, -7.5]
+  },
+  {
+    title: 'Development',
+    subtitle: [
+      'Website layout and animation implementation',
+      'Integration with CMS WordPress + approval',
+      'Website hosting and domain linking',
+      'Integration of additional solutions'
+    ],
+    position: [-1.5, 0, -10]
+  },
+  {
+    title: 'Testing and Delivery',
+    subtitle: [
+      'Checking website functionality on different devices and browsers',
+      'Basic SEO optimization',
+      'Preparation of website management instructions',
+      'Handover of all source files',
+      '30-day free support'
+    ],
+    position: [1.5, 0, -12.5]
   }
 ]
 </script>
@@ -94,9 +128,5 @@ const stages = [
   z-index: 1;
   width: 100%;
   height: 100%;
-}
-
-.subtitle {
-  color: $redsquirrel-cream;
 }
 </style>

@@ -19,14 +19,39 @@ h2 {
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 	}
+}
 
-	.style-script {
-		font-family: "Style Script", cursive;
-		font-weight: 400;
-		font-style: normal;
-	}
+h3 {
+	font-size: 46px;
+	font-weight: 200;
+	line-height: 69.92px;
+	text-transform: uppercase;
+	color: $redsquirrel-cream;
+}
+
+h4 {
+	font-size: 20px;
+	font-weight: 400;
+	line-height: 30px;
+	text-transform: uppercase;
+	color: $redsquirrel-cream;
+}
+
+.style-script {
+	font-family: "Style Script", cursive;
+	font-weight: 400;
+	font-style: normal;
 }
 
 .line {
 	display: block;
+}
+
+.glass {
+	background: rgba(255, 255, 255, 0.2);
+	border-radius: 60px;
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(5px);
+	-webkit-backdrop-filter: blur(5px);
+	border: 1px solid rgba(255, 255, 255, 0.3);
 }
