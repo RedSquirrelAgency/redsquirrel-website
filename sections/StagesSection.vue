@@ -2,7 +2,10 @@
   <div class="d-flex justify-center">
     <div class="header">
       <h2 class="text-center">
-        <span class="line">St<span class="style-script">a</span>ges tran<span class="style-script">s</span>paren<span class="style-script">c</span>y</span>
+        <HeadingText
+          text="Stages transparency"
+          :font-replacements="[[0, 2], [1, 4], [1, 10]]"
+        />
       </h2>
       <h4 class="text-center">
         <span class="line">Thanks to aligning important stages and safeguarding our decisions,</span>
@@ -29,6 +32,7 @@
 import { BasicShadowMap, NoToneMapping, SRGBColorSpace } from 'three'
 import { navigationEmits, useSectionNavigation } from '~/composables/sectionNavigation'
 import { useScrollAnimation } from '~/composables/scrollAnimation'
+import MultifontText from '~/components/MultifontText.vue'
 
 const emit = defineEmits([...navigationEmits])
 const { next, back } = useSectionNavigation(emit)

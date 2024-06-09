@@ -30,12 +30,11 @@
         </div>
         <!-- Main offer -->
         <h1>
-          <div>
-            <span>A website with</span>
-            <span class="spacer" />
-            <span>a cr<span class="style-script">e</span>ative</span>
-          </div>
-          <div>d<span class="style-script">e</span>sign and persuasive content</div>
+          <HeadingText
+            text="A website with a creative design and persuasive content"
+            :spacers="[2]"
+            :line-breaks="[4]"
+          />
         </h1>
       </div>
     </div>
@@ -114,10 +113,6 @@ h1 {
   margin-right: auto;
   margin-top: 20px;
   text-align: center;
-
-  .spacer {
-    margin-left: 250px;
-  }
 }
 
 .benefit {

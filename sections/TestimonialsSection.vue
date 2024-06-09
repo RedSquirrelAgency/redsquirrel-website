@@ -3,9 +3,9 @@
     <div class="container fill-height">
       <div class="content">
         <h1 class="header">
-          <div>Cli<span class="style-script">e</span>nts' word<span class="style-script">s</span></div>
-          <div>inspire us t<span class="style-script">o</span> new</div>
-          <div>m<span class="style-script">a</span>sterpie<span class="style-script">c</span>es</div>
+          <MultifontText text="Clients' words" />
+          <MultifontText text="inspire us to new" />
+          <MultifontText text="masterpieces" />
         </h1>
       </div>
       <div

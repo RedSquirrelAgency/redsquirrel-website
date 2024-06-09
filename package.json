@@ -20,6 +20,7 @@
     "@tresjs/nuxt": "^2.1.2",
     "@tresjs/post-processing": "^0.7.1",
     "@tweenjs/tween.js": "^23.1.2",
+    "howler": "^2.2.4",
     "mitt": "^3.0.1",
     "nuxt": "^3.11.2",
     "three": "^0.164.1",
@@ -29,6 +30,7 @@
   "devDependencies": {
     "@hypernym/nuxt-gsap": "^2.4.2",
     "@nuxtjs/google-fonts": "^3.2.0",
+    "@types/howler": "^2.2.11",
     "@types/three": "^0.164.0",
     "sass": "^1.77.1",
     "vite-plugin-vuetify": "^2.0.3",

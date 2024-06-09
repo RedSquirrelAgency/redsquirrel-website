@@ -1,8 +1,8 @@
 <template>
   <div>
     <h2 class="text-center">
-      <span class="line"><span class="style-script">W</span>e value y<span class="style-script">o</span>ur time</span>
-      <span class="line">and k<span class="style-script">e</span>ep our promi<span class="style-script">s</span>es</span>
+      <MultifontText text="We value your time" />
+      <MultifontText text="and keep our promises" />
     </h2>
     <v-container
       class="d-flex justify-center"

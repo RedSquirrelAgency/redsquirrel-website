@@ -13,20 +13,12 @@ h2 {
 	line-height: 92.4px;
 	text-transform: uppercase;
 
-	.line {
+	&:not(.plain) .line {
 		background: -webkit-linear-gradient($redsquirrel-cream-m1, $redsquirrel-peach);
 		background-clip: text;
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 	}
-}
-
-h3 {
-	font-size: 46px;
-	font-weight: 200;
-	line-height: 69.92px;
-	text-transform: uppercase;
-	color: $redsquirrel-cream;
 }
 
 h4 {
@@ -54,4 +46,8 @@ h4 {
 	backdrop-filter: blur(5px);
 	-webkit-backdrop-filter: blur(5px);
 	border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.v-input .v-input__prepend {
+	margin-inline-end: 0;
 }

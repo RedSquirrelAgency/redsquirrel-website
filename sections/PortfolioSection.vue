@@ -1,9 +1,9 @@
 <template>
   <div>
     <h2>
-      <span class="line">Imme<span class="style-script">r</span>sing deeply</span>
-      <span class="line">into each pr<span class="style-script">o</span>ject and</span>
-      <span class="line">finding <span class="style-script">s</span>uccessful solutions</span>
+      <MultifontText text="Immersing deeply" />
+      <MultifontText text="into each project and " />
+      <MultifontText text="finding successful solutions" />
     </h2>
     <v-row
       class="cards"
