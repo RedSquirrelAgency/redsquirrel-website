@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>
+    <h2 class="gradient-1">
       <MultifontText text="Immersing deeply" />
       <MultifontText text="into each project and " />
       <MultifontText text="finding successful solutions" />

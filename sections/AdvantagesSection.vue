@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-center">
+    <h2 class="gradient-1 text-center">
       <MultifontText text="We value your time" />
       <MultifontText text="and keep our promises" />
     </h2>

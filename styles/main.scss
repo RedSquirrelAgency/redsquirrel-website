@@ -13,8 +13,15 @@ h2 {
 	line-height: 92.4px;
 	text-transform: uppercase;
 
-	&:not(.plain) .line {
+	&.gradient-1 .line {
 		background: -webkit-linear-gradient($redsquirrel-cream-m1, $redsquirrel-peach);
+		background-clip: text;
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+	}
+
+	&.gradient-2 .line {
+		background: -webkit-linear-gradient(#FB9F6F, #FFC6A9);
 		background-clip: text;
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;

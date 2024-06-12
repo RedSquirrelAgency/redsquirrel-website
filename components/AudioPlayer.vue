@@ -4,21 +4,38 @@
     min-width="600"
     max-width="600"
   >
-    <v-toolbar color="transparent">
+    <v-toolbar
+      class="toolbar"
+      color="transparent"
+      height="44"
+    >
       <template #append>
         <v-btn
+          rounded
+          size="24"
           color="#85553D"
-          :icon="fullTranscription ? 'mdi-fullscreen-exit' : 'mdi-fullscreen'"
           @click="fullTranscription = !fullTranscription"
-        />
+        >
+          <v-icon size="16">
+            {{ fullTranscription ? 'mdi-fullscreen-exit' : 'mdi-fullscreen' }}
+          </v-icon>
+        </v-btn>
         <v-btn
+          size="24"
           icon="mdi-close"
           color="#85553D"
           @click="emit('close')"
-        />
+        >
+          <v-icon size="16">
+            mdi-close
+          </v-icon>
+        </v-btn>
       </template>
     </v-toolbar>
-    <v-card-text v-if="fullTranscription">
+    <v-card-text
+      v-if="fullTranscription"
+      class="subtitles full"
+    >
       <div
         v-for="({ text }, index) in props.sound.transcription"
         :key="index"
@@ -26,13 +43,22 @@
         {{ text }}
       </div>
     </v-card-text>
-    <v-card-text v-else-if="subtitles">
-      <div>{{ subtitles.previous }}</div>
-      <div><b>{{ subtitles.current }}</b></div>
-      <div>{{ subtitles.next }}</div>
+    <v-card-text
+      v-else-if="subtitles"
+      class="subtitles"
+    >
+      <div class="previous">
+        {{ subtitles.previous }}
+      </div>
+      <div class="current">
+        {{ subtitles.current }}
+      </div>
+      <div class="next">
+        {{ subtitles.next }}
+      </div>
     </v-card-text>
     <v-card-actions class="pt-0">
-      <v-container>
+      <v-container class="controls-container">
         <v-slider
           v-model="seek"
           min="0"
@@ -41,6 +67,7 @@
           track-size="4"
           thumb-size="12"
           elevation="0"
+          :hide-details="true"
           @update:model-value="player.seek(player.duration() * seek)"
         />
         <v-row class="d-flex align-center justify-center">
@@ -49,50 +76,48 @@
           </v-col>
           <v-col>
             <v-btn
-              icon="mdi-rewind-15"
-              color="#85553D"
+              rounded
+              :size="CONTROLS_SIZE"
               @click="rewind(-0.5)"
-            />
+            >
+              <Rewind15Icon :color="CONTROLS_COLOR" />
+            </v-btn>
             <v-btn
               v-if="playing"
-              icon="mdi-pause-box"
-              color="#85553D"
+              rounded
+              :size="CONTROLS_SIZE"
               @click="player.pause()"
-            />
+            >
+              <PauseIcon :color="CONTROLS_COLOR" />
+            </v-btn>
             <v-btn
               v-else
-              icon="mdi-play-box"
-              color="#85553D"
+              rounded
+              :size="CONTROLS_SIZE"
               @click="player.play()"
-            />
+            >
+              <PlayIcon :color="CONTROLS_COLOR" />
+            </v-btn>
             <v-btn
-              icon="mdi-fast-forward-15"
-              color="#85553D"
+              rounded
+              :size="CONTROLS_SIZE"
               @click="rewind(0.5)"
-            />
+            >
+              <FastForward15Icon :color="CONTROLS_COLOR" />
+            </v-btn>
           </v-col>
           <v-col class="d-flex justify-center align-center">
             <v-btn
-              v-if="muted"
-              icon="mdi-volume-off"
-              size="small"
+              rounded
+              size="24"
               color="#85553D"
-              @click="mute(false)"
-            />
-            <v-btn
-              v-else-if="volume < 0.2"
-              icon="mdi-volume-low"
-              size="small"
-              color="#85553D"
-              @click="mute(true)"
-            />
-            <v-btn
-              v-else
-              icon="mdi-volume-high"
-              size="small"
-              color="#85553D"
-              @click="mute(true)"
-            />
+              @click="mute(!muted)"
+            >
+              <v-icon
+                size="20"
+                :icon="volumeIcon"
+              />
+            </v-btn>
             <v-slider
               v-model="volume"
               class="volume-slider"
@@ -101,7 +126,7 @@
               color="#85553D"
               track-color="#85553D"
               track-fill-color="#85553D"
-              track-size="2"
+              track-size="3"
               thumb-size="8"
               elevation="0"
               :hide-details="true"
@@ -117,6 +142,9 @@
 <script setup lang="ts">
 import { Howl } from 'howler'
 import type { PropType } from 'vue'
+
+const CONTROLS_COLOR = '#85553D'
+const CONTROLS_SIZE = 48
 
 interface ISubtitles {
   previous: string
@@ -203,6 +231,16 @@ function mute(mute: boolean) {
   }
 }
 
+const volumeIcon = computed(() => {
+  if (muted.value) {
+    return 'mdi-volume-off'
+  }
+  if (volume.value < 0.2) {
+    return 'mdi-volume-low'
+  }
+  return 'mdi-volume-high'
+})
+
 function rewind(seconds: number) {
   const seek = player.seek() + seconds
   if (seek < 0) {
@@ -268,11 +306,40 @@ onUnmounted(() => {
   bottom: 20px;
   width: 600px;
 
+  .toolbar {
+    padding: 0 12px;
+  }
+
+  .controls-container {
+    padding: 16px 12px 12px;
+  }
+
   .sound-name {
     text-transform: uppercase;
     color: $redsquirrel-chocolate;
     font-weight: 600;
     font-size: 15px;
+  }
+
+  .volume-slider {
+    padding-left: 10px;
+  }
+
+  .subtitles {
+    padding: 0 20px;
+    font-size: 15px;
+    line-height: 20px;
+    color: $redsquirrel-chocolate-m1;
+
+    .current {
+      color: $redsquirrel-chocolate;
+    }
+
+    &.full {
+      font-size: 15px;
+      line-height: 20px;
+      color: $redsquirrel-chocolate;
+    }
   }
 }
 </style>

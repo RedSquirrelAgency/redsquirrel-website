@@ -1,8 +1,11 @@
 <template>
-  <div class="container d-flex justify-center">
+  <div
+    class="container d-flex justify-center"
+    :style="containerStyle"
+  >
     <div class="offer">
       <FacebookRating class="facebook-rating text-center" />
-      <h2 class="plain text-center">
+      <h2 class="text-center">
         <HeadingText
           text="We are chosen for our high level of expertise and service"
           :line-breaks="[4, 8]"
@@ -50,16 +53,16 @@
         </div>
       </div>
     </v-card>
-    <AudioPlayer
-      v-if="sound"
-      :sound="sound"
-      @play="playing = true"
-      @end="playing = false"
-      @stop="playing = false"
-      @pause="playing = false"
-      @close="onAudioPlayerClose()"
-    />
   </div>
+  <AudioPlayer
+    v-if="sound"
+    :sound="sound"
+    @play="playing = true"
+    @end="playing = false"
+    @stop="playing = false"
+    @pause="playing = false"
+    @close="onAudioPlayerClose()"
+  />
 </template>
 
 <script setup lang="ts">
@@ -68,7 +71,7 @@ import { useScrollAnimation } from '~/composables/scrollAnimation'
 import AudioPlayer from '~/components/AudioPlayer.vue'
 
 const emit = defineEmits([...navigationEmits])
-const { back } = useSectionNavigation(emit)
+const { back, next } = useSectionNavigation(emit)
 
 interface IReviewPosition {
   top?: string
@@ -89,11 +92,20 @@ const sound = ref<ISound>()
 const selected = ref<number>()
 const playing = ref(false)
 
+const containerStyle = ref({})
 useScrollAnimation({
   valueFrom: 0,
-  valueTo: 20,
-  onChange: () => {},
-  onScrollUpOverflow: back
+  valueTo: -200,
+  onChange: (value: number) => {
+    containerStyle.value = {
+      position: 'absolute',
+      height: '100%',
+      width: '100%',
+      top: `${value}px`
+    }
+  },
+  onScrollUpOverflow: back,
+  onScrollDownOverflow: next
 })
 
 function onReviewClick(review: IReview, index: number) {
@@ -141,7 +153,7 @@ const reviews: IReview[] = [
     niche: 'Metaphysics Expert',
     avatar: 'avatars/anna_soboleva.png',
     sound: { src: 'adam.mp3', transcription },
-    position: { top: '100px', left: '488px' }
+    position: { top: '150px', left: '488px' }
   },
   {
     company: 'Rayth',
@@ -191,6 +203,20 @@ const reviews: IReview[] = [
     avatar: 'avatars/ezdesign.png',
     sound: { src: 'adam.mp3', transcription },
     position: { top: '728px', right: '215px' }
+  },
+  {
+    company: 'Kare',
+    niche: 'Beauty Saloon',
+    avatar: 'avatars/kare.png',
+    sound: { src: 'adam.mp3', transcription },
+    position: { top: '820px', left: '488px' }
+  },
+  {
+    company: 'Ekaterina U.',
+    niche: 'Beauty Expert',
+    avatar: 'avatars/ekaterina_u.png',
+    sound: { src: 'adam.mp3', transcription },
+    position: { top: '790px', right: '488px' }
   }
 ]
 </script>
@@ -208,8 +234,7 @@ const reviews: IReview[] = [
 
 .offer {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  top: 398px;
   display: flex;
   flex-direction: column;
   justify-content: center;

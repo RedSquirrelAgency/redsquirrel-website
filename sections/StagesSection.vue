@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex justify-center">
     <div class="header">
-      <h2 class="text-center">
+      <h2 class="gradient-1 text-center">
         <HeadingText
           text="Stages transparency"
           :font-replacements="[[0, 2], [1, 4], [1, 10]]"
@@ -32,7 +32,6 @@
 import { BasicShadowMap, NoToneMapping, SRGBColorSpace } from 'three'
 import { navigationEmits, useSectionNavigation } from '~/composables/sectionNavigation'
 import { useScrollAnimation } from '~/composables/scrollAnimation'
-import MultifontText from '~/components/MultifontText.vue'
 
 const emit = defineEmits([...navigationEmits])
 const { next, back } = useSectionNavigation(emit)
@@ -51,7 +50,7 @@ const gl = {
 
 useScrollAnimation({
   valueFrom: 300,
-  valueTo: -2000,
+  valueTo: -1300,
   onChange: (value: number) => {
     const z = value / 100
     cameraPosition.value = [0, 0, z]

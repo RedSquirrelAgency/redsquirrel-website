@@ -26,7 +26,8 @@ export default defineNuxtConfig({
     '@hypernym/nuxt-gsap',
     '@nuxtjs/i18n',
     '@nuxt/eslint',
-    '@nuxtjs/google-fonts'
+    '@nuxtjs/google-fonts',
+    'nuxt-icon'
   ],
   vite: {
     vue: {
@@ -53,6 +54,10 @@ export default defineNuxtConfig({
   components: [
     {
       path: '~/components',
+      pathPrefix: false
+    },
+    {
+      path: '~/icons',
       pathPrefix: false
     }
   ]
