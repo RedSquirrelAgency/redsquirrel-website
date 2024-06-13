@@ -22,6 +22,26 @@
           <div>Email</div>
         </v-col>
         <v-col class="meeting">
+          <div class="canvas">
+            <TresCanvas v-bind="gl">
+              <TresPerspectiveCamera
+                :fov="70"
+                :look-at="[0, 0, 0]"
+                :zoom="2.5"
+              />
+              <Suspense>
+                <SquirrelTresComponent
+                  :position="[0, -1, 0]"
+                  :rotation="[0, 0, 0]"
+                  :sparkle="false"
+                  :transmission="0.9"
+                  :roughness="0.1"
+                  :thickness="1"
+                  :ior="5"
+                />
+              </Suspense>
+            </TresCanvas>
+          </div>
           <div class="about-meeting">
             <span class="avatar">
               <v-avatar
@@ -55,11 +75,23 @@
 </template>
 
 <script setup lang="ts">
+import { BasicShadowMap, NoToneMapping, SRGBColorSpace } from 'three'
 import { navigationEmits, useSectionNavigation } from '~/composables/sectionNavigation'
 import { useScrollAnimation } from '~/composables/scrollAnimation'
+import SquirrelTresComponent from '~/components/SquirrelTresComponent.vue'
 
 const emit = defineEmits([...navigationEmits])
 const { next, back } = useSectionNavigation(emit)
+
+const gl = {
+  clearColor: 0x000000,
+  shadows: true,
+  alpha: true,
+  antialias: true,
+  shadowMapType: BasicShadowMap,
+  outputColorSpace: SRGBColorSpace,
+  toneMapping: NoToneMapping
+}
 
 useScrollAnimation({
   valueFrom: 0,
@@ -108,6 +140,15 @@ h2 {
     p {
       display: inline;
     }
+  }
+
+  .canvas {
+    position: absolute;
+    top: 400px;
+    right: 200px;
+    width: 300px;
+    height: 300px;
+    z-index: 2;
   }
 }
 </style>

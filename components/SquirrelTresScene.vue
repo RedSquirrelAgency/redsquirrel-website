@@ -11,11 +11,10 @@
   <TresPerspectiveCamera
     :fov="60"
   />
-  <Suspense>
-    <primitive :object="mesh">
-      <Sparkles />
-    </primitive>
-  </Suspense>
+  <SquirrelTresComponent
+    :position="squirrelPosition"
+    :rotation="squirrelRotation"
+  />
   <TresDirectionalLight
     :position="new Vector3(0, 0, 30)"
     :intensity="10"
@@ -23,16 +22,12 @@
 </template>
 
 <script setup lang="ts">
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 import { degToRad } from 'three/src/math/MathUtils'
 import { Clock, Color, type PerspectiveCamera, TextureLoader } from 'three'
 import {
-  EquirectangularReflectionMapping,
-  MeshPhysicalMaterial,
   Vector3
 } from 'three'
-import { useLoader, useTresContext } from '@tresjs/core'
-import { RGBELoader } from 'three-stdlib'
+import { useTresContext } from '@tresjs/core'
 import * as TWEEN from '@tweenjs/tween.js'
 import CustomisedStars from '~/components/CustomisedStars.vue'
 
@@ -41,23 +36,10 @@ const props = defineProps({
 })
 
 const starsAlpha = new TextureLoader().load('/redsquirrel-website/star_alpha_map.png')
-const hdrEquirect = new RGBELoader().load('/redsquirrel-website/empty_warehouse_01_2k.hdr', () => {
-  hdrEquirect.mapping = EquirectangularReflectionMapping
-})
-const { children } = await useLoader(OBJLoader, '/redsquirrel-website/Squirrel.obj')
-const mesh = children[0]
-mesh.scale.set(0.025, 0.025, 0.025)
-mesh.rotateY(2.5)
-
-const material = new MeshPhysicalMaterial({
-  roughness: 0,
-  transmission: 1, // Add transparency
-  thickness: 1, // Add refraction!
-  envMap: hdrEquirect
-})
-mesh.material = material
-
 const yRotation = shallowRef(0)
+const squirrelPosition = shallowRef([0, 0, 0])
+const squirrelRotation = shallowRef([0, 0, 0])
+
 onMounted(() => {
   const { camera } = useTresContext()
   const perspectiveCamera = camera.value as PerspectiveCamera
@@ -65,21 +47,27 @@ onMounted(() => {
 
   const direction = new Vector3()
   const startPosition = new Vector3()
-  perspectiveCamera.lookAt(mesh.position)
+  perspectiveCamera.lookAt(arrayToVector3(squirrelPosition.value))
   perspectiveCamera.rotateX(0.1)
   perspectiveCamera.getWorldDirection(direction)
   startPosition.copy(perspectiveCamera.position)
 
+  function arrayToVector3(array: number[]): Vector3 {
+    return new Vector3(array[0], array[1], array[2])
+  }
+
   document.addEventListener('mousemove', (e) => {
     const percentageX = e.screenX / window.innerWidth
-    mesh.rotation.y = degToRad(180 * percentageX)
+    squirrelRotation.value[1] = degToRad(180 * percentageX)
+    squirrelRotation.value = [...squirrelRotation.value]
   })
 
   useRenderLoop().onLoop(({ delta }) => {
     yRotation.value += 0.02 * delta
 
     const time = clock.getElapsedTime()
-    mesh.position.y = Math.cos(time) * 0.1
+    squirrelPosition.value[1] = Math.cos(time) * 0.1
+    squirrelPosition.value = [...squirrelPosition.value]
 
     TWEEN.update()
   })
