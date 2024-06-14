@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex justify-center">
+  <div class="container d-flex justify-center">
     <div class="header">
       <h2 class="gradient-1 text-center">
         <HeadingText
@@ -119,16 +119,20 @@ const stages = [
 <style scoped lang="scss">
 @import "styles/variables";
 
+.container {
+  position: relative;
+}
+
 .header {
   position: absolute;
-  z-index: 2;
+  z-index: 3;
   width: 100%;
   height: 100%;
 }
 
 .canvas {
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   width: 100%;
   height: 100%;
 }

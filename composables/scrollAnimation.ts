@@ -63,7 +63,6 @@ export function useScrollAnimation(scrollAnimationOptions: ScrollAnimationOption
   }
 
   function onWheel(event: WheelEvent) {
-    console.log(event)
     if (wheelHandlerDisabled) return
     scrollAnimation.onScroll(event)
   }
@@ -80,7 +79,6 @@ export function useScrollAnimation(scrollAnimationOptions: ScrollAnimationOption
     scrollAnimation.scrollPosition
     onChange(valueFrom)
     const waitForCooldownCallback = (event: WheelEvent) => {
-      console.log(event.deltaY)
       if (Math.abs(event.deltaY) < SCROLL_COOLDOWN) {
         document.removeEventListener('wheel', waitForCooldownCallback)
         document.addEventListener('wheel', onWheel, { passive: false })

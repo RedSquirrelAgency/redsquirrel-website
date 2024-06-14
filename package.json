@@ -20,6 +20,7 @@
     "@tresjs/nuxt": "^2.1.2",
     "@tresjs/post-processing": "^0.7.1",
     "@tweenjs/tween.js": "^23.1.2",
+    "@vimeo/player": "^2.23.0",
     "howler": "^2.2.4",
     "mitt": "^3.0.1",
     "nuxt": "^3.11.2",

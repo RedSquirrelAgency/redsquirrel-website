@@ -40,6 +40,7 @@ import GoalSection from '~/sections/GoalSection.vue'
 import StagesSection from '~/sections/StagesSection.vue'
 import ReviewsSection from '~/sections/ReviewsSection.vue'
 import BookSection from '~/sections/BookSection.vue'
+import TeamSection from '~/sections/TeamSection.vue'
 
 const sectionsOrder = [
   { hash: 'hero', component: HeroSection, background: false },
@@ -47,6 +48,7 @@ const sectionsOrder = [
   { hash: 'cases', component: PortfolioSection, background: true },
   { hash: 'advantages', component: AdvantagesSection, background: true },
   { hash: 'goal', component: GoalSection, background: true },
+  { hash: 'team', component: TeamSection, background: true },
   { hash: 'stages', component: StagesSection, background: true },
   { hash: 'reviews', component: ReviewsSection, background: true },
   { hash: 'book', component: BookSection, background: false }
@@ -62,18 +64,18 @@ function onNext() {
   if (index.value + 1 > sectionsOrder.length - 1) return
   index.value++
   router.replace(`#${activeSection.value.hash}`)
-  console.log('next')
+  console.log('next', activeSection.value.hash)
 }
 
 function onBack() {
   if (index.value < 0) return
   index.value--
   router.replace(`#${activeSection.value.hash}`)
-  console.log('back')
+  console.log('back', activeSection.value.hash)
 }
 
 function onLeave(el: Element, done: () => void) {
-  el.className = 'current-section'
+  el.classList.add('current-section')
   $gsap.fromTo(el,
     {
       transform: 'scale(1)',
@@ -84,14 +86,17 @@ function onLeave(el: Element, done: () => void) {
       transform: 'scale(2)',
       filter: 'blur(4px)',
       opacity: 0,
-      duration: 3,
+      duration: 1,
       ease: 'power4.out',
-      onComplete: done
+      onComplete: () => {
+        el.classList.remove('current-section')
+        done()
+      }
     })
 }
 
 function onEnter(el: Element, done: () => void) {
-  el.className = 'next-section'
+  el.classList.add('next-section')
   $gsap.fromTo(el,
     {
       transform: 'scale(2)',
@@ -102,9 +107,12 @@ function onEnter(el: Element, done: () => void) {
       transform: 'scale(1)',
       filter: 'blur(0px)',
       opacity: 1,
-      duration: 3,
+      duration: 1,
       ease: 'power4.out',
-      onComplete: done
+      onComplete: () => {
+        el.classList.remove('next-section')
+        done()
+      }
     })
 }
 
@@ -116,7 +124,6 @@ onBeforeMount(() => {
   const hash = router.currentRoute.value.hash
   const sectionIndex = sectionsOrder.findIndex(section => `#${section.hash}` === hash)
   if (sectionIndex != -1) {
-    console.log(sectionIndex)
     index.value = sectionIndex
   }
   else {

@@ -1,6 +1,6 @@
 <template>
   <v-main>
-    <div class="container fill-height">
+    <div class="container">
       <div class="background">
         <img
           class="star"
@@ -34,6 +34,8 @@
 @import "styles/variables";
 
 .container {
+  width: 100%;
+  height: 100%;
   background-color: $redsquirrel-peach;
 }
 

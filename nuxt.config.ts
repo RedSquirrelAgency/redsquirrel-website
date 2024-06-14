@@ -26,8 +26,7 @@ export default defineNuxtConfig({
     '@hypernym/nuxt-gsap',
     '@nuxtjs/i18n',
     '@nuxt/eslint',
-    '@nuxtjs/google-fonts',
-    'nuxt-icon'
+    '@nuxtjs/google-fonts'
   ],
   vite: {
     vue: {
