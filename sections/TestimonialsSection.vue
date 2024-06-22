@@ -1,52 +1,55 @@
 <template>
-  <v-main>
-    <div class="container fill-height">
-      <div class="content">
-        <h1 class="header">
-          <MultifontText text="Clients' words" />
-          <MultifontText text="inspire us to new" />
-          <MultifontText text="masterpieces" />
-        </h1>
-      </div>
-      <div
-        class="quotes"
-        :style="quotesStyle"
-      >
-        <TickerTape
-          v-for="quote in quotes"
-          :key="quote.text"
-          :direction="quote.direction"
-          :duration="30"
-          class="quote"
-        >
-          <span class="quote">{{ quote.text }}</span>
-        </TickerTape>
-      </div>
+  <div
+    ref="containerRef"
+    class="container"
+  >
+    <div class="header">
+      <h2 class="gradient-1">
+        <HeadingText
+          text="Clients' words inspire us to new masterpieces"
+          :font-replacements="[[0, 3], [1, 4], [4, 1], [6, 1]]"
+          :line-breaks="[1, 5]"
+        />
+      </h2>
     </div>
-  </v-main>
+    <div class="quotes">
+      <TickerTape
+        v-for="(quote, index) in quotes"
+        :key="index"
+        :direction="quote.direction"
+        :duration="30"
+      >
+        <span
+          class="quote"
+          :class="(index % 2 === 0) && 'darker'"
+        >{{ quote.text }}</span>
+      </TickerTape>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { navigationEmits, useSectionNavigation } from '~/composables/sectionNavigation'
-import { useScrollAnimation } from '~/composables/scrollAnimation'
-
-const emit = defineEmits([...navigationEmits])
-const { next, back } = useSectionNavigation(emit)
-
-const quotesStyle = shallowRef({})
-useScrollAnimation({
-  valueFrom: 100,
-  valueTo: 0,
-  onChange: (value: number) => {
-    quotesStyle.value = {
-      transform: `translateY(${value}%)`
-    }
-  },
-  onScrollUpOverflow: back,
-  onScrollDownOverflow: next
-})
-
 const { $gsap } = useNuxtApp()
+const containerRef = ref<HTMLElement | null>(null)
+
+onMounted(() => {
+  if (!containerRef.value) return
+  const container = containerRef.value
+  const tl = $gsap.timeline({
+    scrollTrigger: {
+      trigger: container,
+      start: 'top top',
+      end: '+=100%',
+      scrub: true,
+      pin: true
+    },
+    defaults: { ease: 'none' }
+  })
+  tl.fromTo(container.querySelector('.quotes'),
+    { yPercent: 0 },
+    { yPercent: -100 }
+  )
+})
 
 const quotes = [
   { text: 'Listening to the client\'s desires and vision', direction: 'normal' },
@@ -59,91 +62,55 @@ const quotes = [
   { text: 'Taking calls seriously and being punctual', direction: 'reverse' },
   { text: 'Able to meet our expectations', direction: 'normal' }
 ]
-
-function containerInAnimation() {
-  const tl = $gsap.timeline()
-  tl.fromTo(
-    '.container',
-    {
-      opacity: 0
-    },
-    {
-      opacity: 1,
-      duration: 5,
-      ease: 'power4.out'
-    })
-  tl.fromTo(
-    '.header div',
-    {
-      y: 100,
-      opacity: 0
-    },
-    {
-      y: 0,
-      opacity: 1,
-      stagger: 0.05,
-      duration: 2,
-      ease: 'power4.out'
-    }, '>-4')
-}
 </script>
 
 <style scoped lang="scss">
 @import "styles/variables";
-$backdrop-color: #a25b29;
-
-.container .content, .quotes {
-  position: absolute;
-}
 
 .container {
-  background-image:
-    radial-gradient(transparent 0, transparent 70%),
-    radial-gradient(at 40% 9%, $backdrop-color 0px, transparent 50%),
-    radial-gradient(at 69% 60%, $backdrop-color 0px, transparent 50%),
-    radial-gradient(at 24% 89%, $backdrop-color 0px, transparent 50%),
-    radial-gradient(at 51% 77%, $backdrop-color 0px, transparent 50%),
-    radial-gradient(at 78% 92%, $backdrop-color 0px, transparent 50%);
-  background-size: 150% 150%;
-  animation: aura 15s linear infinite;
+  width: 100%;
+  height: 100vh;
+  background-color: $redsquirrel-peach;
+  //background-image:
+  //  radial-gradient(transparent 0, transparent 70%),
+  //  radial-gradient(at 40% 9%, $backdrop-color 0px, transparent 50%),
+  //  radial-gradient(at 69% 60%, $backdrop-color 0px, transparent 50%),
+  //  radial-gradient(at 24% 89%, $backdrop-color 0px, transparent 50%),
+  //  radial-gradient(at 51% 77%, $backdrop-color 0px, transparent 50%),
+  //  radial-gradient(at 78% 92%, $backdrop-color 0px, transparent 50%);
+  // background-size: 150% 150%;
+  // animation: aura 15s linear infinite;
 }
 
-.content {
+.header {
   display: flex;
   justify-content: left;
   align-items: center;
   margin-left: 120px;
   height: 100%;
   width: 100%;
-  opacity: 60%;
 
-  .header {
+  h2 {
     font-size: 120px;
     line-height: 144px;
     text-transform: uppercase;
-    color: $redsquirrel-peach;
     font-weight: 200;
   }
 }
 
 .quotes {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
+  height: 100vh;
   width: 100%;
-  background-color: #10151B;
+  background-color: #FFE2D3B2;
 
   .quote {
     text-transform: uppercase;
     font-size: 7.4vh;
-    background-color: $redsquirrel-peach;
-    background-size: 100%;
-    background-repeat: repeat;
-    background-attachment: scroll;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: $redsquirrel-peach;
+
+    &.darker {
+      color: $redsquirrel-peach-p1;
+    }
   }
 }
 

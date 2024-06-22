@@ -298,7 +298,7 @@ onUnmounted(() => {
 }
 
 .player {
-  position: absolute;
+  position: fixed;
   margin-left: auto;
   margin-right: auto;
   left: 0;

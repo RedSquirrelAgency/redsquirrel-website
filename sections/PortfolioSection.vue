@@ -1,13 +1,16 @@
 <template>
-  <div>
+  <section
+    ref="containerRef"
+    class="container"
+  >
     <h2 class="gradient-1">
-      <MultifontText text="Immersing deeply" />
-      <MultifontText text="into each project and " />
-      <MultifontText text="finding successful solutions" />
+      <HeadingText text="Immersing deeply" />
+      <HeadingText text="into each project and " />
+      <HeadingText text="finding successful solutions" />
     </h2>
     <v-row
+      ref="cardsRef"
       class="cards"
-      :style="cardsStyle"
     >
       <v-col
         v-for="(item, index) in cases"
@@ -41,27 +44,27 @@
         />
       </v-col>
     </v-row>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">
-import { navigationEmits, useSectionNavigation } from '~/composables/sectionNavigation'
-import { useScrollAnimation } from '~/composables/scrollAnimation'
+const { $gsap } = useNuxtApp()
+const containerRef = ref<HTMLElement | null>(null)
 
-const emit = defineEmits([...navigationEmits])
-const { next, back } = useSectionNavigation(emit)
-
-const cardsStyle = shallowRef({})
-useScrollAnimation({
-  valueFrom: 60,
-  valueTo: -60,
-  onChange: (value: number) => {
-    cardsStyle.value = {
-      transform: `translateX(${value}%)`
-    }
-  },
-  onScrollUpOverflow: back,
-  onScrollDownOverflow: next
+onMounted(() => {
+  if (!containerRef.value) return
+  const container = containerRef.value
+  const tl = $gsap.timeline({
+    scrollTrigger: {
+      trigger: container,
+      start: 'top top',
+      end: '+=100%',
+      scrub: true,
+      pin: true
+    },
+    defaults: { ease: 'none' }
+  })
+  tl.fromTo(container.querySelector('.cards'), { xPercent: 100 }, { xPercent: -105 })
 })
 
 const cases = [
@@ -103,13 +106,13 @@ const cases = [
 <style scoped lang="scss">
 @import "styles/variables";
 
-h2 {
-  margin: 120px 100px;
+.container {
+  padding: 120px 100px;
 }
 
 .cards {
   position: relative;
-  top: -270px;
+  top: -170px;
   width: max-content;
 
   .card {

@@ -50,7 +50,21 @@ export default defineNuxtConfig({
     },
     download: true
   },
+  gsap: {
+    extraPlugins: {
+      scrollTrigger: true
+    }
+  },
+  router: {
+    options: {
+      scrollBehaviorType: 'smooth'
+    }
+  },
   components: [
+    {
+      path: '~/sections',
+      pathPrefix: false
+    },
     {
       path: '~/components',
       pathPrefix: false

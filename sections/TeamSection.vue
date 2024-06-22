@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="container"
-    :style="containerStyle"
-  >
+  <div class="container">
     <h2 class="text-center gradient-1">
       <HeadingText
         text="A-team dedicated to excellent results"
@@ -66,24 +63,6 @@
 <script setup lang="ts">
 // @ts-expect-error
 import Player from '@vimeo/player'
-import { navigationEmits, useSectionNavigation } from '~/composables/sectionNavigation'
-import { useScrollAnimation } from '~/composables/scrollAnimation'
-
-const emit = defineEmits([...navigationEmits])
-const { next, back } = useSectionNavigation(emit)
-
-const containerStyle = ref({})
-useScrollAnimation({
-  valueFrom: 0,
-  valueTo: -300,
-  onChange: (value: number) => {
-    containerStyle.value = {
-      top: `${value}px`
-    }
-  },
-  onScrollUpOverflow: back,
-  onScrollDownOverflow: next
-})
 
 const videoRef = ref<HTMLElement | null>(null)
 const isPlaying = shallowRef(false)
@@ -109,9 +88,8 @@ function onPlay() {
 @import "styles/variables";
 
 .container {
-  position: absolute;
   width: 100%;
-  padding: 100px 120px 130px;
+  padding: 100px 120px 130px 150px;
 
   h2 {
     margin-bottom: 70px;

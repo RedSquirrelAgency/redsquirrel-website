@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="container d-flex justify-center"
-    :style="containerStyle"
-  >
+  <div class="container d-flex justify-center">
     <div class="offer">
       <FacebookRating class="facebook-rating text-center" />
       <h2 class="text-center">
@@ -53,25 +50,20 @@
         </div>
       </div>
     </v-card>
+    <AudioPlayer
+      v-if="sound"
+      :sound="sound"
+      @play="playing = true"
+      @end="playing = false"
+      @stop="playing = false"
+      @pause="playing = false"
+      @close="onAudioPlayerClose()"
+    />
   </div>
-  <AudioPlayer
-    v-if="sound"
-    :sound="sound"
-    @play="playing = true"
-    @end="playing = false"
-    @stop="playing = false"
-    @pause="playing = false"
-    @close="onAudioPlayerClose()"
-  />
 </template>
 
 <script setup lang="ts">
-import { navigationEmits, useSectionNavigation } from '~/composables/sectionNavigation'
-import { useScrollAnimation } from '~/composables/scrollAnimation'
 import AudioPlayer from '~/components/AudioPlayer.vue'
-
-const emit = defineEmits([...navigationEmits])
-const { back, next } = useSectionNavigation(emit)
 
 interface IReviewPosition {
   top?: string
@@ -91,22 +83,6 @@ interface IReview {
 const sound = ref<ISound>()
 const selected = ref<number>()
 const playing = ref(false)
-
-const containerStyle = ref({})
-useScrollAnimation({
-  valueFrom: 0,
-  valueTo: -200,
-  onChange: (value: number) => {
-    containerStyle.value = {
-      position: 'absolute',
-      height: '100%',
-      width: '100%',
-      top: `${value}px`
-    }
-  },
-  onScrollUpOverflow: back,
-  onScrollDownOverflow: next
-})
 
 function onReviewClick(review: IReview, index: number) {
   selected.value = index
@@ -224,12 +200,9 @@ const reviews: IReview[] = [
 <style scoped lang="scss">
 @import "styles/variables";
 
-.glass {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+.container {
+  position: relative;
+  height: 1300px;
 }
 
 .offer {
@@ -251,6 +224,14 @@ const reviews: IReview[] = [
     color: $redsquirrel-cream;
     margin: 20px 0;
   }
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 }
 
 .review-card {

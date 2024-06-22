@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <section ref="containerRef">
     <h2 class="gradient-1 text-center">
-      <MultifontText text="We value your time" />
-      <MultifontText text="and keep our promises" />
+      <HeadingText text="We value your time" />
+      <HeadingText text="and keep our promises" />
     </h2>
     <v-container
       class="d-flex justify-center"
@@ -11,7 +11,6 @@
         class="advantages glass"
         min-width="100%"
         flat
-        :style="cardStyle"
         @mouseout="hoveredItem = -1"
       >
         <v-sheet class="bg-transparent">
@@ -44,32 +43,33 @@
         </v-sheet>
       </v-card>
     </v-container>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">
-import { navigationEmits, useSectionNavigation } from '~/composables/sectionNavigation'
-import { useScrollAnimation } from '~/composables/scrollAnimation'
+const { $gsap } = useNuxtApp()
+const containerRef = ref<HTMLElement | null>(null)
 
-const emit = defineEmits([...navigationEmits])
-const { next, back } = useSectionNavigation(emit)
+onMounted(() => {
+  if (!containerRef.value) return
+  const container = containerRef.value
+  const tl = $gsap.timeline({
+    scrollTrigger: {
+      trigger: container,
+      start: 'top top',
+      end: '+=100%',
+      scrub: true,
+      pin: true
+    },
+    defaults: { ease: 'none' }
+  })
+  tl.fromTo(container.querySelector('.advantages'),
+    { rotate: 20, yPercent: 150, rotationY: 40, opacity: 0 },
+    { rotate: 0, yPercent: 0, rotationY: 0, opacity: 1 }
+  )
+})
 
 const hoveredItem = ref(-1)
-
-const cardStyle = shallowRef({})
-useScrollAnimation({
-  valueFrom: 100,
-  valueTo: 0,
-  onChange: (value: number) => {
-    const factor = value / 100
-    cardStyle.value = {
-      transform: `translateY(${factor * 150}%) rotateY(${factor * 50}deg)`,
-      rotate: `${factor * 10}deg`
-    }
-  },
-  onScrollUpOverflow: back,
-  onScrollDownOverflow: next
-})
 
 const advantages = [
   {

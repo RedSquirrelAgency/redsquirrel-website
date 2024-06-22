@@ -1,5 +1,8 @@
 <template>
-  <div class="container d-flex justify-center">
+  <div
+    ref="containerRef"
+    class="container"
+  >
     <div class="header">
       <h2 class="gradient-1 text-center">
         <HeadingText
@@ -19,8 +22,8 @@
           v-for="(stage, index) in stages"
           v-bind="stage"
           :key="index"
-          :visible="stage.position[2] >= cameraPosition[2] - 7"
           :index="index"
+          :visible="true"
         />
         <TresAmbientLight />
       </TresCanvas>
@@ -29,14 +32,8 @@
 </template>
 
 <script setup lang="ts">
+// :visible="stage.position[2] >= cameraPosition[2] - 7"
 import { BasicShadowMap, NoToneMapping, SRGBColorSpace } from 'three'
-import { navigationEmits, useSectionNavigation } from '~/composables/sectionNavigation'
-import { useScrollAnimation } from '~/composables/scrollAnimation'
-
-const emit = defineEmits([...navigationEmits])
-const { next, back } = useSectionNavigation(emit)
-
-const cameraPosition = shallowRef([0, 0, 0])
 
 const gl = {
   clearColor: 0x000000,
@@ -48,15 +45,29 @@ const gl = {
   toneMapping: NoToneMapping
 }
 
-useScrollAnimation({
-  valueFrom: 300,
-  valueTo: -1300,
-  onChange: (value: number) => {
-    const z = value / 100
-    cameraPosition.value = [0, 0, z]
-  },
-  onScrollUpOverflow: back,
-  onScrollDownOverflow: next
+const { $gsap } = useNuxtApp()
+const containerRef = ref<HTMLElement | null>(null)
+const cameraPosition = shallowRef([0, 0, 0])
+
+onMounted(() => {
+  if (!containerRef.value) return
+  const container = containerRef.value
+  $gsap.timeline({
+    scrollTrigger: {
+      trigger: container,
+      start: 'top top',
+      end: '+=100%',
+      scrub: true,
+      pin: true,
+      onUpdate: (scroll) => {
+        const start = 3
+        const end = -13
+        const coordinate = start + (end - start) * scroll.progress
+        cameraPosition.value = [0, 0, coordinate]
+      }
+    },
+    defaults: { ease: 'none' }
+  })
 })
 
 const stages = [
@@ -120,20 +131,18 @@ const stages = [
 @import "styles/variables";
 
 .container {
+  padding: 50px 0;
+  height: 100vh;
+}
+
+.canvas {
   position: relative;
+  width: 100%;
+  height: 1000px;
 }
 
 .header {
   position: absolute;
-  z-index: 3;
   width: 100%;
-  height: 100%;
-}
-
-.canvas {
-  position: absolute;
-  z-index: 2;
-  width: 100%;
-  height: 100%;
 }
 </style>

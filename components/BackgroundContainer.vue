@@ -1,29 +1,27 @@
 <template>
-  <v-main>
-    <div class="container">
-      <div class="background">
-        <img
-          class="star"
-          src="/figures/star.svg"
-        >
-        <img
-          class="vector"
-          src="/figures/vector.svg"
-        >
-        <img
-          class="ellipse"
-          src="/figures/ellipse.svg"
-        >
-        <img
-          class="rectangle"
-          src="/figures/rectangle.svg"
-        >
-      </div>
-      <div class="content">
-        <slot />
-      </div>
+  <div class="container">
+    <div class="background">
+      <img
+        class="star"
+        src="/figures/star.svg"
+      >
+      <img
+        class="vector"
+        src="/figures/vector.svg"
+      >
+      <img
+        class="ellipse"
+        src="/figures/ellipse.svg"
+      >
+      <img
+        class="rectangle"
+        src="/figures/rectangle.svg"
+      >
     </div>
-  </v-main>
+    <div class="content">
+      <slot />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -34,21 +32,19 @@
 @import "styles/variables";
 
 .container {
+  overflow: hidden;
   width: 100%;
   height: 100%;
-  background-color: $redsquirrel-peach;
-}
-
-.container .background, .content {
-  position: absolute;
 }
 
 .background {
+  position: fixed;
   width: 100%;
   height: 100%;
   overflow: hidden;
   perspective: 1000px;
   perspective-origin: 50% 50%;
+  background-color: $redsquirrel-peach;
 
   .star {
     position: absolute;
@@ -81,6 +77,12 @@
   }
 }
 
+.content {
+  position: absolute;
+  z-index: 2;
+  width: 100%;
+}
+
 @keyframes movement-1 {
   0% {
     transform: rotateX(0deg) rotateY(0deg);
@@ -97,11 +99,5 @@
   100% {
     scale: 1.1;
   }
-}
-
-.content {
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
 }
 </style>
