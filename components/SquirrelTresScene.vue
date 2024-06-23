@@ -14,22 +14,29 @@
   <SquirrelTresComponent
     :position="squirrelPosition"
     :rotation="squirrelRotation"
-  />
-  <TresDirectionalLight
-    :position="new Vector3(0, 0, 30)"
-    :intensity="10"
+    :sparkle="false"
+    :transmission="0.9"
+    :roughness="0.1"
+    :thickness="1"
+    :ior="5"
   />
 </template>
 
 <script setup lang="ts">
 import { degToRad } from 'three/src/math/MathUtils'
-import { Clock, Color, type PerspectiveCamera, TextureLoader } from 'three'
+import {
+  Clock,
+  Color,
+  type PerspectiveCamera,
+  TextureLoader
+} from 'three'
 import {
   Vector3
 } from 'three'
 import { useTresContext } from '@tresjs/core'
 import * as TWEEN from '@tweenjs/tween.js'
 import CustomisedStars from '~/components/CustomisedStars.vue'
+import SquirrelTresComponent from "~/components/SquirrelTresComponent.vue";
 
 const props = defineProps({
   zoom: Number

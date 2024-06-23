@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <BackgroundContainer>
+      <HeroSection />
       <TestimonialsSection />
       <PortfolioSection />
       <AdvantagesSection />

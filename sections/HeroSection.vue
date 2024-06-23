@@ -1,64 +1,78 @@
 <template>
-  <div class="container fill-height">
-    <!-- Canvas -->
+  <div class="container">
+    <div class="underlay d-flex justify-center align-center">
+      <h1>
+        RedSquirrel
+      </h1>
+    </div>
     <div class="canvas">
-      <TresCanvas>
+      <TresCanvas v-bind="gl">
+        <TresPerspectiveCamera
+          :fov="70"
+          :look-at="[0, 0, 0]"
+          :zoom="1.5"
+        />
         <Suspense>
-          <SquirrelTresScene :zoom="zoom" />
+          <SquirrelTresComponent
+            :position="[0, -1, 0]"
+            :rotation="[0, 0, 0]"
+            :sparkle="false"
+            :transmission="0.9"
+            :roughness="0.1"
+            :thickness="1"
+            :ior="5"
+          />
         </Suspense>
       </TresCanvas>
     </div>
-    <!-- Overlay elements -->
-    <div
-      class="overlay"
-      :style="overlayStyle"
-    >
-      <div class="content">
-        <!-- Benefits, consultation and rating -->
-        <div class="d-flex justify-end">
-          <div class="benefit d-flex align-start flex-column">
-            <p>Conducting in-depth research on the target audience and market, crafting modern design solutions, and writing compelling texts to ensure <span class="highlights">the website effectively sells</span> to your audience and achieves business objectives</p>
-            <v-btn
-              class="consultation-button"
-              rounded="xl"
-              append-icon="mdi-arrow-right"
-            >
-              {{ $t("Book a consultation") }}
-            </v-btn>
-            <FacebookRating class="facebook-rating" />
-          </div>
-        </div>
-        <!-- Main offer -->
-        <h1>
-          <HeadingText
-            text="A website with a creative design and persuasive content"
-            :spacers="[2]"
-            :line-breaks="[4]"
-          />
-        </h1>
-      </div>
+    <div class="overlay">
+      <div class="header" />
+      <v-row class="footer">
+        <v-col>
+          <FacebookRating class="facebook-rating" />
+        </v-col>
+        <v-col>
+          <p>The website with a creative design and persuasive content</p>
+          <v-btn
+            class="consultation-button"
+            rounded="lg"
+            append-icon="mdi-arrow-right"
+            color="#FFDFCFE5"
+            variant="flat"
+          >
+            {{ $t("Book a consultation") }}
+          </v-btn>
+        </v-col>
+      </v-row>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import * as TWEEN from '@tweenjs/tween.js'
+import { BasicShadowMap, NoToneMapping, SRGBColorSpace } from 'three'
 import SquirrelTresScene from '~/components/SquirrelTresScene.vue'
-import { navigationEmits, useSectionNavigation } from '~/composables/sectionNavigation'
-import { useScrollAnimation } from '~/composables/scrollAnimation'
+import SquirrelTresComponent from '~/components/SquirrelTresComponent.vue'
 
-const emit = defineEmits([...navigationEmits])
-const { next } = useSectionNavigation(emit)
-
-useScrollAnimation({
-  valueFrom: 20,
-  valueTo: 0,
-  onChange: () => {},
-  onScrollDownOverflow: () => { squirrelTween.start() }
-})
+// useScrollAnimation({
+//  valueFrom: 20,
+//  valueTo: 0,
+//  onChange: () => {},
+//  onScrollDownOverflow: () => { squirrelTween.start() }
+// })
 
 const zoom = shallowRef(1)
 const overlayStyle = shallowRef({})
+
+const gl = {
+  clearColor: 0x000000,
+  shadows: true,
+  alpha: true,
+  antialias: true,
+  shadowMapType: BasicShadowMap,
+  outputColorSpace: SRGBColorSpace,
+  toneMapping: NoToneMapping
+}
 
 const squirrelTween = new TWEEN.Tween({ zoom: 0 })
   .to({ zoom: 4 }, 1500)
@@ -68,9 +82,6 @@ const squirrelTween = new TWEEN.Tween({ zoom: 0 })
   })
   .onUpdate(({ zoom: updatedZoom }) => {
     zoom.value = updatedZoom
-  })
-  .onComplete(() => {
-    next()
   })
 
 const overlayTween = new TWEEN.Tween({ opacity: 1, blur: 0 })
@@ -87,53 +98,33 @@ const overlayTween = new TWEEN.Tween({ opacity: 1, blur: 0 })
 <style scoped lang="scss">
 @import "styles/variables";
 
-.container .canvas, .overlay {
-  position: absolute;
+.container {
+  width: 100%;
+  height: 100vh;
+  background: -webkit-linear-gradient(#B87C6A, #DF8B6B, #EE936B, #FEAE79, #F4C5A1, #DDCABA);
 }
 
-.overlay {
+.underlay {
+  position: absolute;
   width: 100%;
-  height: 100%;
-
-  .content {
-    margin: 120px 100px;
-  }
+  height: 100vh;
 }
 
 .canvas {
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: inherit;
 }
 
-h1 {
-  left: 0;
-  right: 0;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 20px;
-  text-align: center;
-}
+.overlay {
+  width: 100%;
+  height: inherit;
+  display: flex;
+  padding: 30px 120px;
 
-.benefit {
-  width: 372px;
-
-  p {
-    font-size: 16px;
-    color: $redsquirrel-cream-p2;
-  }
-
-  .highlights {
-    color: $redsquirrel-cream-p1;
-  }
-
-  .facebook-rating {
-    color: $redsquirrel-cream-p1;
-  }
-
-  .consultation-button {
-    margin-top: 40px;
-    margin-bottom: 135px;
+  .footer {
+    display: flex;
+    align-self: end;
   }
 }
 </style>
