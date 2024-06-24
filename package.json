@@ -33,6 +33,7 @@
     "@nuxtjs/google-fonts": "^3.2.0",
     "@types/howler": "^2.2.11",
     "@types/three": "^0.164.0",
+    "nuxt-particles": "^0.3.0",
     "sass": "^1.77.1",
     "vite-plugin-vuetify": "^2.0.3",
     "vuetify": "^3.6.5"
