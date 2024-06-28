@@ -1,5 +1,5 @@
 <template>
-  <div
+  <section
     ref="containerRef"
     class="container"
   >
@@ -25,29 +25,29 @@
         >{{ quote.text }}</span>
       </TickerTape>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">
-const { $gsap } = useNuxtApp()
+import type { PropType } from 'vue'
+import Timeline = gsap.core.Timeline
+
+const { tl } = defineProps({
+  tl: {
+    type: Object as PropType<Timeline>,
+    required: true
+  }
+})
+
 const containerRef = ref<HTMLElement | null>(null)
 
 onMounted(() => {
   if (!containerRef.value) return
   const container = containerRef.value
-  const tl = $gsap.timeline({
-    scrollTrigger: {
-      trigger: container,
-      start: 'top top',
-      end: '+=100%',
-      scrub: true,
-      pin: true
-    },
-    defaults: { ease: 'none' }
-  })
   tl.fromTo(container.querySelector('.quotes'),
     { yPercent: 0 },
-    { yPercent: -100 }
+    { yPercent: -100 },
+    '<1.5'
   )
 })
 
