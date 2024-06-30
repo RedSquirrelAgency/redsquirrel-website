@@ -32,7 +32,6 @@
 </template>
 
 <script setup lang="ts">
-// :visible="stage.position[2] >= cameraPosition[2] - 7"
 import { BasicShadowMap, NoToneMapping, SRGBColorSpace } from 'three'
 
 const gl = {

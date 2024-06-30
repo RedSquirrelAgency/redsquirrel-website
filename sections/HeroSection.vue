@@ -157,7 +157,7 @@ const { $gsap } = useNuxtApp()
 const containerRef = ref<HTMLElement | null>(null)
 const squirrelPosition = shallowRef([0, 0, 0])
 const squirrelRotation = shallowRef([0, 0, 0])
-const cameraPosition = shallowRef([0, 0, 0])
+const cameraPosition = shallowRef([0, 0, 1])
 
 const cameraPositionVector = new Vector3()
 function updateCameraPosition() {
@@ -173,7 +173,7 @@ onMounted(() => {
 
   document.addEventListener('mousemove', (e) => {
     const percentageX = e.screenX / window.innerWidth
-    squirrelRotation.value[1] = degToRad(-180 * percentageX - 90)
+    squirrelRotation.value[1] = degToRad(180 * percentageX - 90)
     squirrelRotation.value = [...squirrelRotation.value]
   })
 
@@ -186,11 +186,19 @@ onMounted(() => {
   if (!containerRef.value) return
   const container = containerRef.value
 
+  $gsap.timeline()
+    .fromTo(cameraPositionVector, {
+      z: 1
+    }, {
+      z: 4,
+      duration: 1.5,
+      onUpdate: () => updateCameraPosition()
+    })
+
   const outAnimation = $gsap.timeline({
     paused: true,
     onComplete: () => {
       container.style.display = 'none'
-      container.style.opacity = '1'
     }
   }).to(cameraPositionVector, {
     z: 1,
@@ -204,6 +212,7 @@ onMounted(() => {
       onUpdate: () => {
         if (container.style.display === 'none') {
           container.style.display = 'block'
+          $gsap.to(container, { opacity: 1, duration: 0.5 })
         }
         updateCameraPosition()
       },

@@ -4,9 +4,13 @@
     class="container"
   >
     <h2 class="gradient-1">
-      <HeadingText text="Immersing deeply" />
-      <HeadingText text="into each project and " />
-      <HeadingText text="finding successful solutions" />
+      <HeadingText
+        text="Immersing deeply into each project and finding successful solutions"
+        :font-replacements="[[0, 4], [4, 2], [7, 0]]"
+        :line-breaks="[1, 5]"
+        :line-spacers="{ 0: '4em' }"
+        :word-spacers="{ 4: '2em' }"
+      />
     </h2>
     <v-row
       ref="cardsRef"

@@ -4,11 +4,12 @@
     class="container"
   >
     <div class="header">
-      <h2 class="gradient-1">
+      <h2 class="gradient-1 text-center">
         <HeadingText
           text="Clients' words inspire us to new masterpieces"
           :font-replacements="[[0, 3], [1, 4], [4, 1], [6, 1]]"
           :line-breaks="[1, 5]"
+          :line-spacers="{ 0: '1em', 2: '4em' }"
         />
       </h2>
     </div>
@@ -39,14 +40,45 @@ const { tl } = defineProps({
   }
 })
 
+const { $gsap } = useNuxtApp()
 const containerRef = ref<HTMLElement | null>(null)
 
 onMounted(() => {
   if (!containerRef.value) return
   const container = containerRef.value
+
+  const headerStyle = { opacity: 0, blur: 10 }
+  const headerInAnimation = $gsap.timeline({ paused: true })
+    .fromTo(headerStyle,
+      {
+        opacity: 0,
+        blur: 10
+      },
+      {
+        opacity: 1,
+        blur: 0,
+        onUpdate: () => {
+          $gsap.set(container.querySelector('.header'), {
+            webkitFilter: `blur(${headerStyle.blur}px)`,
+            filter: `blur(${headerStyle.blur}px)`,
+            opacity: headerStyle.opacity
+          })
+        }
+      },
+      '<0.2'
+    )
+
   tl.fromTo(container.querySelector('.quotes'),
     { yPercent: 0 },
-    { yPercent: -100 },
+    {
+      yPercent: -100,
+      duration: 10,
+      onUpdate: () => {
+        if (tl.progress() > 0 && tl.progress() < 1 && headerInAnimation.paused()) {
+          headerInAnimation.play()
+        }
+      }
+    },
     '<1.5'
   )
 })
@@ -67,19 +99,21 @@ const quotes = [
 <style scoped lang="scss">
 @import "styles/variables";
 
+$backdrop-color: #fc7733;
+
 .container {
   width: 100%;
   height: 100vh;
   background-color: $redsquirrel-peach;
-  //background-image:
-  //  radial-gradient(transparent 0, transparent 70%),
-  //  radial-gradient(at 40% 9%, $backdrop-color 0px, transparent 50%),
-  //  radial-gradient(at 69% 60%, $backdrop-color 0px, transparent 50%),
-  //  radial-gradient(at 24% 89%, $backdrop-color 0px, transparent 50%),
-  //  radial-gradient(at 51% 77%, $backdrop-color 0px, transparent 50%),
-  //  radial-gradient(at 78% 92%, $backdrop-color 0px, transparent 50%);
-  // background-size: 150% 150%;
-  // animation: aura 15s linear infinite;
+  background-image:
+    radial-gradient(transparent 0, transparent 70%),
+    radial-gradient(at 40% 9%, $backdrop-color 0px, transparent 30%),
+    radial-gradient(at 69% 60%, $backdrop-color 0px, transparent 30%),
+    radial-gradient(at 24% 89%, $backdrop-color 0px, transparent 30%),
+    radial-gradient(at 51% 77%, $backdrop-color 0px, transparent 30%),
+    radial-gradient(at 78% 92%, $backdrop-color 0px, transparent 30%);
+   background-size: 150% 150%;
+   animation: aura 7s linear infinite;
 }
 
 .header {
@@ -102,6 +136,7 @@ const quotes = [
   height: 100vh;
   width: 100%;
   background-color: #FFE2D3B2;
+  backdrop-filter: blur(3px);
 
   .quote {
     text-transform: uppercase;
@@ -116,16 +151,16 @@ const quotes = [
 
 @keyframes aura {
   0% {
-    background-position: center, 50% 50%, 30% 100%, 100% 10%, 23% 23%, 0% 80%;
+    background-position: center, 50% 50%, 30% 100%, 100% 10%, 23% 23%, 0 80%;
   }
   33.333% {
     background-position: center, 10% 75%, 40% 80%, 60% 20%, 43% 23%, 16% 30%;
   }
   66.666% {
-    background-position: center, 25% 35%, 80% 50%, 10% 10%, 66% 5%, 30% 0%;
+    background-position: center, 25% 35%, 80% 50%, 10% 10%, 66% 5%, 30% 0;
   }
   100% {
-    background-position: center, 50% 50%, 30% 100%, 100% 10%, 23% 23%, 0% 80%;
+    background-position: center, 50% 50%, 30% 100%, 100% 10%, 23% 23%, 0 80%;
   }
 }
 </style>

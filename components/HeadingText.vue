@@ -2,13 +2,14 @@
   <span
     v-for="(line, lineIndex) in transformedText"
     :key="lineIndex"
+    :style="{ marginLeft: line.space || '0' }"
     class="line"
   >
     <span
-      v-for="(linePart, linePartIndex) in line"
+      v-for="(linePart, linePartIndex) in line.parts"
       :key="linePartIndex"
-      :class="line.length > 1 && 'line-part'"
-      v-html="linePart"
+      :style="{ marginRight: linePart.space || '100px' }"
+      v-html="linePart.text"
     />
   </span>
 </template>
@@ -20,7 +21,8 @@ const props = defineProps({
   text: { type: String, required: true },
   fontReplacements: Array as PropType<number[][]>,
   lineBreaks: Array as PropType<number[]>,
-  spacers: Array as PropType<number[]>
+  lineSpacers: Array as PropType<{ [key: number]: string }>,
+  wordSpacers: Array as PropType<{ [key: number]: string }>
 })
 
 const transformedText = computed(() => {
@@ -48,25 +50,25 @@ const transformedText = computed(() => {
     }
 
     linePart.push(word)
-    if (props.spacers?.includes(wordIndex) || props.lineBreaks?.includes(wordIndex)) {
-      lineParts.push(linePart.join(' '))
+    if (props.wordSpacers && Object.keys(props.wordSpacers).includes(wordIndex.toString())) {
+      lineParts.push({ text: linePart.join(' '), space: props.wordSpacers[wordIndex] })
       linePart.length = 0
     }
     if (props.lineBreaks?.includes(wordIndex)) {
-      lines.push([...lineParts])
+      lineParts.push({ text: linePart.join(' ') })
+      linePart.length = 0
+
+      lines.push({ parts: [...lineParts], space: props.lineSpacers?.[lines.length] })
       lineParts.length = 0
     }
   }
 
-  lineParts.push(linePart.join(' '))
-  lines.push(lineParts)
+  lineParts.push({ text: linePart.join(' ') })
+  lines.push({ parts: lineParts, space: props.lineSpacers?.[lines.length] })
 
   return lines
 })
 </script>
 
 <style scoped lang="scss">
-.line-part {
-  margin-left: 100px;
-}
 </style>
