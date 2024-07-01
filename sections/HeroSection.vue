@@ -203,6 +203,7 @@ onMounted(() => {
   )
 
   watch(() => props.displayed, (displayed) => {
+    if (!props.loaded) return
     if (displayed) {
       container.style.display = 'block'
       $gsap.timeline().to(container, { opacity: 1, duration: 0.5 })
