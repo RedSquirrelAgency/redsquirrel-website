@@ -1,6 +1,9 @@
 <template>
-  <div class="container">
-    <div>{{ percentage }}</div>
+  <div
+    :key="progress"
+    class="container"
+  >
+    <div>{{ formatPercentage(progress) }}</div>
     <div>
       <FillingText
         text="Please wait until the website is ready."
@@ -20,9 +23,11 @@ const { progress } = defineProps({
   }
 })
 
-const percentage = computed(() => {
-  return `${Math.round(progress * 100)}%`
-})
+function formatPercentage(value: number) {
+  if (value < 0) return '0%'
+  if (value > 1) return '100%'
+  return `${Math.round(value * 100)}%`
+}
 </script>
 
 <style scoped lang="scss">

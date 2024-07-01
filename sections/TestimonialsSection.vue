@@ -33,9 +33,13 @@
 import type { PropType } from 'vue'
 import Timeline = gsap.core.Timeline
 
-const { tl } = defineProps({
+const props = defineProps({
   tl: {
     type: Object as PropType<Timeline>,
+    required: true
+  },
+  displayed: {
+    type: Boolean,
     required: true
   }
 })
@@ -47,40 +51,36 @@ onMounted(() => {
   if (!containerRef.value) return
   const container = containerRef.value
 
-  const headerStyle = { opacity: 0, blur: 10 }
-  const headerInAnimation = $gsap.timeline({ paused: true })
-    .fromTo(headerStyle,
-      {
-        opacity: 0,
-        blur: 10
-      },
-      {
-        opacity: 1,
-        blur: 0,
-        onUpdate: () => {
-          $gsap.set(container.querySelector('.header'), {
-            webkitFilter: `blur(${headerStyle.blur}px)`,
-            filter: `blur(${headerStyle.blur}px)`,
-            opacity: headerStyle.opacity
-          })
-        }
-      },
-      '<0.2'
-    )
-
-  tl.fromTo(container.querySelector('.quotes'),
+  props.tl.fromTo(container.querySelector('.quotes'),
     { yPercent: 0 },
-    {
-      yPercent: -100,
-      duration: 10,
-      onUpdate: () => {
-        if (tl.progress() > 0 && tl.progress() < 1 && headerInAnimation.paused()) {
-          headerInAnimation.play()
-        }
-      }
-    },
-    '<1.5'
+    { yPercent: -100, delay: 1, duration: 1.5 }
   )
+
+  watch(() => props.displayed, (displayed) => {
+    if (displayed) {
+      const headerStyle = { opacity: 50, blur: 100 }
+      $gsap.timeline()
+        .fromTo(headerStyle,
+          {
+            opacity: 0,
+            blur: 10
+          },
+          {
+            opacity: 1,
+            blur: 0,
+            delay: 0.4,
+            duration: 1.5,
+            onUpdate: () => {
+              $gsap.set(container.querySelector('.header'), {
+                webkitFilter: `blur(${headerStyle.blur}px)`,
+                filter: `blur(${headerStyle.blur}px)`,
+                opacity: headerStyle.opacity
+              })
+            }
+          }
+        )
+    }
+  })
 })
 
 const quotes = [
@@ -118,9 +118,8 @@ $backdrop-color: #fc7733;
 
 .header {
   display: flex;
-  justify-content: left;
+  justify-content: center;
   align-items: center;
-  margin-left: 120px;
   height: 100%;
   width: 100%;
 

@@ -33,7 +33,6 @@
       </TresCanvas>
     </div>
     <div class="overlay">
-      <div class="header" />
       <v-row class="footer d-flex align-end">
         <v-col class="d-flex justify-start">
           <FacebookRating />
@@ -66,9 +65,17 @@ import type { PropType } from 'vue'
 import SquirrelTresComponent from '~/components/SquirrelTresComponent.vue'
 import Timeline = gsap.core.Timeline
 
-const { tl } = defineProps({
+const props = defineProps({
   tl: {
     type: Object as PropType<Timeline>,
+    required: true
+  },
+  loaded: {
+    type: Boolean,
+    required: true
+  },
+  displayed: {
+    type: Boolean,
     required: true
   }
 })
@@ -158,6 +165,7 @@ const containerRef = ref<HTMLElement | null>(null)
 const squirrelPosition = shallowRef([0, 0, 0])
 const squirrelRotation = shallowRef([0, 0, 0])
 const cameraPosition = shallowRef([0, 0, 1])
+const mouseMoveEnabled = shallowRef(false)
 
 const cameraPositionVector = new Vector3()
 function updateCameraPosition() {
@@ -172,7 +180,8 @@ onMounted(() => {
   const clock = new Clock()
 
   document.addEventListener('mousemove', (e) => {
-    const percentageX = e.screenX / window.innerWidth
+    if (!mouseMoveEnabled.value) return
+    const percentageX = e.x / window.innerWidth
     squirrelRotation.value[1] = degToRad(180 * percentageX - 90)
     squirrelRotation.value = [...squirrelRotation.value]
   })
@@ -186,41 +195,71 @@ onMounted(() => {
   if (!containerRef.value) return
   const container = containerRef.value
 
-  $gsap.timeline()
-    .fromTo(cameraPositionVector, {
-      z: 1
-    }, {
-      z: 4,
-      duration: 1.5,
-      onUpdate: () => updateCameraPosition()
-    })
-
-  const outAnimation = $gsap.timeline({
-    paused: true,
-    onComplete: () => {
-      container.style.display = 'none'
-    }
-  }).to(cameraPositionVector, {
-    z: 1,
-    duration: 0.7,
-    onUpdate: () => updateCameraPosition()
-  }).to(container, { opacity: 0, duration: 0.5 }, '<0.3')
-
-  tl.fromTo(cameraPositionVector,
+  props.tl.fromTo(cameraPositionVector,
     { z: 4 },
     { z: 3,
-      onUpdate: () => {
-        if (container.style.display === 'none') {
-          container.style.display = 'block'
-          $gsap.to(container, { opacity: 1, duration: 0.5 })
-        }
-        updateCameraPosition()
-      },
-      onComplete: () => {
-        outAnimation.restart()
-      }
+      onUpdate: () => updateCameraPosition()
     }
   )
+
+  watch(() => props.displayed, (displayed) => {
+    if (displayed) {
+      container.style.display = 'block'
+      $gsap.timeline().to(container, { opacity: 1, duration: 0.5 })
+    }
+    else {
+      $gsap.timeline({
+        onComplete: () => {
+          container.style.display = 'none'
+        }
+      }).to(cameraPositionVector, {
+        z: 1,
+        duration: 0.7,
+        onUpdate: () => updateCameraPosition()
+      }).to(container, { opacity: 0, duration: 0.5 }, '<0.3')
+    }
+  })
+
+  watch(() => props.loaded, (loaded) => {
+    if (loaded) {
+      mouseMoveEnabled.value = false
+      $gsap.timeline({
+        delay: 0.7,
+        onComplete: () => { mouseMoveEnabled.value = true }
+      })
+        .fromTo(container.querySelector('.canvas'),
+          { opacity: 0 },
+          { opacity: 1, duration: 1 }
+        )
+        .fromTo(cameraPositionVector,
+          { z: 20 },
+          {
+            z: 4,
+            duration: 1,
+            onUpdate: () => updateCameraPosition(),
+            ease: 'circ.out'
+          }, '<0.1')
+        .fromTo(container.querySelector('h1'),
+          { letterSpacing: '-0.5em', opacity: 0 },
+          {
+            letterSpacing: '0',
+            opacity: 1,
+            duration: 0.7,
+            keyframes: {
+              '0%': { opacity: 0 },
+              '40%': { opacity: 0.6 },
+              '100%': { opacity: 1 }
+            }
+          },
+          '>-0.7'
+        )
+        .fromTo(container.querySelector('.footer'),
+          { yPercent: 100 },
+          { yPercent: 0, duration: 1, ease: 'elastic.out(1,0.3)' },
+          '>'
+        )
+    }
+  })
 })
 </script>
 

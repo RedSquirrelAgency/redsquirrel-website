@@ -3,12 +3,11 @@
     <Transition>
       <FullScreenPreloader
         v-if="loading < 1"
-        :key="loading"
         :progress="loading"
       />
     </Transition>
     <BackgroundContainer>
-      <IntroSection />
+      <IntroSection :loaded="loading === 1" />
       <PortfolioSection />
       <AdvantagesSection />
       <GoalSection />

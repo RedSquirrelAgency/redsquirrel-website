@@ -21,8 +21,8 @@ const props = defineProps({
   text: { type: String, required: true },
   fontReplacements: Array as PropType<number[][]>,
   lineBreaks: Array as PropType<number[]>,
-  lineSpacers: Array as PropType<{ [key: number]: string }>,
-  wordSpacers: Array as PropType<{ [key: number]: string }>
+  lineSpacers: Object as PropType<{ [key: number]: string }>,
+  wordSpacers: Object as PropType<{ [key: number]: string }>
 })
 
 const transformedText = computed(() => {
