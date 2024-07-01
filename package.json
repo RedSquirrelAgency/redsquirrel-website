@@ -22,9 +22,7 @@
     "@tweenjs/tween.js": "^23.1.2",
     "@vimeo/player": "^2.23.0",
     "howler": "^2.2.4",
-    "mitt": "^3.0.1",
     "nuxt": "^3.11.2",
-    "particles.js": "^2.0.0",
     "three": "^0.164.1",
     "vue": "^3.4.27",
     "vue-router": "^4.3.2"
