@@ -4,12 +4,12 @@
     class="container"
   >
     <div class="header">
-      <h2 class="gradient-1 text-center">
+      <h2 class="gradient-1">
         <HeadingText
-          text="Clients' words inspire us to new masterpieces"
+          :text="$t('Clients\' words inspire us to new masterpieces')"
           :font-replacements="[[0, 3], [1, 4], [4, 1], [6, 1]]"
           :line-breaks="[1, 5]"
-          :line-spacers="{ 0: '1em', 2: '4em' }"
+          :line-spacers="{ 0: '1em', 2: '3.5em' }"
         />
       </h2>
     </div>
@@ -17,13 +17,13 @@
       <TickerTape
         v-for="(quote, index) in quotes"
         :key="index"
-        :direction="quote.direction"
-        :duration="30"
+        :direction="(index % 2 === 0) ? 'normal' : 'reverse'"
+        :duration="quote.length * 5"
       >
         <span
           class="quote"
           :class="(index % 2 === 0) && 'darker'"
-        >{{ quote.text }}</span>
+        >{{ quote }}</span>
       </TickerTape>
     </div>
   </section>
@@ -43,6 +43,19 @@ const props = defineProps({
     required: true
   }
 })
+
+const { t } = useI18n()
+const quotes = [
+  t('Listening to the client\'s desires and vision'),
+  t('Able to listen without imposing personal opinions'),
+  t('Clearly explaining and organizing everything'),
+  t('Immersing deeply into the project from the first meeting'),
+  t('Prompt responses in messenger and timely delivery'),
+  t('Showing great enthusiasm to work'),
+  t('Working with great interest on the project'),
+  t('Taking calls seriously and being punctual'),
+  t('Work like a Swiss watch')
+]
 
 const { $gsap } = useNuxtApp()
 const containerRef = ref<HTMLElement | null>(null)
@@ -82,18 +95,6 @@ onMounted(() => {
     }
   })
 })
-
-const quotes = [
-  { text: 'Listening to the client\'s desires and vision', direction: 'normal' },
-  { text: 'Able to listen without imposing personal opinions ', direction: 'reverse' },
-  { text: 'Clearly explaining and organizing everything', direction: 'normal' },
-  { text: 'Immersing deeply into the project from the first meeting', direction: 'reverse' },
-  { text: 'Prompt responses in messenger and timely delivery', direction: 'normal' },
-  { text: 'Showing great enthusiasm to work', direction: 'reverse' },
-  { text: 'Working with great interest on the project', direction: 'normal' },
-  { text: 'Taking calls seriously and being punctual', direction: 'reverse' },
-  { text: 'Able to meet our expectations', direction: 'normal' }
-]
 </script>
 
 <style scoped lang="scss">
@@ -124,22 +125,27 @@ $backdrop-color: #fc7733;
   width: 100%;
 
   h2 {
-    font-size: 120px;
-    line-height: 144px;
+    font-size: 7vw;
+    line-height: 7vw;
     text-transform: uppercase;
-    font-weight: 200;
+    font-weight: 400;
   }
 }
 
 .quotes {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   height: 100vh;
   width: 100%;
   background-color: #FFE2D3B2;
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(7px);
 
   .quote {
     text-transform: uppercase;
-    font-size: 7.4vh;
+    font-size: 6.5vh;
+    line-height: 10.1vh;
+    margin-right: 1.3em;
     color: $redsquirrel-peach;
 
     &.darker {

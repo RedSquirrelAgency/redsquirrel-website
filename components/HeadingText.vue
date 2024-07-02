@@ -8,7 +8,7 @@
     <span
       v-for="(linePart, linePartIndex) in line.parts"
       :key="linePartIndex"
-      :style="{ marginRight: linePart.space || '100px' }"
+      :style="{ marginRight: linePart.space || '0' }"
       v-html="linePart.text"
     />
   </span>

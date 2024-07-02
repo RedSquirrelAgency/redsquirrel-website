@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import HeroSection from '~/sections/HeroSection.vue'
-import TestimonialsSection from '~/sections/TestimonialsSection.vue'
+import QuotesSection from '~/sections/QuotesSection.vue'
 
 const { loaded } = defineProps({
   loaded: {
@@ -30,7 +30,7 @@ const containerRef = ref<HTMLElement | null>(null)
 
 const slides = [
   HeroSection,
-  TestimonialsSection
+  QuotesSection
 ]
 
 const timelines = slides.map(() => {

@@ -12,6 +12,10 @@ import { RGBELoader } from 'three-stdlib'
 import type { PropType } from 'vue'
 
 const props = defineProps({
+  scale: {
+    default: 1,
+    type: Number
+  },
   position: {
     default: () => [0, 0, 0] as Array<number>,
     type: Array as PropType<Array<number>>
@@ -59,6 +63,7 @@ mesh.material = material
 watchEffect(() => {
   mesh.position.set(...position.value)
   mesh.rotation.set(...rotation.value)
+  mesh.scale.set(props.scale, props.scale, props.scale)
   material.roughness = props.roughness
   material.transmission = props.transmission
   material.thickness = props.thickness

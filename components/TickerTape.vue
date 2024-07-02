@@ -1,20 +1,26 @@
 <template>
-  <div
-    class="ticker-tape-container"
-  >
+  <div class="ticker-wrap">
     <div
-      class="ticker-tape"
+      class="ticker"
       :style="style"
     >
-      <slot />
+      <span
+        class="item-collection-1"
+        :style="style"
+      >
+        <slot />
+        <slot />
+        <slot />
+        <slot />
+      </span>
+      <span class="item-collection-2">
+        <slot />
+        <slot />
+        <slot />
+        <slot />
+      </span>
     </div>
-    <div
-      class="ticker-tape"
-      aria-hidden="true"
-      :style="style"
-    >
-      <slot />
-    </div>
+    <div />
   </div>
 </template>
 
@@ -31,31 +37,41 @@ const style = shallowRef({
 </script>
 
 <style scoped lang="scss">
-.ticker-tape-container {
-  overflow-x: hidden;
+.ticker-wrap {
   display: flex;
-  max-width: 100vw;
   width: 100%;
+  overflow: hidden;
+  margin: 0 auto;
+  white-space: nowrap;
 }
-
-.ticker-tape {
-  display: flex;
-  align-items: start;
-  flex: 0 0 auto;
-  gap: 0;
-  margin-right: 100px;
-  min-width: 100%;
+.ticker {
+  display: inline-block;
+  margin-top: 5px;
   animation: marquee 20s linear infinite;
 }
+.item-collection-1 {
+  position: relative;
+  left: 0;
+  animation: swap 20s linear infinite;
+}
 
+/* Transition */
 @keyframes marquee {
   0% {
-    transform: translateX(0);
-    background-position: 0 center;
+    transform: translateX(0)
   }
   100% {
-    transform: translateX(-100%);
-    background-position: 100vw center;
+    transform: translateX(-100%)
+  }
+}
+
+@keyframes swap {
+  0%, 50% {
+    left: 0;
+  }
+  50.01%,
+  100% {
+    left: 100%;
   }
 }
 </style>

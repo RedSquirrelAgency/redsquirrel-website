@@ -6,7 +6,7 @@
     <div>{{ formatPercentage(progress) }}</div>
     <div>
       <FillingText
-        text="Please wait until the website is ready."
+        :text="$t('Please wait until the website is ready.')"
         :progress="progress"
         color="#FFD2BB"
         filled-color="#FFFBF7"

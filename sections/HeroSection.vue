@@ -28,6 +28,7 @@
             :roughness="0.1"
             :thickness="1"
             :ior="5"
+            :scale="width / 80000"
           />
         </Suspense>
       </TresCanvas>
@@ -40,13 +41,14 @@
         <v-spacer />
         <v-col class="d-flex justify-end">
           <div class="button-container text-right">
-            <p>The website with a creative design and persuasive content</p>
+            <p>{{ $t("The website with a creative design and persuasive content") }} </p>
             <v-btn
               class="consultation-button"
               rounded="lg"
               append-icon="mdi-arrow-right"
               color="#FFDFCFE5"
               variant="flat"
+              href="https://cal.com/redsquirrel/30min"
               block
             >
               {{ $t("Book a consultation") }}
@@ -62,6 +64,7 @@
 import { BasicShadowMap, Clock, NoToneMapping, SRGBColorSpace, Vector3 } from 'three'
 import { degToRad } from 'three/src/math/MathUtils'
 import type { PropType } from 'vue'
+import { useDisplay } from 'vuetify'
 import SquirrelTresComponent from '~/components/SquirrelTresComponent.vue'
 import Timeline = gsap.core.Timeline
 
@@ -161,10 +164,11 @@ const particlesOptions = {
 }
 
 const { $gsap } = useNuxtApp()
+const { width } = useDisplay()
 const containerRef = ref<HTMLElement | null>(null)
 const squirrelPosition = shallowRef([0, 0, 0])
 const squirrelRotation = shallowRef([0, 0, 0])
-const cameraPosition = shallowRef([0, 0, 1])
+const cameraPosition = shallowRef([0, 0, 0])
 const mouseMoveEnabled = shallowRef(false)
 
 const cameraPositionVector = new Vector3()
@@ -176,19 +180,31 @@ function updateCameraPosition() {
   ]
 }
 
+const squirrelRotationVector = new Vector3()
+function updateSquirrelRotation() {
+  squirrelRotation.value = [
+    squirrelRotationVector.x,
+    squirrelRotationVector.y,
+    squirrelRotationVector.z
+  ]
+}
+
+function onMouseUpdate(e: MouseEvent) {
+  if (!mouseMoveEnabled.value) return
+  const mouseMoveFactor = e.x / window.innerWidth
+  squirrelRotationVector.y = degToRad(180 * mouseMoveFactor - 90)
+  updateSquirrelRotation()
+}
+
 onMounted(() => {
   const clock = new Clock()
 
-  document.addEventListener('mousemove', (e) => {
-    if (!mouseMoveEnabled.value) return
-    const percentageX = e.x / window.innerWidth
-    squirrelRotation.value[1] = degToRad(180 * percentageX - 90)
-    squirrelRotation.value = [...squirrelRotation.value]
-  })
+  document.addEventListener('mouseenter', onMouseUpdate)
+  document.addEventListener('mousemove', onMouseUpdate)
 
   useRenderLoop().onLoop(() => {
     const time = clock.getElapsedTime()
-    squirrelPosition.value[1] = Math.cos(time) * 0.1 - 1
+    squirrelPosition.value[1] = Math.cos(time) * 0.1 - (width.value / 1700)
     squirrelPosition.value = [...squirrelPosition.value]
   })
 
@@ -228,36 +244,30 @@ onMounted(() => {
         delay: 0.7,
         onComplete: () => { mouseMoveEnabled.value = true }
       })
-        .fromTo(container.querySelector('.canvas'),
-          { opacity: 0 },
-          { opacity: 1, duration: 1 }
+        .set(container.querySelector('h1'), { transformPerspective: 1000 })
+        .fromTo(container.querySelector('h1'),
+          {
+            z: 600,
+            opacity: 0
+          },
+          {
+            z: 0,
+            opacity: 1,
+            duration: 1
+          }
         )
         .fromTo(cameraPositionVector,
-          { z: 20 },
+          { y: -10 },
           {
-            z: 4,
-            duration: 1,
+            y: 0,
+            duration: 1.5,
             onUpdate: () => updateCameraPosition(),
-            ease: 'circ.out'
-          }, '<0.1')
-        .fromTo(container.querySelector('h1'),
-          { letterSpacing: '-0.5em', opacity: 0 },
-          {
-            letterSpacing: '0',
-            opacity: 1,
-            duration: 0.7,
-            keyframes: {
-              '0%': { opacity: 0 },
-              '40%': { opacity: 0.6 },
-              '100%': { opacity: 1 }
-            }
-          },
-          '>-0.7'
-        )
+            ease: 'power4.out'
+          }, '>-0.6')
         .fromTo(container.querySelector('.footer'),
-          { yPercent: 100 },
-          { yPercent: 0, duration: 1, ease: 'elastic.out(1,0.3)' },
-          '>'
+          { yPercent: 120 },
+          { yPercent: 0, duration: 1, ease: 'circ.out' },
+          '>-0.5'
         )
     }
   })
@@ -308,7 +318,8 @@ onMounted(() => {
   width: 100%;
   height: inherit;
   display: flex;
-  padding: 30px 120px;
+  padding: 2vw 8vw;
+  transform: perspective(800px);
 
   .footer {
     display: flex;
