@@ -34,7 +34,7 @@
 <script setup lang="ts">
 import HeroSection from '~/sections/HeroSection.vue'
 import TestimonialsSection from '~/sections/TestimonialsSection.vue'
-import PortfolioSection from '~/sections/PortfolioSection.vue'
+import PortfolioSection from '~/sections/CasesSection.vue'
 import AdvantagesSection from '~/sections/AdvantagesSection.vue'
 import GoalSection from '~/sections/GoalSection.vue'
 import StagesSection from '~/sections/StagesSection.vue'

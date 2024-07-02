@@ -8,7 +8,7 @@
     </Transition>
     <BackgroundContainer>
       <IntroSection :loaded="loading === 1" />
-      <PortfolioSection />
+      <CasesSection />
       <AdvantagesSection />
       <GoalSection />
       <TeamSection />
