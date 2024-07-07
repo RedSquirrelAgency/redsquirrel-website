@@ -1,12 +1,16 @@
 <template>
-  <div class="container">
-    <h2 class="text-center gradient-1">
-      <HeadingText
-        text="A-team dedicated to excellent results"
-        :font-replacements="[[0, 0], [1, 0], [1, 4], [3, 3], [4, 2]]"
-        :line-breaks="[0, 3]"
-      />
-    </h2>
+  <section class="container">
+    <AnimatedText>
+      <h2 class="gradient-1">
+        <HeadingText
+          :text="$t('A-team dedicated to excellent results')"
+          :font-replacements="[[0, 0], [1, 0], [1, 4], [3, 3], [4, 2]]"
+          :line-breaks="[0, 3]"
+          :word-spacers="{ 0: '3.5em' }"
+          :line-spacers="{ 2: '1.5em' }"
+        />
+      </h2>
+    </AnimatedText>
     <v-row>
       <v-col class="d-flex justify-center">
         <div class="video-wrapper">
@@ -15,18 +19,14 @@
             class="overlay"
           >
             <v-btn
-              variant="flat"
               class="play-button"
-              icon="mdi-play"
-              color="#EEEEEEB2"
+              rounded
               @click="onPlay"
             >
-              <v-icon
-                color="white"
-                size="30"
-              >
-                mdi-play
-              </v-icon>
+              <PlayIcon
+                class="icon"
+                color="#FFFBF7"
+              />
             </v-btn>
           </div>
           <div
@@ -36,28 +36,45 @@
         </div>
       </v-col>
       <v-col class="d-flex justify-center">
-        <v-sheet
-          class="glass about-team"
-          min-width="590px"
-          max-width="590px"
-          height="590px"
-          flat
-        >
-          <h3>
-            Using modern technologies in development, we make reliable fast websites
-          </h3>
-          <div class="text">
+        <GlassSheet class="about-team">
+          <h3>{{ $t('Using modern technologies in development, we make reliable fast websites') }}</h3>
+          <div class="content">
             <div class="location">
-              <span class="icon"><MapPinIcon color="#85553D" /></span>
-              <span>Based in Munich</span>
+              <span class="icon">
+                <MapPinIcon color="#85553D" />
+              </span>
+              <span>{{ $t('Based in Munich') }}</span>
             </div>
-            <p>We do not use template solutions, builders, or ready-made themes. Instead of it, we develop a theme from scratch to avoid unnecessary plugins and other clutter. All of this ultimately results <b>in a high loading speed</b> of a website.</p>
-            <p>We use <b>modern reliable</b> technologies in development. More about technologies.</p>
+            <i18n-t
+              tag="p"
+              keypath="We do not use template solutions, builders, or ready-made themes. Instead of it, we develop a theme {highlight-1} to avoid unnecessary plugins and other clutter. All of this ultimately results {highlight-2} of a website."
+            >
+              <template #highlight-1>
+                <b>{{ $t('from scratch') }}</b>
+              </template>
+              <template #highlight-2>
+                <b>{{ $t('in a high loading speed') }}</b>
+              </template>
+            </i18n-t>
+            <i18n-t
+              tag="p"
+              keypath="We use {highlight} technologies in development. {link}"
+            >
+              <template #highlight>
+                <b>{{ $t('modern reliable') }}</b>
+              </template>
+              <template #link>
+                <a
+                  href=""
+                  target="_blank"
+                >{{ $t('More about technologies.') }}</a>
+              </template>
+            </i18n-t>
           </div>
-        </v-sheet>
+        </GlassSheet>
       </v-col>
     </v-row>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -87,8 +104,9 @@ function onPlay() {
 <style scoped lang="scss">
 @import "styles/variables";
 
+$cards-size: 35vw;
+
 .container {
-  width: 100%;
   padding: 100px 120px 130px 150px;
 
   h2 {
@@ -96,79 +114,98 @@ function onPlay() {
   }
 }
 
-.glass {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 60px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
 .about-team {
-  padding: 70px 40px;
+  width: $cards-size;
+  height: $cards-size;
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  font-size: 1vw;
   color: $redsquirrel-chocolate;
+  padding: 4.2em 2.4em;
 
   h3 {
     text-transform: uppercase;
-    font-size: 30px;
+    font-size: 1.8em;
     font-weight: 300;
-    line-height: 45px;
   }
 
-  .text {
+  .content {
     display: flex;
     flex-direction: column;
-    gap: 30px;
-    font-size: 15px;
+    gap: 1.8em;
+
+    font-size: 0.9em;
     font-weight: 300;
-    line-height: 22.5px;
 
     p b {
-      font-weight: 700;
+      font-weight: 400;
     }
 
-    .location .icon {
-        margin-right: 10px;
+    p a {
+      color: inherit;
+    }
+
+    .location {
+      font-weight: 400;
+
+      .icon {
+        margin-right: 0.7em;
         vertical-align: middle;
+
+        svg {
+          width: 1.44em;
+          height: 1.44em;
+        }
+      }
     }
   }
 }
 
 .video-wrapper {
   position: relative;
-  width: 590px;
-  height: 590px;
-}
+  width: $cards-size;
+  height: $cards-size;
 
-.overlay {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: #EEEEEE66;
-  border-radius: 60px;
-  z-index: 2;
-}
+  .overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #FFD6C3CC;
+    border-radius: 3vw;
+    z-index: 2;
+  }
 
-.play-button {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80px;
-  height: 80px;
+  .play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5vw;
+    height: 5vw;
+
+    transform: translate(-50%, -50%);
+
+    background-color: #EEEEEEB2;
+    border-radius: 50%;
+    border: 1px solid #FFFFFF;
+    box-shadow: 0 1.85px 3.15px 0 #67676704;
+
+    .icon {
+      width: 1.5vw;
+      height: 1.5vw;
+    }
+  }
 }
 </style>
 
 <style lang="scss">
 .video {
   iframe {
-    border-radius: 60px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 3vw;
     border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 1.85px 3.15px 0 #CA5E3C04;
   }
 }
 </style>

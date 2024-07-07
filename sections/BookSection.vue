@@ -3,14 +3,17 @@
     fluid
     class="container"
   >
-    <v-row>
-      <h2 class="gradient-2">
-        <HeadingText
-          text="Book a free online meeting to get a price proposal"
-          :font-replacements="[[1, 0], [3, 0], [6, 1], [8, 3], [9, 5]]"
-          :line-breaks="[2, 4]"
-        />
-      </h2>
+    <v-row class="d-flex justify-center">
+      <AnimatedText>
+        <h2 class="gradient-2">
+          <HeadingText
+            :text="$t('Book a free online meeting to get a price proposal')"
+            :font-replacements="[[1, 0], [3, 0], [6, 1], [8, 3], [9, 5]]"
+            :line-breaks="[2, 4]"
+            :word-spacers="{ 2: '3.8em', 9: '2.7em' }"
+          />
+        </h2>
+      </AnimatedText>
     </v-row>
     <v-row>
       <v-col class="contacts">
@@ -21,26 +24,6 @@
         <div>Email</div>
       </v-col>
       <v-col class="meeting">
-        <div class="canvas">
-          <TresCanvas v-bind="gl">
-            <TresPerspectiveCamera
-              :fov="70"
-              :look-at="[0, 0, 0]"
-              :zoom="2.5"
-            />
-            <Suspense>
-              <SquirrelComponent
-                :position="[0, -1, 0]"
-                :rotation="[0, 0, 0]"
-                :sparkle="false"
-                :transmission="0.9"
-                :roughness="0.1"
-                :thickness="1"
-                :ior="5"
-              />
-            </Suspense>
-          </TresCanvas>
-        </div>
         <div class="about-meeting">
           <span class="avatar">
             <v-avatar
@@ -50,41 +33,21 @@
               <v-img
                 alt="Alena"
                 src="/alena.png"
+                eager
               />
             </v-avatar>
           </span>
           <p>
-            During the 30 minute meeting, Alena will ask you questions to make an accurate
-            assessment of the work and tell a little more about our team
+            {{ $t('During the 30 minute meeting, Alena will ask you questions to make an accurate assessment of the work and tell a little more about our team') }}
           </p>
         </div>
-        <v-btn
-          class="consultation-button"
-          rounded="lg"
-          append-icon="mdi-arrow-right"
-          color="#FFDFCFE5"
-          variant="flat"
-        >
-          {{ $t("Book a consultation") }}
-        </v-btn>
+        <ConsultationButton />
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { BasicShadowMap, NoToneMapping, SRGBColorSpace } from 'three'
-import SquirrelComponent from '~/components/SquirrelComponent.vue'
-
-const gl = {
-  clearColor: 0x000000,
-  shadows: true,
-  alpha: true,
-  antialias: true,
-  shadowMapType: BasicShadowMap,
-  outputColorSpace: SRGBColorSpace,
-  toneMapping: NoToneMapping
-}
 </script>
 
 <style scoped lang="scss">

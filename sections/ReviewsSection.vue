@@ -39,6 +39,7 @@
             <v-img
               :alt="review.company"
               :src="review.avatar"
+              eager
             />
           </v-avatar>
         </div>

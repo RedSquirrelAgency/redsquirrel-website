@@ -4,15 +4,17 @@
     class="container"
   >
     <div class="content">
-      <h2 class="gradient-1">
-        <HeadingText
-          :text="$t('Immersing deeply into each project and finding successful solutions')"
-          :font-replacements="[[0, 4], [4, 2], [7, 0]]"
-          :line-breaks="[1, 5]"
-          :line-spacers="{ 0: '5.5em' }"
-          :word-spacers="{ 4: '4em' }"
-        />
-      </h2>
+      <AnimatedText>
+        <h2 class="gradient-1">
+          <HeadingText
+            :text="$t('Immersing deeply into each project and finding successful solutions')"
+            :font-replacements="[[0, 4], [4, 2], [7, 0]]"
+            :line-breaks="[1, 5]"
+            :line-spacers="{ 0: '5.5em' }"
+            :word-spacers="{ 4: '4em' }"
+          />
+        </h2>
+      </AnimatedText>
       <v-row class="cases">
         <v-col
           v-for="(item, index) in cases"
@@ -32,6 +34,7 @@
                   class="image"
                   :src="item.image"
                   cover
+                  eager
                 />
               </v-card>
               <div class="caption">
@@ -39,7 +42,7 @@
                   {{ item.title }}
                 </div>
                 <div class="subtitle">
-                  {{ item.subtitle }}
+                  {{ $t(item.subtitle) }}
                 </div>
               </div>
             </div>
@@ -73,43 +76,42 @@ onMounted(() => {
   }).fromTo(container.querySelector('.cases'), { xPercent: 100 }, { xPercent: -105 })
 })
 
-const { t } = useI18n()
 const cases = [
   {
     title: 'Natalie Herzel Praxis',
-    subtitle: t('Dental Clinic'),
+    subtitle: 'Dental Clinic',
     image: 'banners/natalie_herzel_praxis.png',
     url: 'https://www.behance.net/alenadomozhirova'
   },
   null,
   {
     title: 'RAYTH',
-    subtitle: t('Car Wash & Detailing Center'),
+    subtitle: 'Car Wash & Detailing Center',
     image: 'banners/rayth.png',
     url: 'https://www.behance.net/alenadomozhirova'
   },
   {
     title: 'EZdesign',
-    subtitle: t('Bureau of Architecture'),
+    subtitle: 'Bureau of Architecture',
     image: 'banners/ezdesign.png',
     url: 'https://www.behance.net/alenadomozhirova'
   },
   {
     title: 'Anna Soboleva',
-    subtitle: t('Metaphysics Expert'),
+    subtitle: 'Metaphysics Expert',
     image: 'banners/anna_soboleva.png',
     url: 'https://www.behance.net/alenadomozhirova'
   },
   null,
   {
     title: 'Yes! Mallorca Property',
-    subtitle: t('Estate Agency'),
+    subtitle: 'Estate Agency',
     image: 'banners/yes!_mallorca_property.png',
     url: 'https://www.behance.net/alenadomozhirova'
   },
   {
     title: 'Bigmishka',
-    subtitle: t('Tattoo Online Store'),
+    subtitle: 'Tattoo Online Store',
     image: 'banners/bigmishka.png',
     url: 'https://www.behance.net/alenadomozhirova'
   }
@@ -132,11 +134,6 @@ $case-card-height: 20vw;
 
 .content {
   width: 100%;
-
-  h2 {
-    text-align: center;
-    color: $redsquirrel-chocolate;
-  }
 
   .cases {
     position: relative;

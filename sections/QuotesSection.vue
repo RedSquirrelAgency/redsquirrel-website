@@ -23,7 +23,7 @@
         <span
           class="quote"
           :class="(index % 2 === 0) && 'darker'"
-        >{{ quote }}</span>
+        >{{ $t(quote) }}</span>
       </TickerTape>
     </div>
   </section>
@@ -44,17 +44,16 @@ const props = defineProps({
   }
 })
 
-const { t } = useI18n()
 const quotes = [
-  t('Listening to the client\'s desires and vision'),
-  t('Able to listen without imposing personal opinions'),
-  t('Clearly explaining and organizing everything'),
-  t('Immersing deeply into the project from the first meeting'),
-  t('Prompt responses in messenger and timely delivery'),
-  t('Showing great enthusiasm to work'),
-  t('Working with great interest on the project'),
-  t('Taking calls seriously and being punctual'),
-  t('Work like a Swiss watch')
+  'Listening to the client\'s desires and vision',
+  'Able to listen without imposing personal opinions',
+  'Clearly explaining and organizing everything',
+  'Immersing deeply into the project from the first meeting',
+  'Prompt responses in messenger and timely delivery',
+  'Showing great enthusiasm to work',
+  'Working with great interest on the project',
+  'Taking calls seriously and being punctual',
+  'Work like a Swiss watch'
 ]
 
 const { $gsap } = useNuxtApp()
@@ -125,6 +124,7 @@ $backdrop-color: #fc7733;
   width: 100%;
 
   h2 {
+    text-align: left;
     font-size: 7vw;
     line-height: 7vw;
     text-transform: uppercase;

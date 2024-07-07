@@ -1,6 +1,6 @@
 <template>
   <div class="container d-flex justify-center">
-    <v-sheet class="footer glass">
+    <GlassSheet class="footer">
       <v-row>
         <div class="heading">
           Redsquirrel
@@ -37,7 +37,7 @@
           <div>By RedSquirrel</div>
         </v-col>
       </v-row>
-    </v-sheet>
+    </GlassSheet>
   </div>
 </template>
 
@@ -67,15 +67,6 @@ useScrollAnimation({
 
 .container {
   padding: 100px 120px 10px;
-}
-
-.glass {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 60px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .footer {

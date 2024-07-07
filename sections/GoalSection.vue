@@ -3,15 +3,15 @@
     ref="containerRef"
     class="container"
   >
-    <h2 class="header">
+    <p>
       <FillingText
         :key="progress"
-        :text="text"
+        :text="$t(text)"
         :progress="progress"
         color="#FFAE83"
         filled-color="#FEE4C9"
       />
-    </h2>
+    </p>
   </section>
 </template>
 
@@ -55,9 +55,10 @@ onMounted(() => {
   justify-content: center;
 }
 
-.header {
-  font-size: 50px;
-  line-height: 57.5px;
+p {
+  font-size: 3.1vw;
+  text-indent: 5vw;
+  line-height: 3.5vw;
   text-transform: uppercase;
   font-weight: 400;
 }

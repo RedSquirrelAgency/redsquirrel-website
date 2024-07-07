@@ -1,48 +1,55 @@
 <template>
   <section ref="containerRef">
-    <h2 class="gradient-1 text-center">
-      <HeadingText text="We value your time" />
-      <HeadingText text="and keep our promises" />
-    </h2>
-    <v-container
-      class="d-flex justify-center"
-    >
-      <v-card
-        class="advantages glass"
-        min-width="100%"
-        flat
+    <AnimatedText>
+      <h2 class="gradient-1">
+        <HeadingText
+          :text="$t('We value your time and keep our promises')"
+          :line-breaks="[3]"
+          :font-replacements="[[0, 0], [2, 1], [5, 1], [7, 5]]"
+          :word-spacers="{ 0: '2.6em' }"
+          :line-spacers="{ 1: '0.7em' }"
+        />
+      </h2>
+    </AnimatedText>
+    <div class="d-flex justify-center">
+      <GlassSheet
+        class="advantages"
         @mouseout="hoveredItem = -1"
       >
-        <v-sheet class="bg-transparent">
-          <v-row
-            v-for="(item, index) in advantages"
-            :key="index"
-            class="item"
-            :class="(hoveredItem === index) && 'hovered'"
-            @mouseover="hoveredItem = index"
+        <v-row
+          v-for="(item, index) in advantages"
+          :key="index"
+          class="item"
+          :class="(hoveredItem === index) && 'hovered'"
+          @mouseover="hoveredItem = index"
+        >
+          <v-col class="title d-flex h-100 align-center">
+            <p>
+              {{ $t(item.title) }}<span class="index">{{ formatIndex(index) }}</span>
+            </p>
+          </v-col>
+          <v-col
+            cols="4"
+            class="subtitle d-flex h-100 justify-end align-center"
           >
-            <v-col class="title d-flex h-100 align-center">
-              <p>{{ item.title }}<span class="index">{{ formatIndex(index) }}</span></p>
-            </v-col>
-            <v-col
-              cols="3"
-              class="subtitle d-flex h-100 justify-end align-center"
+            <i18n-t
+              tag="p"
+              :keypath="item.subtitle"
             >
-              <p
-                :class="(hoveredItem === index) && 'show'"
-                v-html="item.subtitle"
-              />
-            </v-col>
-            <v-divider
-              v-if="index < advantages.length - 1"
-              class="d-flex align-self-end"
-              thickness="1"
-              opacity="1"
-            />
-          </v-row>
-        </v-sheet>
-      </v-card>
-    </v-container>
+              <template #highlight>
+                <b>{{ $t(item.highlight) }}</b>
+              </template>
+            </i18n-t>
+          </v-col>
+          <v-divider
+            v-if="index < advantages.length - 1"
+            class="d-flex align-self-end"
+            thickness="1"
+            opacity="1"
+          />
+        </v-row>
+      </GlassSheet>
+    </div>
   </section>
 </template>
 
@@ -74,23 +81,28 @@ const hoveredItem = ref(-1)
 const advantages = [
   {
     title: 'Expertise',
-    subtitle: 'Our <b>12 years</b> of experience in design and development help us create effective strategies and optimal solutions'
+    subtitle: 'Our {highlight} of experience in design and development help us create effective strategies and optimal solutions',
+    highlight: '12 years'
   },
   {
     title: 'Comfortable Service',
-    subtitle: 'We are trusted because we can explain complex things, stand by our decisions, and <b>exceed expectations</b>'
+    subtitle: 'We are trusted because we can explain complex things, stand by our decisions, and {highlight}',
+    highlight: 'exceed expectations'
   },
   {
     title: 'Fast Communication',
-    subtitle: 'We <b>respond within 20 minutes</b> during business hours, deliver on time, and aim to manage all website-related queries'
+    subtitle: 'We {highlight} during business hours, deliver on time, and aim to manage all website-related queries',
+    highlight: 'respond within 20 minutes'
   },
   {
     title: 'Full Immersion',
-    subtitle: '<b>We love what we do</b> and dive headfirst into each project to ensure our work meets your expectations and becomes an interesting case study in our portfolio'
+    subtitle: '{highlight} and dive headfirst into each project to ensure our work meets your expectations and becomes an interesting case study in our portfolio',
+    highlight: 'We love what we do'
   },
   {
     title: 'Transparent Contract',
-    subtitle: 'We outline <b>all guarantees</b>, deadlines, and technical implementation details in the contract and provide invoices'
+    subtitle: 'We outline {highlight}, deadlines, and technical implementation details in the contract and provide invoices',
+    highlight: 'all guarantees'
   }
 ]
 
@@ -102,53 +114,52 @@ function formatIndex(index: number) {
 <style scoped lang="scss">
 @import "styles/variables";
 
-.glass {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 60px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
 .advantages {
   color: $redsquirrel-chocolate;
+  margin-top: 4vw;
   padding: 20px 30px 20px;
+  font-size: 1vw;
+  width: 80vw;
 
   .item {
-    height: 100px;
+    height: 6.5vw;
     transition: height .6s ease-in-out;
 
+    .title p {
+      font-size: 3em;
+      font-weight: 300;
+      text-transform: uppercase;
+
+      .index {
+        position: relative;
+        top: -2.5em;
+        left: 0.7em;
+        font-size: 0.3em;
+        font-style: italic;
+      }
+    }
+
+    .subtitle p {
+      font-size: 0.9em;
+      width: 17vw;
+      filter: blur(12px);
+      opacity: 0;
+    }
+
     &.hovered {
+      height: 9vw;
       transition: height .4s ease-in-out;
-      height: 150px;
-    }
-  }
 
-  .title p {
-    font-size: 60px;
-    text-transform: uppercase;
+      .title p {
+        font-weight: 400;
+      }
 
-    .index {
-      position: relative;
-      top: -40px;
-      left: 5px;
-      font-size: 14px;
-      font-style: italic;
-    }
-  }
-
-  .subtitle p {
-    font-size: 14px;
-    width: 300px;
-    filter: blur(12px);
-    opacity: 0;
-
-    &.show {
-      filter: blur(0px);
-      transition: filter .4s ease, opacity .4s ease;
-      transition-delay: .1s;
-      opacity: 1;
+      .subtitle p {
+        filter: blur(0px);
+        transition: filter .4s ease, opacity .4s ease;
+        transition-delay: .1s;
+        opacity: 1;
+      }
     }
   }
 }

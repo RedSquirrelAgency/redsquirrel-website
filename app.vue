@@ -12,7 +12,7 @@
       <AdvantagesSection />
       <GoalSection />
       <TeamSection />
-      <StagesSection />
+      <!-- <StagesSection /> -->
       <ReviewsSection />
       <BookSection />
       <FooterSection />

@@ -88,7 +88,7 @@
               :size="CONTROLS_SIZE"
               @click="player.pause()"
             >
-              <PauseIcon :color="CONTROLS_COLOR" />
+              <PauseBoxFilledIcon :color="CONTROLS_COLOR" />
             </v-btn>
             <v-btn
               v-else
@@ -96,7 +96,7 @@
               :size="CONTROLS_SIZE"
               @click="player.play()"
             >
-              <PlayIcon :color="CONTROLS_COLOR" />
+              <PlayBoxFilledIcon :color="CONTROLS_COLOR" />
             </v-btn>
             <v-btn
               rounded

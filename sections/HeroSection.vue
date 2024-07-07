@@ -53,15 +53,7 @@
         <v-col class="d-flex justify-end">
           <div class="button-container text-right">
             <p>{{ $t("The website with a creative design and persuasive content") }} </p>
-            <v-btn
-              href="https://cal.com/redsquirrel/30min"
-              class="consultation-button"
-              append-icon="mdi-arrow-right"
-              variant="flat"
-              block
-            >
-              {{ $t("Book a consultation") }}
-            </v-btn>
+            <ConsultationButton block />
           </div>
         </v-col>
       </v-row>
@@ -77,6 +69,7 @@ import SquirrelComponent from '~/components/SquirrelComponent.vue'
 import TextureBackground from '~/components/TextureBackground.vue'
 import Timeline = gsap.core.Timeline
 import TexturedText from '~/components/TexturedText.vue'
+import ConsultationButton from "~/components/ConsultationButton.vue";
 
 const props = defineProps({
   tl: {
@@ -276,20 +269,6 @@ onMounted(() => {
       p {
         text-transform: uppercase;
         margin-bottom: 2vw;
-      }
-
-      .consultation-button {
-        height: 2.8em;
-        background: #FFDFCFE5;
-
-        font-size: 0.8em;
-        letter-spacing: 0.05em;
-        color: $redsquirrel-chocolate;
-
-        border-radius: 0.8em;
-        border-width: 1px;
-        border-color: $redsquirrel-cream-p1;
-        box-shadow: 0 1em 3em 0 #D3835B1A;
       }
     }
   }
