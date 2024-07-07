@@ -3,34 +3,45 @@
     ref="containerRef"
     class="container"
   >
-    <div class="underlay d-flex justify-center align-center">
-      <NuxtParticles
-        id="particles"
-        :options="particlesOptions"
-      />
-      <h1>
-        RedSquirrel
-      </h1>
-    </div>
     <div class="canvas">
       <TresCanvas v-bind="gl">
-        <TresPerspectiveCamera
-          :fov="70"
-          :look-at="[0, 0, 0]"
-          :position="cameraPosition"
-        />
-        <Suspense>
-          <SquirrelTresComponent
-            :position="squirrelPosition"
-            :rotation="squirrelRotation"
-            :sparkle="true"
-            :transmission="0.9"
-            :roughness="0.1"
-            :thickness="1"
-            :ior="5"
-            :scale="width / 80000"
+        <TextureBackground>
+          <TresPerspectiveCamera
+            :fov="70"
+            :look-at="[0, 0, 0]"
+            :position="cameraPosition"
           />
-        </Suspense>
+          <FloatingStarsParticle
+            alpha-map="star_alpha_map.png"
+            color="#FFD2BB"
+            :radius="50"
+            :depth="40"
+            :count="500"
+            :size="1"
+          />
+          <Suspense>
+            <TexturedText
+              map="text_gradient.png"
+              :size="0.8"
+              :position="textPosition"
+              :opacity="textOpacity"
+            />
+          </Suspense>
+          <Levioso>
+            <Suspense>
+              <SquirrelComponent
+                :position="squirrelPosition"
+                :rotation="squirrelRotation"
+                :sparkle="true"
+                :transmission="1"
+                :roughness="0"
+                :thickness="1"
+                :ior="5"
+                :scale="0.000003"
+              />
+            </Suspense>
+          </Levioso>
+        </TextureBackground>
       </TresCanvas>
     </div>
     <div class="overlay">
@@ -43,12 +54,10 @@
           <div class="button-container text-right">
             <p>{{ $t("The website with a creative design and persuasive content") }} </p>
             <v-btn
-              class="consultation-button"
-              rounded="lg"
-              append-icon="mdi-arrow-right"
-              color="#FFDFCFE5"
-              variant="flat"
               href="https://cal.com/redsquirrel/30min"
+              class="consultation-button"
+              append-icon="mdi-arrow-right"
+              variant="flat"
               block
             >
               {{ $t("Book a consultation") }}
@@ -61,12 +70,13 @@
 </template>
 
 <script setup lang="ts">
-import { BasicShadowMap, Clock, NoToneMapping, SRGBColorSpace, Vector3 } from 'three'
+import { BasicShadowMap, NoToneMapping, SRGBColorSpace, TextureLoader, Vector3 } from 'three'
 import { degToRad } from 'three/src/math/MathUtils'
 import type { PropType } from 'vue'
-import { useDisplay } from 'vuetify'
-import SquirrelTresComponent from '~/components/SquirrelTresComponent.vue'
+import SquirrelComponent from '~/components/SquirrelComponent.vue'
+import TextureBackground from '~/components/TextureBackground.vue'
 import Timeline = gsap.core.Timeline
+import TexturedText from '~/components/TexturedText.vue'
 
 const props = defineProps({
   tl: {
@@ -84,91 +94,21 @@ const props = defineProps({
 })
 
 const gl = {
-  clearColor: 0x000000,
   shadows: true,
-  alpha: true,
+  alpha: false,
   antialias: true,
   shadowMapType: BasicShadowMap,
   outputColorSpace: SRGBColorSpace,
   toneMapping: NoToneMapping
 }
 
-const particlesOptions = {
-  fullScreen: { enable: false },
-  interactivity: {
-    events: {
-      onHover: { enable: true, mode: 'repulse' }
-    },
-    modes: {
-      repulse: {
-        distance: 100,
-        duration: 0.4,
-        factor: 100,
-        speed: 1,
-        maxSpeed: 20,
-        easing: 'ease-out-quad'
-      }
-    }
-  },
-  particles: {
-    number: {
-      value: 160
-    },
-    color: {
-      value: '#FFD2BB'
-    },
-    shape: {
-      type: 'circle',
-      close: true,
-      fill: true
-    },
-    opacity: {
-      value: {
-        min: 0.1,
-        max: 1
-      }
-    },
-    size: {
-      value: {
-        min: 2,
-        max: 4
-      }
-    },
-    collisions: {
-      absorb: {
-        speed: 2
-      },
-      bounce: {
-        horizontal: {
-          value: 1
-        },
-        vertical: {
-          value: 1
-        }
-      },
-      enable: true,
-      maxSpeed: 50,
-      mode: 'bounce',
-      overlap: {
-        enable: true,
-        retries: 0
-      }
-    },
-    move: {
-      enable: true,
-      speed: 1,
-      random: true
-    }
-  },
-  detectRetina: true
-}
-
 const { $gsap } = useNuxtApp()
-const { width } = useDisplay()
 const containerRef = ref<HTMLElement | null>(null)
-const squirrelPosition = shallowRef([0, 0, 0])
+const squirrelPosition = shallowRef([0, -1, 0])
 const squirrelRotation = shallowRef([0, 0, 0])
 const cameraPosition = shallowRef([0, 0, 0])
+const textOpacity = ref(0)
+const textPosition = ref([0, 0, -2])
 const mouseMoveEnabled = shallowRef(false)
 
 const cameraPositionVector = new Vector3()
@@ -177,6 +117,15 @@ function updateCameraPosition() {
     cameraPositionVector.x,
     cameraPositionVector.y,
     cameraPositionVector.z
+  ]
+}
+
+const squirrelPositionVector = new Vector3()
+function updateSquirrelPosition() {
+  squirrelPosition.value = [
+    squirrelPositionVector.x,
+    squirrelPositionVector.y,
+    squirrelPositionVector.z
   ]
 }
 
@@ -189,6 +138,15 @@ function updateSquirrelRotation() {
   ]
 }
 
+const textPositionVector = new Vector3()
+function updateTextPosition() {
+  textPosition.value = [
+    textPositionVector.x,
+    textPositionVector.y,
+    textPositionVector.z
+  ]
+}
+
 function onMouseUpdate(e: MouseEvent) {
   if (!mouseMoveEnabled.value) return
   const mouseMoveFactor = e.x / window.innerWidth
@@ -197,25 +155,15 @@ function onMouseUpdate(e: MouseEvent) {
 }
 
 onMounted(() => {
-  const clock = new Clock()
-
   document.addEventListener('mouseenter', onMouseUpdate)
   document.addEventListener('mousemove', onMouseUpdate)
-
-  useRenderLoop().onLoop(() => {
-    const time = clock.getElapsedTime()
-    squirrelPosition.value[1] = Math.cos(time) * 0.1 - (width.value / 1700)
-    squirrelPosition.value = [...squirrelPosition.value]
-  })
 
   if (!containerRef.value) return
   const container = containerRef.value
 
   props.tl.fromTo(cameraPositionVector,
     { z: 4 },
-    { z: 3,
-      onUpdate: () => updateCameraPosition()
-    }
+    { z: 3, onUpdate: () => updateCameraPosition() }
   )
 
   watch(() => props.displayed, (displayed) => {
@@ -240,35 +188,39 @@ onMounted(() => {
   watch(() => props.loaded, (loaded) => {
     if (loaded) {
       mouseMoveEnabled.value = false
-      $gsap.timeline({
-        delay: 0.7,
-        onComplete: () => { mouseMoveEnabled.value = true }
-      })
-        .set(container.querySelector('h1'), { transformPerspective: 1000 })
-        .fromTo(container.querySelector('h1'),
-          {
-            z: 600,
-            opacity: 0
-          },
-          {
-            z: 0,
-            opacity: 1,
-            duration: 1
-          }
-        )
-        .fromTo(cameraPositionVector,
-          { y: -10 },
-          {
-            y: 0,
-            duration: 1.5,
-            onUpdate: () => updateCameraPosition(),
-            ease: 'power4.out'
-          }, '>-0.6')
-        .fromTo(container.querySelector('.footer'),
-          { yPercent: 120 },
-          { yPercent: 0, duration: 1, ease: 'circ.out' },
-          '>-0.5'
-        )
+      $gsap.timeline(
+        {
+          delay: 0.7,
+          onComplete: () => { mouseMoveEnabled.value = true }
+        }
+      ).fromTo(textOpacity,
+        { value: 0 },
+        {
+          value: 1,
+          duration: 1
+        }
+      ).fromTo(textPositionVector,
+        { z: 3 },
+        {
+          z: -2,
+          duration: 1,
+          onUpdate: () => updateTextPosition()
+        },
+        '<='
+      ).fromTo(container.querySelector('.footer'),
+        { yPercent: 120 },
+        { yPercent: 0, duration: 1, ease: 'circ.out' },
+        '>-0.5'
+      ).fromTo(squirrelPositionVector,
+        { y: 5 },
+        {
+          y: -1,
+          duration: 3,
+          ease: 'circ.out',
+          onUpdate: () => updateSquirrelPosition()
+        },
+        '>-0.5'
+      )
     }
   })
 })
@@ -285,15 +237,6 @@ onMounted(() => {
   height: 100vh;
   z-index: 10;
   background: -webkit-linear-gradient(#B87C6A, #DF8B6B, #EE936B, #FEAE79, #F4C5A1, #DDCABA);
-
-  @keyframes zoom {
-    0% {
-      rotate: 0;
-    }
-    100% {
-      rotate: 360deg;
-    }
-  }
 }
 
 #particles {
@@ -312,6 +255,7 @@ onMounted(() => {
   position: absolute;
   width: 100%;
   height: inherit;
+  color: transparent;
 }
 
 .overlay {
@@ -319,20 +263,33 @@ onMounted(() => {
   height: inherit;
   display: flex;
   padding: 2vw 8vw;
-  transform: perspective(800px);
 
   .footer {
     display: flex;
     align-self: end;
     color: $redsquirrel-cream-m1;
-    font-size: 15px;
+    font-size: 1vw;
 
     .button-container {
-      width: 260px;
+      width: 18vw;
 
       p {
         text-transform: uppercase;
-        margin-bottom: 30px;
+        margin-bottom: 2vw;
+      }
+
+      .consultation-button {
+        height: 2.8em;
+        background: #FFDFCFE5;
+
+        font-size: 0.8em;
+        letter-spacing: 0.05em;
+        color: $redsquirrel-chocolate;
+
+        border-radius: 0.8em;
+        border-width: 1px;
+        border-color: $redsquirrel-cream-p1;
+        box-shadow: 0 1em 3em 0 #D3835B1A;
       }
     }
   }

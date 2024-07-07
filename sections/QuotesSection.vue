@@ -66,7 +66,7 @@ onMounted(() => {
 
   props.tl.fromTo(container.querySelector('.quotes'),
     { yPercent: 0 },
-    { yPercent: -100, delay: 1, duration: 1.5 }
+    { yPercent: -100, delay: 0.5, duration: 1.5 }
   )
 
   watch(() => props.displayed, (displayed) => {
@@ -128,7 +128,7 @@ $backdrop-color: #fc7733;
     font-size: 7vw;
     line-height: 7vw;
     text-transform: uppercase;
-    font-weight: 400;
+    font-weight: 300;
   }
 }
 

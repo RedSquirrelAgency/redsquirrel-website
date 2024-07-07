@@ -37,24 +37,24 @@
       class="subtitles full"
     >
       <div
-        v-for="({ text }, index) in props.sound.transcription"
+        v-for="({ text }, index) in subtitles"
         :key="index"
       >
         {{ text }}
       </div>
     </v-card-text>
     <v-card-text
-      v-else-if="subtitles"
+      v-else-if="currentSubtitleFrame"
       class="subtitles"
     >
       <div class="previous">
-        {{ subtitles.previous }}
+        {{ currentSubtitleFrame.previous }}
       </div>
       <div class="current">
-        {{ subtitles.current }}
+        {{ currentSubtitleFrame.current }}
       </div>
       <div class="next">
-        {{ subtitles.next }}
+        {{ currentSubtitleFrame.next }}
       </div>
     </v-card-text>
     <v-card-actions class="pt-0">
@@ -142,14 +142,21 @@
 <script setup lang="ts">
 import { Howl } from 'howler'
 import type { PropType } from 'vue'
+import SrtParser2 from 'srt-parser-2'
 
 const CONTROLS_COLOR = '#85553D'
 const CONTROLS_SIZE = 48
 
-interface ISubtitles {
+interface ISubtitleFrame {
   previous: string
   current: string
   next: string
+}
+
+interface ISubtitleItem {
+  startSeconds: number
+  endSeconds: number
+  text: string
 }
 
 const props = defineProps({
@@ -162,13 +169,14 @@ const playing = ref(false)
 const muted = ref(false)
 const seek = ref(0)
 const volume = ref(1)
-const subtitles = ref<ISubtitles | undefined>()
+const subtitles = ref<ISubtitleItem[] | undefined>()
+const currentSubtitleFrame = ref<ISubtitleFrame | undefined>()
 const fullTranscription = ref(false)
 
 let seekInterval: ReturnType<typeof setInterval>
 let player: Howl
 
-function setRecording(src: string) {
+async function setRecording(audioSrc: string, subtitlesSrc: string) {
   let volume = 1
   if (player) {
     volume = player.volume()
@@ -176,10 +184,12 @@ function setRecording(src: string) {
   }
 
   player = new Howl({
-    src: [src],
+    src: [audioSrc],
     volume: volume,
     mute: muted.value
   })
+
+  subtitles.value = await loadSubtitles(subtitlesSrc)
 
   player.on('play', () => {
     playing.value = true
@@ -260,25 +270,32 @@ function onSeekInterval() {
 }
 
 function updateSubtitles() {
-  const { transcription } = props.sound
-  transcription.find(({ start, end, text }, index) => {
-    if (player.seek() >= start && player.seek() <= end) {
-      subtitles.value = {
-        previous: index >= 1 ? transcription[index - 1]?.text : '',
+  const _subtitles = subtitles.value
+  if (!_subtitles) return
+  _subtitles.find(({ startSeconds, endSeconds, text }, index) => {
+    if (player.seek() >= startSeconds && player.seek() <= endSeconds) {
+      currentSubtitleFrame.value = {
+        previous: index >= 1 ? _subtitles[index - 1]?.text : '',
         current: text,
-        next: index < transcription.length ? transcription[index + 1]?.text : ''
+        next: index < _subtitles.length ? _subtitles[index + 1]?.text : ''
       }
       return true
     }
   })
 }
 
-watch(() => props.sound, (sound) => {
-  setRecording(sound.src)
+async function loadSubtitles(src: string): Promise<ISubtitleItem[]> {
+  const srt = await (await fetch(src)).text()
+  const parser = new SrtParser2()
+  return parser.fromSrt(srt)
+}
+
+watch(() => props.sound, async (sound) => {
+  await setRecording(sound.src, sound.subtitlesSrc)
 })
 
-onMounted(() => {
-  setRecording(props.sound.src)
+onMounted(async () => {
+  await setRecording(props.sound.src, props.sound.subtitlesSrc)
 })
 
 onUnmounted(() => {

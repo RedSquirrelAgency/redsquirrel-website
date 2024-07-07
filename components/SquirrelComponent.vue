@@ -7,9 +7,11 @@
 <script setup lang="ts">
 import { useLoader } from '@tresjs/core'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
-import { EquirectangularReflectionMapping, MeshPhysicalMaterial } from 'three'
+import { Box3, EquirectangularReflectionMapping, MeshPhysicalMaterial, Vector3 } from 'three'
 import { RGBELoader } from 'three-stdlib'
 import type { PropType } from 'vue'
+import { useWindowSize } from '~/composables/windowSize'
+import { useAdaptiveMesh } from '~/composables/adaptiveMesh'
 
 const props = defineProps({
   scale: {
@@ -53,17 +55,18 @@ const hdrEquirect = new RGBELoader().load('/redsquirrel-website/empty_warehouse_
 })
 const material = new MeshPhysicalMaterial({
   envMap: hdrEquirect,
+  color: 0xffffff
 })
 
 const { children } = await useLoader(OBJLoader, '/redsquirrel-website/Squirrel.obj')
 const mesh = children[0]
-mesh.scale.set(0.025, 0.025, 0.025)
 mesh.material = material
+
+useAdaptiveMesh(mesh, props.scale)
 
 watchEffect(() => {
   mesh.position.set(...position.value)
   mesh.rotation.set(...rotation.value)
-  mesh.scale.set(props.scale, props.scale, props.scale)
   material.roughness = props.roughness
   material.transmission = props.transmission
   material.thickness = props.thickness

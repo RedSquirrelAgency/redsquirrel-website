@@ -29,7 +29,7 @@
               :zoom="2.5"
             />
             <Suspense>
-              <SquirrelTresComponent
+              <SquirrelComponent
                 :position="[0, -1, 0]"
                 :rotation="[0, 0, 0]"
                 :sparkle="false"
@@ -74,12 +74,7 @@
 
 <script setup lang="ts">
 import { BasicShadowMap, NoToneMapping, SRGBColorSpace } from 'three'
-import { navigationEmits, useSectionNavigation } from '~/composables/sectionNavigation'
-import { useScrollAnimation } from '~/composables/scrollAnimation'
-import SquirrelTresComponent from '~/components/SquirrelTresComponent.vue'
-
-const emit = defineEmits([...navigationEmits])
-const { next, back } = useSectionNavigation(emit)
+import SquirrelComponent from '~/components/SquirrelComponent.vue'
 
 const gl = {
   clearColor: 0x000000,
@@ -90,13 +85,6 @@ const gl = {
   outputColorSpace: SRGBColorSpace,
   toneMapping: NoToneMapping
 }
-
-useScrollAnimation({
-  valueFrom: 0,
-  valueTo: 100,
-  onChange: () => {},
-  onScrollUpOverflow: back
-})
 </script>
 
 <style scoped lang="scss">

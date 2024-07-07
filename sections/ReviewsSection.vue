@@ -95,103 +95,75 @@ function onAudioPlayerClose() {
   playing.value = false
 }
 
-const transcription = [
-  {
-    start: 0.06,
-    end: 3.57,
-    text: 'Deciding to create my own website was difficult for some reasons.'
-  },
-  {
-    start: 3.6,
-    end: 8.43,
-    text: 'Firstly, there was a very vivid negative experience several years ago'
-  },
-  {
-    start: 8.43,
-    end: 11.7,
-    text: 'when we got something completely different from what we wanted and'
-  },
-  {
-    start: 11.7,
-    end: 14.58,
-    text: 'for a very large sum of money. Secondly,'
-  },
-  {
-    start: 14.58,
-    end: 18.72,
-    text: 'I thought that if I really tried, I could build the website myself.'
-  }
-]
-
 const reviews: IReview[] = [
   {
     company: 'Anna Soboleva',
     niche: 'Metaphysics Expert',
     avatar: 'avatars/anna_soboleva.png',
-    sound: { src: 'adam.mp3', transcription },
+    sound: { src: 'adam.mp3', subtitlesSrc: 'subtitles/landystyle.srt' },
     position: { top: '150px', left: '488px' }
   },
   {
     company: 'Rayth',
     niche: 'Car Wash & Detailing Center',
     avatar: 'avatars/rayth.png',
-    sound: { src: 'test.mp3', transcription },
+    sound: { src: 'test.mp3', subtitlesSrc: 'subtitles/landystyle.srt' },
     position: { top: '100px', right: '488px' }
   },
   {
     company: 'Natalie Herzel',
     niche: 'Dental Clinic',
     avatar: 'avatars/natalie_herzel.png',
-    sound: { src: 'adam.mp3', transcription },
+    sound: { src: 'adam.mp3', subtitlesSrc: 'subtitles/landystyle.srt' },
     position: { top: '120px', left: '215px' }
   },
   {
     company: 'Ambre Akadeemia',
     niche: 'Language School',
     avatar: 'avatars/ambre_akadeemia.png',
-    sound: { src: 'adam.mp3', transcription },
+    sound: { src: 'adam.mp3', subtitlesSrc: 'subtitles/landystyle.srt' },
     position: { top: '180px', right: '215px' }
   },
   {
     company: 'Dreamlis',
     niche: 'Jewelry Brand',
     avatar: 'avatars/dreamlis.png',
-    sound: { src: 'adam.mp3', transcription },
+    sound: { src: 'adam.mp3', subtitlesSrc: 'subtitles/landystyle.srt' },
     position: { top: '404px', left: '120px' }
   },
   {
     company: 'Nuga Best Eesti',
     niche: 'Medical Equipment',
     avatar: 'avatars/nuga_best_eesti.png',
-    sound: { src: 'adam.mp3', transcription },
+    sound: { src: 'adam.mp3', subtitlesSrc: 'subtitles/landystyle.srt' },
     position: { top: '464px', right: '120px' }
   },
   {
     company: 'LandyStyle',
     niche: 'Landscape Agency',
     avatar: 'avatars/landystyle.png',
-    sound: { src: 'adam.mp3', transcription },
+    sound: { src: 'audio/landystyle.mp3', subtitlesSrc: 'subtitles/landystyle.srt' },
     position: { top: '688px', left: '215px' }
   },
   {
     company: 'EZdesign',
     niche: 'Bureau of Architecture',
     avatar: 'avatars/ezdesign.png',
-    sound: { src: 'adam.mp3', transcription },
+    sound: { src: 'audio/landystyle_ru.mp3', subtitlesSrc: 'subtitles/landystyle_ru.srt' },
     position: { top: '728px', right: '215px' }
   },
   {
     company: 'Kare',
     niche: 'Beauty Saloon',
     avatar: 'avatars/kare.png',
-    sound: { src: 'adam.mp3', transcription },
+    sound: { src: 'adam.mp3', subtitlesSrc: 'subtitles/landystyle.srt' },
     position: { top: '820px', left: '488px' }
   },
   {
     company: 'Ekaterina U.',
     niche: 'Beauty Expert',
     avatar: 'avatars/ekaterina_u.png',
-    sound: { src: 'adam.mp3', transcription },
+    sound: { src: 'adam.mp3', subtitlesSrc: 'subtitles/landystyle.srt' },
     position: { top: '790px', right: '488px' }
   }
 ]

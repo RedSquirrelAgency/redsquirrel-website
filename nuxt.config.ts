@@ -49,7 +49,7 @@ export default defineNuxtConfig({
   },
   googleFonts: {
     families: {
-      'Poppins': true,
+      'Poppins': [300, 400],
       'Style Script': true
     },
     download: true

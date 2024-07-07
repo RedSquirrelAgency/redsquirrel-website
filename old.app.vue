@@ -118,6 +118,76 @@ function onEnter(el: Element, done: () => void) {
     })
 }
 
+const particlesOptions = {
+  fullScreen: { enable: false },
+  interactivity: {
+    events: {
+      onHover: { enable: true, mode: 'repulse' }
+    },
+    modes: {
+      repulse: {
+        distance: 100,
+        duration: 0.4,
+        factor: 100,
+        speed: 1,
+        maxSpeed: 20,
+        easing: 'ease-out-quad'
+      }
+    }
+  },
+  particles: {
+    number: {
+      value: 160
+    },
+    color: {
+      value: '#FFD2BB'
+    },
+    shape: {
+      type: 'circle',
+      close: true,
+      fill: true
+    },
+    opacity: {
+      value: {
+        min: 0.1,
+        max: 1
+      }
+    },
+    size: {
+      value: {
+        min: 2,
+        max: 4
+      }
+    },
+    collisions: {
+      absorb: {
+        speed: 2
+      },
+      bounce: {
+        horizontal: {
+          value: 1
+        },
+        vertical: {
+          value: 1
+        }
+      },
+      enable: true,
+      maxSpeed: 50,
+      mode: 'bounce',
+      overlap: {
+        enable: true,
+        retries: 0
+      }
+    },
+    move: {
+      enable: true,
+      speed: 1,
+      random: true
+    }
+  },
+  detectRetina: true
+}
+
 onMounted(() => {
   document.addEventListener('wheel', (e: WheelEvent) => e.preventDefault(), { passive: false })
 })

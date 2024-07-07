@@ -1,11 +1,5 @@
 interface ISound {
   src: string
-  transcription: ITranscriptionItem[]
+  subtitlesSrc: string
   name?: string
-}
-
-interface ITranscriptionItem {
-  start: number
-  end: number
-  text: string
 }

@@ -1,19 +1,9 @@
 @import "styles/variables";
 
-h1 {
-	font-size: 13.5vw;
-	font-weight: 600;
-	text-transform: uppercase;
-	background: -webkit-linear-gradient(#FFFBF7, #FFBC9A);
-	background-clip: text;
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
-}
-
 h2 {
 	font-size: 5.3vw;
 	line-height: 6.3vw;
-	font-weight: 200;
+	font-weight: 300;
 	text-transform: uppercase;
 
 	&.gradient-1 .line {

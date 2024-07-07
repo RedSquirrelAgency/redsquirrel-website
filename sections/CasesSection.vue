@@ -20,7 +20,7 @@
         >
           <NuxtLink
             v-if="item"
-            class="link"
+            class="case-wrapper"
             :to="item.url"
           >
             <div class="case">
@@ -61,7 +61,7 @@ const containerRef = ref<HTMLElement | null>(null)
 onMounted(() => {
   if (!containerRef.value) return
   const container = containerRef.value
-  const tl = $gsap.timeline({
+  $gsap.timeline({
     scrollTrigger: {
       trigger: container,
       start: 'top top',
@@ -70,8 +70,7 @@ onMounted(() => {
       pin: true
     },
     defaults: { ease: 'none' }
-  })
-  tl.fromTo(container.querySelector('.cases'), { xPercent: 100 }, { xPercent: -105 })
+  }).fromTo(container.querySelector('.cases'), { xPercent: 100 }, { xPercent: -105 })
 })
 
 const { t } = useI18n()
@@ -131,10 +130,6 @@ $case-card-height: 20vw;
   justify-content: center;
 }
 
-.link {
-  text-decoration: none;
-}
-
 .content {
   width: 100%;
 
@@ -147,6 +142,10 @@ $case-card-height: 20vw;
     position: relative;
     width: max-content;
     top: -10vw;
+
+    .case-wrapper {
+      text-decoration: none;
+    }
 
     .case {
       height: $case-card-height;

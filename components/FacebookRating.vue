@@ -14,8 +14,8 @@
 .facebook-rating {
   text-transform: uppercase;
   color: $redsquirrel-cream-m1;
-  font-size: 15px;
-  line-height: 22.5px;
-  text-underline-offset: 5px;
+  font-size: 1vw;
+  text-underline-offset: 0.4vw;
+  text-decoration-thickness: 0.5px;
 }
 </style>
