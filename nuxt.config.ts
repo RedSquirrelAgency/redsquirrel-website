@@ -26,12 +26,8 @@ export default defineNuxtConfig({
     '@hypernym/nuxt-gsap',
     '@nuxtjs/i18n',
     '@nuxt/eslint',
-    '@nuxtjs/google-fonts',
-    'nuxt-particles'
+    '@nuxtjs/google-fonts'
   ],
-  particles: {
-    mode: 'full'
-  },
   vite: {
     vue: {
       template: {

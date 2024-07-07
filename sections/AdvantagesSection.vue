@@ -1,5 +1,8 @@
 <template>
-  <section ref="containerRef">
+  <section
+    ref="containerRef"
+    class="container"
+  >
     <AnimatedText>
       <h2 class="gradient-1">
         <HeadingText
@@ -71,7 +74,7 @@ onMounted(() => {
     defaults: { ease: 'none' }
   })
   tl.fromTo(container.querySelector('.advantages'),
-    { rotate: 20, yPercent: 150, rotationY: 40, opacity: 0 },
+    { rotate: 10, yPercent: 150, rotationY: 40, opacity: 0 },
     { rotate: 0, yPercent: 0, rotationY: 0, opacity: 1 }
   )
 })
@@ -114,6 +117,10 @@ function formatIndex(index: number) {
 <style scoped lang="scss">
 @import "styles/variables";
 
+.container {
+  padding: 8vw;
+}
+
 .advantages {
   color: $redsquirrel-chocolate;
   margin-top: 4vw;
@@ -126,7 +133,7 @@ function formatIndex(index: number) {
     transition: height .6s ease-in-out;
 
     .title p {
-      font-size: 3em;
+      font-size: 2.5em;
       font-weight: 300;
       text-transform: uppercase;
 

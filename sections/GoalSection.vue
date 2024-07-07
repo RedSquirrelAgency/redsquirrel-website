@@ -48,7 +48,7 @@ onMounted(() => {
 @import "styles/variables";
 
 .container {
-  padding: 120px;
+  padding: 8vw;
   height: 100vh;
   display: flex;
   flex-direction: column;

@@ -12,21 +12,15 @@ onMounted(() => {
   if (!textRef.value) return
   const text = textRef.value
 
-  $gsap.fromTo(
+  $gsap.effects.slideTop(
     text,
     {
-      yPercent: 30,
-      opacity: 0
-    },
-    {
+      duration: 0.8,
       scrollTrigger: {
         trigger: text,
         start: 'top center',
         toggleActions: 'play none resume reverse'
-      },
-      yPercent: 0,
-      opacity: 1,
-      duration: 0.8
+      }
     }
   )
 })

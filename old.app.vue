@@ -39,7 +39,7 @@ import AdvantagesSection from '~/sections/AdvantagesSection.vue'
 import GoalSection from '~/sections/GoalSection.vue'
 import StagesSection from '~/sections/StagesSection.vue'
 import ReviewsSection from '~/sections/ReviewsSection.vue'
-import BookSection from '~/sections/BookSection.vue'
+import BookSection from '~/sections/CallToActionSection.vue'
 import TeamSection from '~/sections/TeamSection.vue'
 import FooterSection from '~/sections/FooterSection.vue'
 

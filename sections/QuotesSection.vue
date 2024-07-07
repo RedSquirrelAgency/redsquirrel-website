@@ -18,7 +18,7 @@
         v-for="(quote, index) in quotes"
         :key="index"
         :direction="(index % 2 === 0) ? 'normal' : 'reverse'"
-        :duration="quote.length * 5"
+        :duration="quote.length * (index % 2 ? 8 : 5)"
       >
         <span
           class="quote"
