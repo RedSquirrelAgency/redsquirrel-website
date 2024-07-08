@@ -164,7 +164,7 @@ function onPause() {
 <style scoped lang="scss">
 @import "styles/variables";
 
-$cards-size: 35vw;
+$cards-size: 41vw;
 $nominee-tag-height: 4vw;
 $nominee-tag-width: 13vw;
 
@@ -184,7 +184,8 @@ $nominee-tag-width: 13vw;
   bottom: calc($cards-size + $nominee-tag-height / 2);
   transform: rotate(3.8deg);
   border-radius: 20px;
-  opacity: 0.8;
+  opacity: 0.5;
+  box-shadow: 0 4px 10px 0 #5050501A;
 }
 
 .about-team {
@@ -209,7 +210,7 @@ $nominee-tag-width: 13vw;
     display: flex;
     flex-direction: column;
 
-    font-size: 0.9em;
+    font-size: 1em;
     font-weight: 300;
     gap: 1.8em;
 
@@ -292,7 +293,7 @@ $nominee-tag-width: 13vw;
 .video {
   iframe {
     border-radius: 3vw;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.7);
     box-shadow: 0 1.85px 3.15px 0 #CA5E3C04;
   }
 }

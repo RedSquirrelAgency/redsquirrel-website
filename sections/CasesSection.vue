@@ -24,6 +24,7 @@
             v-if="item"
             class="case-wrapper"
             :to="item.url"
+            target="_blank"
           >
             <div class="case">
               <v-card
@@ -73,7 +74,7 @@ onMounted(() => {
       pin: true
     },
     defaults: { ease: 'none' }
-  }).fromTo(container.querySelector('.cases'), { xPercent: 100 }, { xPercent: -105 })
+  }).fromTo(container.querySelector('.cases'), { xPercent: 100 }, { xPercent: -14 })
 })
 
 const cases = [
@@ -121,8 +122,8 @@ const cases = [
 <style scoped lang="scss">
 @import "styles/variables";
 
-$case-card-width: 17.85vw;
-$case-card-height: 20vw;
+$case-card-width: 24vw;
+$case-card-height: calc($case-card-width * 0.9);
 
 .container {
   height: 100vh;
@@ -179,8 +180,12 @@ $case-card-height: 20vw;
     }
 
     .case:not(:hover) {
-      .image, .caption {
+      .image {
         opacity: 0.5;
+      }
+
+      .caption {
+        opacity: 0.7;
       }
     }
 

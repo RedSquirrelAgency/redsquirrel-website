@@ -11,6 +11,11 @@
             :look-at="[0, 0, 0]"
             :position="cameraPosition"
           />
+          <TresDirectionalLight
+            color="white"
+            :position="new Vector3(0, 10, 40)"
+            :intensity="3"
+          />
           <FloatingStarsParticle
             alpha-map="star_alpha_map.png"
             color="#FFD2BB"
@@ -37,7 +42,7 @@
                 :roughness="0"
                 :thickness="1"
                 :ior="5"
-                :scale="0.000003"
+                :scale="0.016"
               />
             </Suspense>
           </Levioso>
@@ -62,14 +67,14 @@
 </template>
 
 <script setup lang="ts">
-import { BasicShadowMap, NoToneMapping, SRGBColorSpace, TextureLoader, Vector3 } from 'three'
+import { BasicShadowMap, NoToneMapping, SRGBColorSpace, Vector3 } from 'three'
 import { degToRad } from 'three/src/math/MathUtils'
 import type { PropType } from 'vue'
 import SquirrelComponent from '~/components/SquirrelComponent.vue'
 import TextureBackground from '~/components/TextureBackground.vue'
 import Timeline = gsap.core.Timeline
 import TexturedText from '~/components/TexturedText.vue'
-import ConsultationButton from "~/components/ConsultationButton.vue";
+import ConsultationButton from '~/components/ConsultationButton.vue'
 
 const props = defineProps({
   tl: {
@@ -97,7 +102,7 @@ const gl = {
 
 const { $gsap } = useNuxtApp()
 const containerRef = ref<HTMLElement | null>(null)
-const squirrelPosition = shallowRef([0, -1, 0])
+const squirrelPosition = shallowRef([0, -2, 0])
 const squirrelRotation = shallowRef([0, 0, 0])
 const cameraPosition = shallowRef([0, 0, 0])
 const textOpacity = ref(0)

@@ -147,8 +147,8 @@ function formatIndex(index: number) {
     }
 
     .subtitle p {
-      font-size: 0.9em;
-      width: 17vw;
+      font-size: 1em;
+      width: 20.5vw;
       filter: blur(12px);
       opacity: 0;
     }

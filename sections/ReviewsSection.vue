@@ -108,7 +108,7 @@ const reviews: IReview[] = [
     company: 'Rayth',
     niche: 'Car Wash & Detailing Center',
     avatar: 'avatars/rayth.png',
-    sound: { src: 'test.mp3', subtitlesSrc: 'subtitles/landystyle.srt' },
+    sound: { src: 'adam.mp3', subtitlesSrc: 'subtitles/landystyle.srt' },
     position: { top: '100px', right: '488px' }
   },
   {

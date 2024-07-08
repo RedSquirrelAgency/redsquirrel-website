@@ -27,13 +27,13 @@ const { block } = defineProps({
   height: 2.1vw;
   background: #FFDFCFE5;
 
-  border-radius: 0.6vw;
+  border-radius: 10px;
   border-width: 1px;
   border-color: $redsquirrel-cream-p1;
   box-shadow: 0 1rem 3rem 0 #D3835B1A;
 
   font-size: 0.8rem;
-  letter-spacing: 0.05rem;
+  letter-spacing: 0;
   color: $redsquirrel-chocolate;
 }
 </style>

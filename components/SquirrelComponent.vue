@@ -7,11 +7,9 @@
 <script setup lang="ts">
 import { useLoader } from '@tresjs/core'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
-import { Box3, EquirectangularReflectionMapping, MeshPhysicalMaterial, Vector3 } from 'three'
+import { EquirectangularReflectionMapping, MeshPhysicalMaterial } from 'three'
 import { RGBELoader } from 'three-stdlib'
 import type { PropType } from 'vue'
-import { useWindowSize } from '~/composables/windowSize'
-import { useAdaptiveMesh } from '~/composables/adaptiveMesh'
 
 const props = defineProps({
   scale: {
@@ -50,26 +48,36 @@ const props = defineProps({
 
 const { position, rotation } = toRefs(props)
 
-const hdrEquirect = new RGBELoader().load('/redsquirrel-website/empty_warehouse_01_2k.hdr', () => {
+const hdrEquirect = new RGBELoader().load('evening_road_01_puresky_2k.hdr', () => {
   hdrEquirect.mapping = EquirectangularReflectionMapping
 })
 const material = new MeshPhysicalMaterial({
   envMap: hdrEquirect,
-  color: 0xffffff
+  color: 'white',
+  envMapIntensity: 0.4
 })
 
-const { children } = await useLoader(OBJLoader, '/redsquirrel-website/Squirrel.obj')
+const { children } = await useLoader(OBJLoader, 'Squirrel.obj')
 const mesh = children[0]
 mesh.material = material
 
-useAdaptiveMesh(mesh, props.scale)
+const { width, height } = useWindowSize()
 
+watch([width, height], () => updateMeshPositionAndScale())
 watchEffect(() => {
-  mesh.position.set(...position.value)
+  updateMeshPositionAndScale()
   mesh.rotation.set(...rotation.value)
   material.roughness = props.roughness
   material.transmission = props.transmission
   material.thickness = props.thickness
   material.ior = props.ior
 })
+onMounted(() => updateMeshPositionAndScale())
+
+function updateMeshPositionAndScale() {
+  const scale = (width.value / height.value) * props.scale
+  const adjustedPosition = [...position.value]
+  mesh.scale.set(scale, scale, scale)
+  mesh.position.set(...adjustedPosition)
+}
 </script>
