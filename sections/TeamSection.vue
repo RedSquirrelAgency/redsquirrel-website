@@ -98,12 +98,18 @@
               </i18n-t>
             </div>
           </GlassSheet>
-          <v-img
+          <v-card
             class="nominee-tag"
-            alt="Awwwards nominee"
-            src="/awwwards.jpg"
-            eager
-          />
+            flat
+          >
+            <v-img
+              class="image"
+              alt="Awwwards nominee"
+              src="/awwwards.jpg"
+              eager
+              cover
+            />
+          </v-card>
         </div>
       </v-col>
     </v-row>
@@ -147,7 +153,7 @@ onMounted(() => {
     }
   }).slideTop(videoWrapper, { duration: 0.8 })
     .slideTop(aboutTeam, { duration: 0.8 }, '>-0.3')
-    .slideBottom(nomineeTag, { duration: 0.8 }, '>-0.3')
+    .slideBottom(nomineeTag, { duration: 0.5 }, '>-0.3')
 })
 
 function onPlay() {
@@ -177,15 +183,26 @@ $nominee-tag-width: 13vw;
 }
 
 .nominee-tag {
-  height: $nominee-tag-height;
-  width: $nominee-tag-width;
   position: relative;
   left: calc($cards-size - $nominee-tag-width - 3vw);
   bottom: calc($cards-size + $nominee-tag-height / 2);
   transform: rotate(3.8deg);
-  border-radius: 20px;
-  opacity: 0.5;
+
+  height: $nominee-tag-height;
+  width: $nominee-tag-width;
+
+  border: 1px solid #FFFFFF;
+  border-radius: 22px;
   box-shadow: 0 4px 10px 0 #5050501A;
+
+  background: rgb(255, 255, 255, 0);
+  backdrop-filter: blur(5px) opacity(1);
+  -webkit-backdrop-filter: blur(5px) opacity(1);
+
+  .image {
+    border-radius: 21px;
+    opacity: 0.7;
+  }
 }
 
 .about-team {
