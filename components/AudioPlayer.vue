@@ -1,8 +1,7 @@
 <template>
-  <v-card
-    class="player glass"
-    min-width="600"
-    max-width="600"
+  <GlassSheet
+    class="player"
+    border="1vw"
   >
     <v-toolbar
       class="toolbar"
@@ -136,7 +135,7 @@
         </v-row>
       </v-container>
     </v-card-actions>
-  </v-card>
+  </GlassSheet>
 </template>
 
 <script setup lang="ts">
@@ -305,14 +304,6 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 @import "styles/variables";
-
-.glass {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-}
 
 .player {
   position: fixed;

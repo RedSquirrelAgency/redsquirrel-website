@@ -15,6 +15,7 @@
   text-transform: uppercase;
   color: $redsquirrel-cream-m1;
   font-size: 1vw;
+  text-decoration: underline;
   text-underline-offset: 0.4vw;
   text-decoration-thickness: 0.5px;
 }

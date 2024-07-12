@@ -1,27 +1,26 @@
 <template>
   <div class="container d-flex justify-center">
-    <div class="offer">
-      <FacebookRating class="facebook-rating text-center" />
-      <h2 class="text-center">
+    <div class="offer text-center">
+      <FacebookRating class="facebook-rating" />
+      <h2>
         <HeadingText
           text="We are chosen for our high level of expertise and service"
           :line-breaks="[4, 8]"
           :font-replacements="[[0, 0], [2, 2], [6, 2], [8, 3], [10, 0]]"
         />
       </h2>
-      <h4 class="text-center">
+      <p class="ai-note">
         <span class="line">Photos and voices are generated</span>
         <span class="line">by AI due to the confidentiality of</span>
         <span class="line">our clients</span>
-      </h4>
+      </p>
     </div>
-    <v-card
+    <GlassSheet
       v-for="(review, index) in reviews"
       :key="index"
       :style="{ position: 'absolute', ...review.position }"
-      class="review-card glass"
-      min-width="190"
-      max-width="190"
+      border="1vw"
+      class="review-card"
       @click="onReviewClick(review, index)"
     >
       <div
@@ -32,10 +31,7 @@
           class="avatar-wrapper"
           :class="(selected === index && playing) && 'pulsate'"
         >
-          <v-avatar
-            class="avatar"
-            size="100"
-          >
+          <v-avatar class="avatar">
             <v-img
               :alt="review.company"
               :src="review.avatar"
@@ -50,7 +46,7 @@
           {{ review.niche }}
         </div>
       </div>
-    </v-card>
+    </GlassSheet>
     <AudioPlayer
       v-if="sound"
       :sound="sound"
@@ -102,70 +98,70 @@ const reviews: IReview[] = [
     niche: 'Metaphysics Expert',
     avatar: 'avatars/anna_soboleva.png',
     sound: { src: 'adam.mp3', subtitlesSrc: 'subtitles/landystyle.srt' },
-    position: { top: '150px', left: '488px' }
+    position: { top: '8.7vw', left: '35vw' }
   },
   {
     company: 'Rayth',
     niche: 'Car Wash & Detailing Center',
     avatar: 'avatars/rayth.png',
     sound: { src: 'adam.mp3', subtitlesSrc: 'subtitles/landystyle.srt' },
-    position: { top: '100px', right: '488px' }
+    position: { top: '5.8vw', right: '35vw' }
   },
   {
     company: 'Natalie Herzel',
     niche: 'Dental Clinic',
     avatar: 'avatars/natalie_herzel.png',
     sound: { src: 'adam.mp3', subtitlesSrc: 'subtitles/landystyle.srt' },
-    position: { top: '120px', left: '215px' }
+    position: { top: '7.0vw', left: '17vw' }
   },
   {
     company: 'Ambre Akadeemia',
     niche: 'Language School',
     avatar: 'avatars/ambre_akadeemia.png',
     sound: { src: 'adam.mp3', subtitlesSrc: 'subtitles/landystyle.srt' },
-    position: { top: '180px', right: '215px' }
+    position: { top: '10.44vw', right: '17vw' }
   },
   {
     company: 'Dreamlis',
     niche: 'Jewelry Brand',
     avatar: 'avatars/dreamlis.png',
     sound: { src: 'adam.mp3', subtitlesSrc: 'subtitles/landystyle.srt' },
-    position: { top: '404px', left: '120px' }
+    position: { top: '23.43vw', left: '6.96vw' }
   },
   {
     company: 'Nuga Best Eesti',
     niche: 'Medical Equipment',
     avatar: 'avatars/nuga_best_eesti.png',
     sound: { src: 'adam.mp3', subtitlesSrc: 'subtitles/landystyle.srt' },
-    position: { top: '464px', right: '120px' }
+    position: { top: '26.91vw', right: '6.96vw' }
   },
   {
     company: 'LandyStyle',
     niche: 'Landscape Agency',
     avatar: 'avatars/landystyle.png',
     sound: { src: 'audio/landystyle.mp3', subtitlesSrc: 'subtitles/landystyle.srt' },
-    position: { top: '688px', left: '215px' }
+    position: { top: '39.94vw', left: '17vw' }
   },
   {
     company: 'EZdesign',
     niche: 'Bureau of Architecture',
     avatar: 'avatars/ezdesign.png',
     sound: { src: 'audio/landystyle_ru.mp3', subtitlesSrc: 'subtitles/landystyle_ru.srt' },
-    position: { top: '728px', right: '215px' }
+    position: { top: '42.22vw', right: '17vw' }
   },
   {
     company: 'Kare',
     niche: 'Beauty Saloon',
     avatar: 'avatars/kare.png',
     sound: { src: 'adam.mp3', subtitlesSrc: 'subtitles/landystyle.srt' },
-    position: { top: '820px', left: '488px' }
+    position: { top: '47.56vw', left: '35vw' }
   },
   {
     company: 'Ekaterina U.',
     niche: 'Beauty Expert',
     avatar: 'avatars/ekaterina_u.png',
     sound: { src: 'adam.mp3', subtitlesSrc: 'subtitles/landystyle.srt' },
-    position: { top: '790px', right: '488px' }
+    position: { top: '45.82vw', right: '35vw' }
   }
 ]
 </script>
@@ -175,12 +171,12 @@ const reviews: IReview[] = [
 
 .container {
   position: relative;
-  height: 1300px;
+  height: 66vw;
 }
 
 .offer {
   position: absolute;
-  top: 398px;
+  top: 23vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -190,36 +186,39 @@ const reviews: IReview[] = [
   }
 
   h2 {
-    font-size: 46px;
-    font-weight: 200;
-    line-height: 69.92px;
+    font-size: 3vw;
+    font-weight: 400;
+    line-height: 4vw;
     text-transform: uppercase;
     color: $redsquirrel-cream;
-    margin: 20px 0;
+    margin: 1vw 0;
+  }
+
+  .ai-note {
+    font-size: 1vw;
+    font-weight: 400;
+    line-height: 1.5vw;
+    text-transform: uppercase;
+    color: $redsquirrel-cream;
   }
 }
 
-.glass {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-}
-
 .review-card {
-  padding: 11px 20px 20px;
+  width: 11.8vw;
+  padding: 0.7vw 1.5vw 1.2vw;
   border: 1px solid rgba(255, 255, 255, 0.7);
 
   .avatar-wrapper {
-    height: 116px;
-    width: 116px;
+    height: 7vw;
+    width: 7vw;
     display: flex;
     justify-content: center;
     border-radius: 100%;
-    margin-bottom: 5px;
+    margin-bottom: 0.7vw;
 
     .avatar {
+      height: 6vw;
+      width: 6vw;
       outline: 1px solid rgba(255, 255, 255, 0.7);
       margin: auto 0;
     }
@@ -234,14 +233,14 @@ const reviews: IReview[] = [
 
   .company {
     text-transform: uppercase;
-    font-size: 16px;
-    line-height: 24px;
+    font-size: 0.94vw;
+    line-height: 1.9vw;
     color: $redsquirrel-cream-m1;
   }
 
   .niche {
-    font-size: 15px;
-    line-height: 15px;
+    font-size: 0.9vw;
+    line-height: 0.9vw;
     color: $redsquirrel-cream-p1;
   }
 }
