@@ -4,8 +4,17 @@
 
   $slide-group-prev-basis: 0,
   $divider-border-color: $redsquirrel-cream-p1,
+
   $slider-horizontal-start: 0,
   $slider-horizontal-end: 0,
   $slider-vertical-margin-bottom: 0,
-  $slider-track-active-size-offset: 1px
+  $slider-track-active-size-offset: 1px,
+
+  $shadow-key-umbra-opacity: rgba(#CA5E3C, 0.2),
+  $shadow-key-penumbra-opacity: rgba(#CA5E3C, 0.14),
+  $shadow-key-ambient-opacity: rgba(#CA5E3C, 0.12),
+
+  $skeleton-loader-background: rgb(255, 255, 255, 0),
+  $skeleton-loader-text-background: #E0B29B,
+  $skeleton-loader-bone-background: linear-gradient(90deg, rgba(225,196,182,0), rgba(225,196,182,0.7), rgba(225,196,182,0))
 );

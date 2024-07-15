@@ -1,5 +1,8 @@
 <template>
-  <div class="container d-flex justify-center">
+  <div
+    ref="containerRef"
+    class="container d-flex justify-center"
+  >
     <div class="offer text-center">
       <FacebookRating class="facebook-rating" />
       <h2>
@@ -19,9 +22,13 @@
       v-for="(review, index) in reviews"
       :key="index"
       :style="{ position: 'absolute', ...review.position }"
+      :elevation="hovered === index ? 24 : 8"
       border="1vw"
       class="review-card"
+      :class="((selected === index && playing) || (hovered === index)) && 'closer'"
       @click="onReviewClick(review, index)"
+      @mouseover="hovered = index"
+      @mouseleave="hovered = -1"
     >
       <div
         class="d-flex justify-center align-center"
@@ -47,15 +54,22 @@
         </div>
       </div>
     </GlassSheet>
-    <AudioPlayer
-      v-if="sound"
-      :sound="sound"
-      @play="playing = true"
-      @end="playing = false"
-      @stop="playing = false"
-      @pause="playing = false"
-      @close="onAudioPlayerClose()"
-    />
+    <div
+      ref="playerRef"
+      class="player"
+    >
+      <Transition>
+        <AudioPlayer
+          v-if="sound"
+          :sound="sound"
+          @play="playing = true"
+          @end="playing = false"
+          @stop="playing = false"
+          @pause="playing = false"
+          @close="onAudioPlayerClose()"
+        />
+      </Transition>
+    </div>
   </div>
 </template>
 
@@ -78,6 +92,7 @@ interface IReview {
 }
 
 const sound = ref<ISound>()
+const hovered = ref<number>()
 const selected = ref<number>()
 const playing = ref(false)
 
@@ -91,6 +106,21 @@ function onAudioPlayerClose() {
   sound.value = undefined
   playing.value = false
 }
+
+const containerRef = ref<HTMLElement | null>(null)
+const playerRef = ref<HTMLElement | null>(null)
+
+function onDocumentScroll() {
+  const container = containerRef.value
+  if (!container) return
+  const topOffset = container.offsetTop - window.scrollY
+  const offsetHeight = container.offsetHeight
+  if ((topOffset + offsetHeight * -0.7) > 0 || (topOffset + offsetHeight * 0.5) < 0) {
+    onAudioPlayerClose()
+    return
+  }
+}
+document.addEventListener('wheel', onDocumentScroll, { passive: false })
 
 const reviews: IReview[] = [
   {
@@ -207,6 +237,12 @@ const reviews: IReview[] = [
   width: 11.8vw;
   padding: 0.7vw 1.5vw 1.2vw;
   border: 1px solid rgba(255, 255, 255, 0.7);
+  transition: box-shadow 0.3s ease-in-out, scale 0.3s ease-in-out;
+  cursor: pointer;
+
+  &.closer {
+    scale: 1.05;
+  }
 
   .avatar-wrapper {
     height: 7vw;
@@ -245,18 +281,39 @@ const reviews: IReview[] = [
   }
 }
 
+.player {
+  position: fixed;
+  z-index: 5;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  bottom: 20px;
+  width: 600px;
+}
+
 @keyframes pulsate {
   0% {
     background: rgba($redsquirrel-cream-m1, 0);
-    outline: 7px solid rgba($redsquirrel-cream-m1, 0);
+    outline: 0.5vw solid rgba($redsquirrel-cream-m1, 0);
   }
   50% {
     background: rgba($redsquirrel-cream-m1, 0.5);
-    outline: 7px solid rgba($redsquirrel-cream-m1, 0);
+    outline: 0.5vw solid rgba($redsquirrel-cream-m1, 0);
   }
   100% {
     background: rgba($redsquirrel-cream-m1, 0.5);
-    outline: 7px solid rgba($redsquirrel-cream-m1, 0.2);
+    outline: 0.5vw solid rgba($redsquirrel-cream-m1, 0.2);
   }
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>

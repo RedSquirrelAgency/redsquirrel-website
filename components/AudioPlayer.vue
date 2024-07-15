@@ -2,6 +2,7 @@
   <GlassSheet
     class="player"
     border="1vw"
+    :fill="0.5"
   >
     <v-toolbar
       class="toolbar"
@@ -12,50 +13,55 @@
         <v-btn
           rounded
           size="24"
-          color="#85553D"
+          color="#C38D72"
           @click="fullTranscription = !fullTranscription"
         >
-          <v-icon size="16">
+          <v-icon size="19">
             {{ fullTranscription ? 'mdi-fullscreen-exit' : 'mdi-fullscreen' }}
           </v-icon>
         </v-btn>
         <v-btn
           size="24"
           icon="mdi-close"
-          color="#85553D"
+          color="#C38D72"
           @click="emit('close')"
         >
-          <v-icon size="16">
+          <v-icon size="19">
             mdi-close
           </v-icon>
         </v-btn>
       </template>
     </v-toolbar>
-    <v-card-text
-      v-if="fullTranscription"
-      class="subtitles full"
+    <v-skeleton-loader
+      type="text@3"
+      :loading="loading"
     >
-      <div
-        v-for="({ text }, index) in subtitles"
-        :key="index"
+      <v-card-text
+        v-if="fullTranscription"
+        class="subtitles full"
       >
-        {{ text }}
-      </div>
-    </v-card-text>
-    <v-card-text
-      v-else-if="currentSubtitleFrame"
-      class="subtitles"
-    >
-      <div class="previous">
-        {{ currentSubtitleFrame.previous }}
-      </div>
-      <div class="current">
-        {{ currentSubtitleFrame.current }}
-      </div>
-      <div class="next">
-        {{ currentSubtitleFrame.next }}
-      </div>
-    </v-card-text>
+        <div
+          v-for="({ text }, index) in subtitles"
+          :key="index"
+        >
+          {{ text }}
+        </div>
+      </v-card-text>
+      <v-card-text
+        v-else-if="currentSubtitleFrame"
+        class="subtitles"
+      >
+        <div class="previous">
+          {{ currentSubtitleFrame.previous }}
+        </div>
+        <div class="current">
+          {{ currentSubtitleFrame.current }}
+        </div>
+        <div class="next">
+          {{ currentSubtitleFrame.next }}
+        </div>
+      </v-card-text>
+    </v-skeleton-loader>
     <v-card-actions class="pt-0">
       <v-container class="controls-container">
         <v-slider
@@ -63,10 +69,11 @@
           min="0"
           max="1"
           color="#85553D"
-          track-size="4"
+          track-size="5"
           thumb-size="12"
           elevation="0"
           :hide-details="true"
+          :disabled="loading"
           @update:model-value="player.seek(player.duration() * seek)"
         />
         <v-row class="d-flex align-center justify-center">
@@ -77,6 +84,7 @@
             <v-btn
               rounded
               :size="CONTROLS_SIZE"
+              :disabled="loading"
               @click="rewind(-0.5)"
             >
               <Rewind15Icon :color="CONTROLS_COLOR" />
@@ -85,6 +93,7 @@
               v-if="playing"
               rounded
               :size="CONTROLS_SIZE"
+              :disabled="loading"
               @click="player.pause()"
             >
               <PauseBoxFilledIcon :color="CONTROLS_COLOR" />
@@ -93,6 +102,7 @@
               v-else
               rounded
               :size="CONTROLS_SIZE"
+              :disabled="loading"
               @click="player.play()"
             >
               <PlayBoxFilledIcon :color="CONTROLS_COLOR" />
@@ -100,6 +110,7 @@
             <v-btn
               rounded
               :size="CONTROLS_SIZE"
+              :disabled="loading"
               @click="rewind(0.5)"
             >
               <FastForward15Icon :color="CONTROLS_COLOR" />
@@ -110,6 +121,7 @@
               rounded
               size="24"
               color="#85553D"
+              :disabled="loading"
               @click="mute(!muted)"
             >
               <v-icon
@@ -129,6 +141,7 @@
               thumb-size="8"
               elevation="0"
               :hide-details="true"
+              :disabled="loading"
               @update:model-value="player.volume(volume)"
             />
           </v-col>
@@ -164,6 +177,7 @@ const props = defineProps({
 
 const emit = defineEmits(['play', 'pause', 'stop', 'end', 'close'])
 
+const loading = ref(false)
 const playing = ref(false)
 const muted = ref(false)
 const seek = ref(0)
@@ -175,21 +189,40 @@ const fullTranscription = ref(false)
 let seekInterval: ReturnType<typeof setInterval>
 let player: Howl
 
-async function setRecording(audioSrc: string, subtitlesSrc: string) {
-  let volume = 1
-  if (player) {
-    volume = player.volume()
-    player.unload()
-  }
+async function setRecording(audioSrc: string, subtitlesSrc: string, volume: number) {
+  loading.value = true
 
-  player = new Howl({
-    src: [audioSrc],
-    volume: volume,
-    mute: muted.value
+  const [loadedPlayer, loadedSubtitles] = await Promise.all([
+    loadPlayer(audioSrc),
+    loadSubtitles(subtitlesSrc)
+  ])
+
+  subtitles.value = loadedSubtitles
+  player = loadedPlayer
+  registerPlayerCallbacks()
+  player.volume(volume)
+  player.mute(muted.value)
+
+  loading.value = false
+
+  player.play()
+}
+
+async function loadPlayer(audioSrc: string): Promise<Howl> {
+  return new Promise((resolve) => {
+    const howl = new Howl({
+      src: [audioSrc]
+    })
+    const loadingInterval = setInterval(() => {
+      if (howl.state() === 'loaded') {
+        clearInterval(loadingInterval)
+        return resolve(howl)
+      }
+    }, 50)
   })
+}
 
-  subtitles.value = await loadSubtitles(subtitlesSrc)
-
+function registerPlayerCallbacks() {
   player.on('play', () => {
     playing.value = true
     seekInterval = setInterval(onSeekInterval, 100)
@@ -225,8 +258,6 @@ async function setRecording(audioSrc: string, subtitlesSrc: string) {
   player.on('seek', () => {
     updateSubtitles()
   })
-
-  player.play()
 }
 
 function mute(mute: boolean) {
@@ -239,16 +270,6 @@ function mute(mute: boolean) {
     volume.value = player.volume()
   }
 }
-
-const volumeIcon = computed(() => {
-  if (muted.value) {
-    return 'mdi-volume-off'
-  }
-  if (volume.value < 0.2) {
-    return 'mdi-volume-low'
-  }
-  return 'mdi-volume-high'
-})
 
 function rewind(seconds: number) {
   const seek = player.seek() + seconds
@@ -289,16 +310,31 @@ async function loadSubtitles(src: string): Promise<ISubtitleItem[]> {
   return parser.fromSrt(srt)
 }
 
+const volumeIcon = computed(() => {
+  if (muted.value) {
+    return 'mdi-volume-off'
+  }
+  if (volume.value < 0.2) {
+    return 'mdi-volume-low'
+  }
+  return 'mdi-volume-high'
+})
+
 watch(() => props.sound, async (sound) => {
-  await setRecording(sound.src, sound.subtitlesSrc)
+  let volume = 1
+  if (player) {
+    volume = player.volume()
+    player.unload()
+  }
+  await setRecording(sound.src, sound.subtitlesSrc, volume)
 })
 
 onMounted(async () => {
-  await setRecording(props.sound.src, props.sound.subtitlesSrc)
+  await setRecording(props.sound.src, props.sound.subtitlesSrc, 1)
 })
 
 onUnmounted(() => {
-  player.unload()
+  player.fade(player.volume(), 0, 1000)
 })
 </script>
 
@@ -306,14 +342,6 @@ onUnmounted(() => {
 @import "styles/variables";
 
 .player {
-  position: fixed;
-  margin-left: auto;
-  margin-right: auto;
-  left: 0;
-  right: 0;
-  bottom: 20px;
-  width: 600px;
-
   .toolbar {
     padding: 0 12px;
   }
@@ -324,7 +352,7 @@ onUnmounted(() => {
 
   .sound-name {
     text-transform: uppercase;
-    color: $redsquirrel-chocolate;
+    color: $redsquirrel-chocolate-m1;
     font-weight: 600;
     font-size: 15px;
   }
