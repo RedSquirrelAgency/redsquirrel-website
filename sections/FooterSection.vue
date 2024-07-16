@@ -35,7 +35,7 @@
             class="link highlight"
             :to="link.to"
           >
-            {{ $t(link.title) }}
+            {{ link.title }}
           </NuxtLink>
         </v-col>
       </v-row>
