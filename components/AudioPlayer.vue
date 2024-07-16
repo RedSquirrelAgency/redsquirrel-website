@@ -1,6 +1,5 @@
 <template>
   <GlassSheet
-    class="player"
     border="1vw"
     :fill="0.5"
   >
@@ -36,31 +35,33 @@
       type="text@3"
       :loading="loading"
     >
-      <v-card-text
-        v-if="fullTranscription"
-        class="subtitles full"
-      >
-        <div
-          v-for="({ text }, index) in subtitles"
-          :key="index"
+      <Transition mode="out-in">
+        <v-card-text
+          v-if="fullTranscription"
+          class="subtitles full"
         >
-          {{ text }}
-        </div>
-      </v-card-text>
-      <v-card-text
-        v-else-if="currentSubtitleFrame"
-        class="subtitles"
-      >
-        <div class="previous">
-          {{ currentSubtitleFrame.previous }}
-        </div>
-        <div class="current">
-          {{ currentSubtitleFrame.current }}
-        </div>
-        <div class="next">
-          {{ currentSubtitleFrame.next }}
-        </div>
-      </v-card-text>
+          <div
+            v-for="({ text }, index) in subtitles"
+            :key="index"
+          >
+            {{ text }}
+          </div>
+        </v-card-text>
+        <v-card-text
+          v-else-if="currentSubtitleFrame"
+          class="subtitles"
+        >
+          <div class="previous">
+            {{ currentSubtitleFrame.previous }}
+          </div>
+          <div class="current">
+            {{ currentSubtitleFrame.current }}
+          </div>
+          <div class="next">
+            {{ currentSubtitleFrame.next }}
+          </div>
+        </v-card-text>
+      </Transition>
     </v-skeleton-loader>
     <v-card-actions class="pt-0">
       <v-container class="controls-container">
@@ -196,15 +197,14 @@ async function setRecording(audioSrc: string, subtitlesSrc: string, volume: numb
     loadPlayer(audioSrc),
     loadSubtitles(subtitlesSrc)
   ])
-
   subtitles.value = loadedSubtitles
   player = loadedPlayer
-  registerPlayerCallbacks()
+
+  registerPlayerCallbacks(player)
   player.volume(volume)
   player.mute(muted.value)
 
   loading.value = false
-
   player.play()
 }
 
@@ -222,7 +222,7 @@ async function loadPlayer(audioSrc: string): Promise<Howl> {
   })
 }
 
-function registerPlayerCallbacks() {
+function registerPlayerCallbacks(player: Howl) {
   player.on('play', () => {
     playing.value = true
     seekInterval = setInterval(onSeekInterval, 100)
@@ -340,42 +340,50 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 @import "styles/variables";
+.toolbar {
+  padding: 0 12px;
+}
 
-.player {
-  .toolbar {
-    padding: 0 12px;
+.controls-container {
+  padding: 16px 12px 12px;
+}
+
+.sound-name {
+  text-transform: uppercase;
+  color: $redsquirrel-chocolate-m1;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.volume-slider {
+  padding-left: 10px;
+}
+
+.subtitles {
+  padding: 0 20px;
+  font-size: 15px;
+  line-height: 20px;
+  height: auto;
+  color: $redsquirrel-chocolate-m1;
+
+  .current {
+    color: $redsquirrel-chocolate;
   }
 
-  .controls-container {
-    padding: 16px 12px 12px;
-  }
-
-  .sound-name {
-    text-transform: uppercase;
-    color: $redsquirrel-chocolate-m1;
-    font-weight: 600;
-    font-size: 15px;
-  }
-
-  .volume-slider {
-    padding-left: 10px;
-  }
-
-  .subtitles {
-    padding: 0 20px;
+  &.full {
     font-size: 15px;
     line-height: 20px;
-    color: $redsquirrel-chocolate-m1;
-
-    .current {
-      color: $redsquirrel-chocolate;
-    }
-
-    &.full {
-      font-size: 15px;
-      line-height: 20px;
-      color: $redsquirrel-chocolate;
-    }
+    color: $redsquirrel-chocolate;
   }
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>

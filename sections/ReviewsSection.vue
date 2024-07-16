@@ -22,10 +22,10 @@
       v-for="(review, index) in reviews"
       :key="index"
       :style="{ position: 'absolute', ...review.position }"
-      :elevation="hovered === index ? 24 : 8"
+      :elevation="isReviewCardElevated(index) ? 24 : 8"
       border="1vw"
       class="review-card"
-      :class="((selected === index && playing) || (hovered === index)) && 'closer'"
+      :class="isReviewCardElevated(index) && 'closer'"
       @click="onReviewClick(review, index)"
       @mouseover="hovered = index"
       @mouseleave="hovered = -1"
@@ -54,28 +54,32 @@
         </div>
       </div>
     </GlassSheet>
-    <div
-      ref="playerRef"
-      class="player"
-    >
-      <Transition>
-        <AudioPlayer
-          v-if="sound"
-          :sound="sound"
-          @play="playing = true"
-          @end="playing = false"
-          @stop="playing = false"
-          @pause="playing = false"
-          @close="onAudioPlayerClose()"
-        />
-      </Transition>
-    </div>
+    <Transition>
+      <AudioPlayer
+        v-if="sound"
+        class="player"
+        :sound="sound"
+        @play="playing = true"
+        @end="playing = false"
+        @stop="playing = false"
+        @pause="playing = false"
+        @close="onAudioPlayerClose()"
+      />
+    </Transition>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="20000"
+      timer="#C38D72"
+      color="rgba(255, 255, 255, 0.5)"
+      text="Click on the card to play the review"
+      rounded="lg"
+      width="600px"
+      height="63px"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import AudioPlayer from '~/components/AudioPlayer.vue'
-
 interface IReviewPosition {
   top?: string
   bottom?: string
@@ -92,32 +96,40 @@ interface IReview {
 }
 
 const sound = ref<ISound>()
-const hovered = ref<number>()
-const selected = ref<number>()
+const hovered = ref<number>(-1)
+const selected = ref<number>(-1)
 const playing = ref(false)
+const snackbar = ref(false)
+let snackbarHasBeenDisplayed = false
 
 function onReviewClick(review: IReview, index: number) {
   selected.value = index
   sound.value = { name: review.company, ...review.sound }
+  snackbar.value = false
 }
 
 function onAudioPlayerClose() {
-  selected.value = undefined
+  selected.value = -1
   sound.value = undefined
   playing.value = false
 }
 
-const containerRef = ref<HTMLElement | null>(null)
-const playerRef = ref<HTMLElement | null>(null)
+function isReviewCardElevated(index: number) {
+  return ((selected.value === index && playing.value) || (hovered.value === index))
+}
 
+const containerRef = ref<HTMLElement | null>(null)
 function onDocumentScroll() {
   const container = containerRef.value
   if (!container) return
   const topOffset = container.offsetTop - window.scrollY
   const offsetHeight = container.offsetHeight
+  if (!snackbarHasBeenDisplayed && (topOffset + offsetHeight * -0.4) < 0) {
+    snackbar.value = true
+    snackbarHasBeenDisplayed = true
+  }
   if ((topOffset + offsetHeight * -0.7) > 0 || (topOffset + offsetHeight * 0.5) < 0) {
     onAudioPlayerClose()
-    return
   }
 }
 document.addEventListener('wheel', onDocumentScroll, { passive: false })
@@ -279,6 +291,18 @@ const reviews: IReview[] = [
     line-height: 0.9vw;
     color: $redsquirrel-cream-p1;
   }
+}
+
+.snackbar {
+  position: fixed;
+  z-index: 5;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  bottom: 20px;
+  width: 600px;
+  padding: 20px;
 }
 
 .player {

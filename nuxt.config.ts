@@ -45,7 +45,7 @@ export default defineNuxtConfig({
   },
   googleFonts: {
     families: {
-      'Poppins': [300, 400],
+      'Poppins': [300, 400, 600],
       'Style Script': true
     },
     download: true
