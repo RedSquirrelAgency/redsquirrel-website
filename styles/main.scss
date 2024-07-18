@@ -1,5 +1,11 @@
 @import "styles/variables";
 
+body {
+	font-size: 1vw;
+	line-height: 1.5vw;
+	font-weight: 300;
+}
+
 h2 {
 	font-size: 5.3vw;
 	line-height: 6.3vw;
@@ -40,8 +46,14 @@ h4 {
 	display: block;
 }
 
-a {
+a.text-link {
+	display: block;
 	text-decoration: none;
+	color: $redsquirrel-chocolate-m1;
+
+	&.highlight {
+		color: $redsquirrel-chocolate;
+	}
 
 	&:hover {
 		opacity: 0.7;

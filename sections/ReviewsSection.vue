@@ -141,70 +141,70 @@ const reviews: IReview[] = [
     niche: 'Handmade Wrap Pants',
     avatar: 'avatars/oom_store.png',
     sound: { src: 'audio/landystyle_en.mp3', subtitlesSrc: 'subtitles/landystyle_en.srt' },
-    position: { top: '8vw', left: '35vw' }
+    position: { top: '10.4vw', left: '33.8vw' }
   },
   {
     company: 'LandyStyle',
     niche: 'Landscape Agency',
     avatar: 'avatars/landystyle.png',
     sound: { src: 'audio/landystyle_en.mp3', subtitlesSrc: 'subtitles/landystyle_en.srt' },
-    position: { top: '5.8vw', right: '35vw' }
+    position: { top: '6.9vw', left: '52.8vw' }
   },
   {
     company: 'Natalie Herzel',
     niche: 'Dental Clinic',
     avatar: 'avatars/natalie_herzel.png',
     sound: { src: 'audio/landystyle_en.mp3', subtitlesSrc: 'subtitles/landystyle_en.srt' },
-    position: { top: '7.0vw', left: '17vw' }
+    position: { top: '8.3vw', left: '14.9vw' }
   },
   {
     company: 'Ambre Akadeemia',
     niche: 'Language School',
     avatar: 'avatars/ambre_akadeemia.png',
     sound: { src: 'audio/landystyle_en.mp3', subtitlesSrc: 'subtitles/landystyle_en.srt' },
-    position: { top: '10.44vw', right: '17vw' }
+    position: { top: '12.5vw', left: '71.8vw' }
   },
   {
     company: 'Dreamlis',
     niche: 'Jewelry Brand',
     avatar: 'avatars/dreamlis.png',
     sound: { src: 'audio/landystyle_en.mp3', subtitlesSrc: 'subtitles/landystyle_en.srt' },
-    position: { top: '23.43vw', left: '6.96vw' }
+    position: { top: '28vw', left: '8.3vw' }
   },
   {
     company: 'Integrator Digital',
     niche: 'CRM Systems for Business',
     avatar: 'avatars/integrator_digital.png',
     sound: { src: 'audio/landystyle_en.mp3', subtitlesSrc: 'subtitles/landystyle_en.srt' },
-    position: { top: '26.91vw', right: '6.96vw' }
+    position: { top: '32.2vw', left: '78.4vw' }
   },
   {
     company: 'Marketing Etico',
     niche: 'Marketing Agency',
     avatar: 'avatars/marketing_etico.png',
     sound: { src: 'audio/landystyle_en.mp3', subtitlesSrc: 'subtitles/landystyle_en.srt' },
-    position: { top: '39.94vw', left: '17vw' }
+    position: { top: '47.8vw', left: '14.9vw' }
   },
   {
     company: 'EZdesign',
     niche: 'Bureau of Architecture',
     avatar: 'avatars/ezdesign.png',
     sound: { src: 'audio/landystyle_en.mp3', subtitlesSrc: 'subtitles/landystyle_en.srt' },
-    position: { top: '42.22vw', right: '17vw' }
+    position: { top: '50.5vw', left: '71.8vw' }
   },
   {
     company: 'Nuga Best Eesti',
     niche: 'Medical Equipment',
     avatar: 'avatars/nuga_best_eesti.png',
     sound: { src: 'audio/landystyle_en.mp3', subtitlesSrc: 'subtitles/landystyle_en.srt' },
-    position: { top: '47.56vw', left: '35vw' }
+    position: { top: '56.9vw', left: '33.8vw' }
   },
   {
     company: 'LaruHelpsUkraine',
     niche: 'Charity Organization',
     avatar: 'avatars/laruhelpsukraine.png',
     sound: { src: 'audio/landystyle_en.mp3', subtitlesSrc: 'subtitles/landystyle_en.srt' },
-    position: { top: '45.82vw', right: '35vw' }
+    position: { top: '54.8vw', left: '52.8vw' }
   }
 ]
 </script>
@@ -214,12 +214,12 @@ const reviews: IReview[] = [
 
 .container {
   position: relative;
-  height: 66vw;
+  height: 78vw;
 }
 
 .offer {
   position: absolute;
-  top: 23vw;
+  top: 27.6vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -231,24 +231,24 @@ const reviews: IReview[] = [
   h2 {
     font-size: 3vw;
     font-weight: 400;
-    line-height: 4vw;
+    line-height: 4.5vw;
     text-transform: uppercase;
     color: $redsquirrel-cream;
     margin: 1vw 0;
   }
 
   .ai-note {
-    font-size: 1vw;
+    font-size: 1.3vw;
     font-weight: 400;
-    line-height: 1.5vw;
+    line-height: 2vw;
     text-transform: uppercase;
     color: $redsquirrel-cream;
   }
 }
 
 .review-card {
-  width: 11.8vw;
-  padding: 0.7vw 1.5vw 1.2vw;
+  width: 13vw;
+  padding: 0.8vw 1.3vw 1.3vw;
   border: 1px solid rgba(255, 255, 255, 0.7);
   transition: box-shadow 0.3s ease-in-out, scale 0.3s ease-in-out;
   cursor: pointer;
@@ -258,16 +258,16 @@ const reviews: IReview[] = [
   }
 
   .avatar-wrapper {
-    height: 7vw;
-    width: 7vw;
+    height: 8vw;
+    width: 8vw;
     display: flex;
     justify-content: center;
     border-radius: 100%;
-    margin-bottom: 0.7vw;
+    margin-bottom: 0.95vw;
 
     .avatar {
-      height: 6vw;
-      width: 6vw;
+      height: 7vw;
+      width: 7vw;
       outline: 1px solid rgba(255, 255, 255, 0.7);
       margin: auto 0;
     }
@@ -282,14 +282,15 @@ const reviews: IReview[] = [
 
   .company {
     text-transform: uppercase;
-    font-size: 0.88vw;
+    font-size: 1.02vw;
     line-height: 1.9vw;
+    font-weight: 400;
     color: $redsquirrel-cream-m1;
   }
 
   .niche {
-    font-size: 0.9vw;
-    line-height: 0.9vw;
+    font-size: 1.05vw;
+    line-height: 1vw;
     color: $redsquirrel-cream-p1;
   }
 }

@@ -50,6 +50,14 @@ export default defineNuxtConfig({
     },
     download: true
   },
+  experimental: {
+    defaults: {
+      nuxtLink: {
+        activeClass: 'router-link-active',
+        exactActiveClass: 'router-link-exact-active'
+      }
+    }
+  },
   gsap: {
     extraPlugins: {
       scrollTrigger: true

@@ -11,8 +11,8 @@
           <NuxtLink
             v-for="(link, index) in siteNavigationLinks"
             :key="index"
-            class="link"
             :to="link.to"
+            class="text-link"
           >
             {{ $t(link.title) }}
           </NuxtLink>
@@ -32,7 +32,7 @@
           <NuxtLink
             v-for="(link, index) in socialLinks"
             :key="index"
-            class="link highlight"
+            class="text-link highlight"
             :to="link.to"
           >
             {{ link.title }}
@@ -82,8 +82,6 @@ const socialLinks = [
 .sheet {
   text-transform: uppercase;
   color: $redsquirrel-chocolate-m1;
-  font-size: 1vw;
-  font-weight: 300;
   padding: 2.3vw;
   width: 100%;
 
@@ -92,8 +90,8 @@ const socialLinks = [
   }
 
   .heading {
-    line-height: 11vw;
     font-size: 12.8vw;
+    line-height: 11vw;
     font-weight: 400;
     color: $redsquirrel-cream-p1;
     text-align: center;
@@ -102,15 +100,6 @@ const socialLinks = [
 
   .footer {
     margin-top: 3vw;
-  }
-
-  a {
-    display: block;
-    color: $redsquirrel-chocolate-m1;
-
-    &.highlight {
-      color: $redsquirrel-chocolate;
-    }
   }
 }
 </style>

@@ -57,7 +57,7 @@
         <v-spacer />
         <v-col class="d-flex justify-end">
           <div class="button-container text-right">
-            <p>{{ $t("The website with a creative design and persuasive content") }} </p>
+            <p>{{ $t("A website with a creative design and complex SEO promotion") }} </p>
             <ConsultationButton block />
           </div>
         </v-col>

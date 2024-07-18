@@ -9,32 +9,33 @@
       />
     </h2>
     <v-row>
-      <v-col class="contacts">
-        <div>Telegram</div>
-        <div>Whatsapp</div>
-        <div>Facebook</div>
-        <div>Instagram</div>
-        <div>Email</div>
+      <v-col
+        cols="4"
+        class="contacts"
+      >
+        <NuxtLink
+          v-for="(link, index) in socialLinks"
+          :key="index"
+          :to="link.to"
+          class="text-link"
+        >
+          {{ link.title }}
+        </NuxtLink>
       </v-col>
-      <v-col class="meeting">
+      <v-col
+        cols="8"
+        class="meeting"
+      >
         <div class="about-meeting">
-          <div class="avatar-1">
-            <v-avatar
-              tile
-              size="6vw"
-            >
+          <div class="avatars">
+            <v-avatar class="avatar">
               <v-img
                 alt="Alena"
-                src="/alena.png"
+                src="/alena.jpg"
                 eager
               />
             </v-avatar>
-          </div>
-          <div class="avatar-2">
-            <v-avatar
-              tile
-              size="6vw"
-            >
+            <v-avatar class="avatar">
               <v-img
                 alt="Kate"
                 src="/kate.jpg"
@@ -43,7 +44,7 @@
             </v-avatar>
           </div>
           <p>
-            {{ $t('During the 30 minute meeting, Alena will ask you questions to make an accurate assessment of the work and tell a little more about our team') }}
+            {{ $t('During the 30-min meeting, Alena and Kate will ask you questions to make an accurate assessment of the work and tell a little more about our team') }}
           </p>
         </div>
         <ConsultationButton />
@@ -53,6 +54,13 @@
 </template>
 
 <script setup lang="ts">
+const socialLinks = [
+  { title: 'Telegram', to: 'https://telegram.org/' },
+  { title: 'Whatsapp', to: '/' },
+  { title: 'Facebook', to: '/' },
+  { title: 'Instagram', to: '/' },
+  { title: 'Email', to: '/' }
+]
 </script>
 
 <style scoped lang="scss">
@@ -62,58 +70,44 @@
   position: relative;
   width: 100%;
   background-color: $redsquirrel-cream-p1;
-  padding: 100px 120px 100px 205px;
+  padding: 7vw 8vw 7vw 14vw;
+
+  text-transform: uppercase;
+  font-weight: 300;
 }
 
 h2 {
-  margin-bottom: 40px;
-}
-
-.contacts {
-  color: $redsquirrel-chocolate-m1;
-  text-transform: uppercase;
-  font-weight: 300;
-  font-size: 16px;
-  line-height: 24px;
+  margin-bottom: 7vw;
 }
 
 .meeting {
   color: $redsquirrel-chocolate;
-  text-transform: uppercase;
-  font-weight: 300;
-  font-size: 26px;
-  line-height: 39px;
 
   .about-meeting {
-    margin-bottom: 30px;
+    font-size: 1.75vw;
+    line-height: 2.7vw;
+    margin-bottom: 1.5vw;
 
-    .avatar-1 {
+    .avatars {
       display: inline-block;
-      transform: rotate(-5deg);
       vertical-align: bottom;
-    }
+      margin-right: 0.4vw;
 
-    .avatar-2 {
-      display: inline-block;
-      position: relative;
-      transform: rotate(5deg);
-      vertical-align: bottom;
-      margin-right: 20px;
-      margin-bottom: 10px;
+      .avatar {
+        height: 4.1vw;
+        width: 4.1vw;
+        outline: 1px solid rgba(255, 255, 255, 0.7);
+      }
+
+      .avatar:not(:first-child) {
+        position: relative;
+        left: -0.3vw;
+      }
     }
 
     p {
       display: inline;
     }
-  }
-
-  .canvas {
-    position: absolute;
-    top: 400px;
-    right: 200px;
-    width: 300px;
-    height: 300px;
-    z-index: 2;
   }
 }
 </style>
