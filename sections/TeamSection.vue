@@ -213,13 +213,13 @@ $nominee-tag-width: 13vw;
   flex-direction: column;
   justify-content: space-between;
 
-  font-size: 1vw;
   color: $redsquirrel-chocolate;
   padding: 4.2em 2.4em;
 
   h3 {
     text-transform: uppercase;
-    font-size: 1.8em;
+    font-size: 2vw;
+    line-height: 3vw;
     font-weight: 300;
   }
 

@@ -1,5 +1,8 @@
 <template>
-  <section class="container">
+  <section
+    ref="containerRef"
+    class="container"
+  >
     <h2 class="gradient-2">
       <HeadingText
         :text="$t('Book a free online meeting to get a price proposal')"
@@ -54,6 +57,48 @@
 </template>
 
 <script setup lang="ts">
+const containerRef = ref()
+const { $gsap } = useNuxtApp()
+
+onMounted(() => {
+  const container = containerRef.value
+  const header = container.querySelector('h2')
+  const contacts = container.querySelector('.contacts')
+  const meeting = container.querySelector('.meeting')
+  const avatars = container.querySelectorAll('.avatar')
+
+  $gsap.timeline({
+    scrollTrigger: {
+      pin: true,
+      trigger: container,
+      start: 'bottom bottom',
+      toggleActions: 'play none resume reverse'
+    }
+  })
+    .dissolve(
+      container,
+      { duration: 0.8 }
+    )
+    .slideTop(
+      header,
+      { duration: 0.8 }
+    )
+    .slideRight(
+      contacts,
+      { duration: 0.8 },
+      '<'
+    )
+    .slideLeft(
+      meeting,
+      { duration: 0.8 },
+      '<'
+    )
+    .scaleIn(
+      avatars,
+      { duration: 1.3, stagger: 0.3, ease: 'elastic.out(1,0.5)' }
+    )
+})
+
 const socialLinks = [
   { title: 'Telegram', to: 'https://telegram.org/' },
   { title: 'Whatsapp', to: '/' },

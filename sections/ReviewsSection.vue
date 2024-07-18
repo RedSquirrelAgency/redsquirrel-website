@@ -21,6 +21,7 @@
     </div>
     <GlassSheet
       v-for="(review, index) in reviews"
+      ref="reviewCardsRef"
       :key="index"
       :style="{ position: 'absolute', ...review.position }"
       :elevation="isReviewCardElevated(index) ? 24 : 8"
@@ -101,7 +102,6 @@ const hovered = ref<number>(-1)
 const selected = ref<number>(-1)
 const playing = ref(false)
 const snackbar = ref(false)
-let snackbarHasBeenDisplayed = false
 
 function onReviewClick(review: IReview, index: number) {
   selected.value = index
@@ -119,21 +119,50 @@ function isReviewCardElevated(index: number) {
   return ((selected.value === index && playing.value) || (hovered.value === index))
 }
 
-const containerRef = ref<HTMLElement | null>(null)
+function toggleSnackbar(display: boolean) {
+  snackbar.value = display
+}
+
+const containerRef = ref()
 function onDocumentScroll() {
   const container = containerRef.value
-  if (!container) return
   const topOffset = container.offsetTop - window.scrollY
   const offsetHeight = container.offsetHeight
-  if (!snackbarHasBeenDisplayed && (topOffset + offsetHeight * -0.4) < 0) {
-    snackbar.value = true
-    snackbarHasBeenDisplayed = true
-  }
   if ((topOffset + offsetHeight * -0.7) > 0 || (topOffset + offsetHeight * 0.5) < 0) {
     onAudioPlayerClose()
+    toggleSnackbar(false)
   }
 }
 document.addEventListener('wheel', onDocumentScroll, { passive: false })
+
+const { $gsap } = useNuxtApp()
+onMounted(() => {
+  const container = containerRef.value
+  const offer = container.querySelector('.offer')
+  const reviewCards = container.querySelectorAll('.review-card')
+  const reviewCardsArray = $gsap.utils.toArray(reviewCards) as HTMLElement[]
+
+  for (const reviewCard of reviewCardsArray) {
+    $gsap.effects.slideBottom(reviewCard, {
+      duration: 0.5,
+      scrollTrigger: {
+        trigger: reviewCard,
+        start: 'top center',
+        toggleActions: 'play none resume reverse'
+      }
+    })
+  }
+
+  $gsap.effects.slideTop(offer, {
+    duration: 0.8,
+    scrollTrigger: {
+      trigger: offer,
+      start: 'top center',
+      toggleActions: 'play none resume reverse'
+    },
+    onComplete: () => toggleSnackbar(true)
+  })
+})
 
 const reviews: IReview[] = [
   {

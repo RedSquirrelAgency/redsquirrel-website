@@ -21,12 +21,42 @@
 </template>
 
 <script setup lang="ts">
-import CallToActionSection from "~/sections/CallToActionSection.vue";
+import CallToActionSection from '~/sections/CallToActionSection.vue'
 
 const loading = ref(0)
 const { $gsap } = useNuxtApp()
 
 const effects = [
+  {
+    name: 'dissolve',
+    effect: (targets: any, config: any) => {
+      return $gsap.fromTo(targets,
+        {
+          opacity: 0
+        },
+        {
+          opacity: 1,
+          ...config
+        })
+    },
+    extendTimeline: true
+  },
+  {
+    name: 'scaleIn',
+    effect: (targets: any, config: any) => {
+      return $gsap.fromTo(targets,
+        {
+          scale: 0,
+          opacity: 0
+        },
+        {
+          scale: 1,
+          opacity: 1,
+          ...config
+        })
+    },
+    extendTimeline: true
+  },
   {
     name: 'slideTop',
     effect: (targets: any, config: any) => {
