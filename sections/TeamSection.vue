@@ -175,7 +175,7 @@ $nominee-tag-height: 4vw;
 $nominee-tag-width: 13vw;
 
 .container {
-  padding: 8vw;
+  padding: 8vw 0;
 
   h2 {
     margin-bottom: 70px;

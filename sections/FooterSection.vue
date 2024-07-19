@@ -1,6 +1,9 @@
 <template>
   <div class="container d-flex justify-center">
-    <GlassSheet class="sheet">
+    <GlassSheet
+      class="sheet"
+      :fill="0.3"
+    >
       <v-row class="d-flex justify-center">
         <div class="heading">
           REDSQUIRREL
@@ -96,6 +99,7 @@ const socialLinks = [
     color: $redsquirrel-cream-p1;
     text-align: center;
     margin-bottom: 3vw;
+    text-shadow: 0 20px 30px #D3835B1A;
   }
 
   .footer {

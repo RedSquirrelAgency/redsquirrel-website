@@ -74,7 +74,7 @@ onMounted(() => {
       pin: true
     },
     defaults: { ease: 'none' }
-  }).fromTo(container.querySelector('.cases'), { xPercent: 50 }, { xPercent: -50 })
+  }).fromTo(container.querySelector('.cases'), { xPercent: 50 }, { xPercent: -51 })
 })
 
 const cases = [
