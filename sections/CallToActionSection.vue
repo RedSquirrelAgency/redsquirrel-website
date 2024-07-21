@@ -16,14 +16,7 @@
         cols="4"
         class="contacts"
       >
-        <NuxtLink
-          v-for="(link, index) in socialLinks"
-          :key="index"
-          :to="link.to"
-          class="text-link"
-        >
-          {{ link.title }}
-        </NuxtLink>
+        <SocialLinks />
       </v-col>
       <v-col
         cols="8"
@@ -98,14 +91,6 @@ onMounted(() => {
       { duration: 1.3, stagger: 0.3, ease: 'elastic.out(1,0.5)' }
     )
 })
-
-const socialLinks = [
-  { title: 'Telegram', to: 'https://telegram.org/' },
-  { title: 'Whatsapp', to: '/' },
-  { title: 'Facebook', to: '/' },
-  { title: 'Instagram', to: '/' },
-  { title: 'Email', to: '/' }
-]
 </script>
 
 <style scoped lang="scss">

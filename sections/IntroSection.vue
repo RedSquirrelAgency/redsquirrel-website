@@ -5,7 +5,7 @@
   >
     <component
       :is="slide"
-      v-for="(slide, index) in slides"
+      v-for="(slide, index) in Object.values(slides)"
       :key="index"
       :displayed="index === currentSlideIndex"
       :tl="timelines[index]"
@@ -18,6 +18,8 @@
 import HeroSection from '~/sections/HeroSection.vue'
 import QuotesSection from '~/sections/QuotesSection.vue'
 
+const emit = defineEmits(['slideChange'])
+
 const { loaded } = defineProps({
   loaded: {
     type: Boolean,
@@ -28,15 +30,18 @@ const { loaded } = defineProps({
 const { $gsap } = useNuxtApp()
 const containerRef = ref<HTMLElement | null>(null)
 
-const slides = [
-  HeroSection,
-  QuotesSection
-]
+const slides = {
+  HeroSection: HeroSection,
+  QuotesSection: QuotesSection
+}
 
-const timelines = slides.map(() => {
+const timelines = Object.values(slides).map(() => {
   return $gsap.timeline()
 })
 const currentSlideIndex = ref(0)
+watch(currentSlideIndex, (slideIndex) => {
+  emit('slideChange', Object.keys(slides)[slideIndex])
+})
 
 onMounted(() => {
   if (!containerRef.value) return

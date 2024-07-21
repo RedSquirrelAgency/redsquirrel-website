@@ -1,29 +1,60 @@
 <template>
   <v-btn
     href="https://cal.com/redsquirrel/30min"
-    class="button"
+    v-bind="buttonProps"
     append-icon="mdi-arrow-right"
-    variant="flat"
-    :block="block"
-    height="2.3vw"
   >
     {{ $t("Book a consultation") }}
   </v-btn>
 </template>
 
 <script setup lang="ts">
-const { block } = defineProps({
+import type { PropType } from 'vue'
+
+type ConsultationButtonVariant = 'default' | 'plain'
+
+const { variant, block, textColor } = defineProps({
+  variant: {
+    type: String as PropType<ConsultationButtonVariant>,
+    default: 'default'
+  },
   block: {
     type: Boolean,
     default: false
+  },
+  textColor: {
+    type: String
   }
+})
+
+const buttonProps = computed(() => {
+  let props: any = {}
+  switch (variant) {
+    case 'default':
+      props = {
+        class: 'default',
+        height: '2.3vw',
+        variant: 'flat'
+      }
+      break
+    case 'plain':
+      props = {
+        class: 'plain',
+        variant: 'plain',
+        ripple: false
+      }
+      break
+  }
+  props.style = { color: textColor }
+  props.block = block
+  return props
 })
 </script>
 
 <style scoped lang="scss">
 @import "styles/variables";
 
-.button {
+.default {
   background: #FFDFCFE5;
 
   border-radius: 0.7vw;
@@ -35,5 +66,10 @@ const { block } = defineProps({
   font-weight: 400;
   letter-spacing: 0;
   color: $redsquirrel-chocolate;
+}
+
+.plain {
+  font-size: 1vw;
+  color: $redsquirrel-cream-p1;
 }
 </style>

@@ -7,7 +7,11 @@
       />
     </Transition>
     <BackgroundContainer>
-      <IntroSection :loaded="loading === 1" />
+      <AppBar :variant="appBarVariant" />
+      <IntroSection
+        :loaded="loading === 1"
+        @slide-change="onSlideChange"
+      />
       <CasesSection />
       <AdvantagesSection />
       <GoalSection />
@@ -21,10 +25,14 @@
 </template>
 
 <script setup lang="ts">
-import CallToActionSection from '~/sections/CallToActionSection.vue'
-
 const loading = ref(0)
+const appBarVariant = ref<AppBarVariant>('fixed')
 const { $gsap } = useNuxtApp()
+
+function onSlideChange(slideName: string) {
+  if (slideName === 'HeroSection') appBarVariant.value = 'fixed'
+  else appBarVariant.value = 'floating'
+}
 
 const effects = [
   {

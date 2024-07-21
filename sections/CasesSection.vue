@@ -82,20 +82,20 @@ const cases = [
     title: 'Natalie Herzel Praxis',
     subtitle: 'Dental Clinic',
     image: 'banners/natalie_herzel_praxis.png',
-    url: 'https://www.behance.net/alenadomozhirova'
+    url: 'https://herzel-zahnarzt.de/'
   },
   null,
   {
     title: 'RAYTH',
     subtitle: 'Car Wash & Detailing Center',
     image: 'banners/rayth.png',
-    url: 'https://www.behance.net/alenadomozhirova'
+    url: 'https://www.behance.net/gallery/187262715/Landing-Page-for-Detailing-Center'
   },
   {
     title: 'EZdesign',
     subtitle: 'Bureau of Architecture',
     image: 'banners/ezdesign.png',
-    url: 'https://www.behance.net/alenadomozhirova'
+    url: 'https://www.behance.net/gallery/187262715/Landing-Page-for-Detailing-Center'
   },
   {
     title: 'Anna Soboleva',
@@ -108,7 +108,7 @@ const cases = [
     title: 'Yes! Mallorca Property',
     subtitle: 'Estate Agency',
     image: 'banners/yes!_mallorca_property.png',
-    url: 'https://www.behance.net/alenadomozhirova'
+    url: 'https://www.behance.net/gallery/128711407/agentstvo-nedvizhimosti-na-majorke'
   },
   {
     title: 'Bigmishka',

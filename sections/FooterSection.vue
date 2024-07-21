@@ -12,7 +12,7 @@
       <v-row>
         <v-col>
           <NuxtLink
-            v-for="(link, index) in siteNavigationLinks"
+            v-for="(link, index) in navigationLinks"
             :key="index"
             :to="link.to"
             class="text-link"
@@ -32,14 +32,7 @@
           </div>
         </v-col>
         <v-col>
-          <NuxtLink
-            v-for="(link, index) in socialLinks"
-            :key="index"
-            class="text-link highlight"
-            :to="link.to"
-          >
-            {{ link.title }}
-          </NuxtLink>
+          <SocialLinks link-class="highlight" />
         </v-col>
       </v-row>
       <v-row class="footer">
@@ -56,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-const siteNavigationLinks = [
+const navigationLinks = [
   { title: 'Home', to: '/' },
   { title: 'Cases', to: '/' },
   { title: 'Reviews', to: '/' },
@@ -64,14 +57,6 @@ const siteNavigationLinks = [
   { title: 'Contacts', to: '/' },
   { title: 'Impressum', to: '/' },
   { title: 'Privacy Policy', to: '/' }
-]
-
-const socialLinks = [
-  { title: 'Telegram', to: 'https://telegram.org/' },
-  { title: 'Whatsapp', to: '/' },
-  { title: 'Facebook', to: '/' },
-  { title: 'Instagram', to: '/' },
-  { title: 'Email', to: '/' }
 ]
 </script>
 

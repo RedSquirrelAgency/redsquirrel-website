@@ -160,7 +160,10 @@ onMounted(() => {
       start: 'top center',
       toggleActions: 'play none resume reverse'
     },
-    onComplete: () => toggleSnackbar(true)
+    onComplete: () => {
+      if (selected.value != -1) return
+      toggleSnackbar(true)
+    }
   })
 })
 
