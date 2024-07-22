@@ -43,7 +43,10 @@
     </v-row>
   </v-app-bar>
   <Transition>
-    <NavigationMenu v-if="menuOpen" />
+    <NavigationMenu
+      v-if="menuOpen"
+      @close="menuOpen = false"
+    />
   </Transition>
 </template>
 

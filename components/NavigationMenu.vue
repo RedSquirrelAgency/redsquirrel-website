@@ -8,12 +8,13 @@
         cols="6"
         class="my-auto text-center"
       >
-        <NuxtLink
+        <a
           v-for="(link, index) in navigationLinks"
           :key="index"
-          :to="link.to"
+          :href="link.to"
           class="text-link"
           :class="hoveredNavigationLink === index && 'style-script'"
+          @click.stop="emit('close')"
           @mouseover="hoveredNavigationLink = index"
           @mouseleave="hoveredNavigationLink = -1"
         >
@@ -24,7 +25,7 @@
             icon="mdi-arrow-top-right"
             class="arrow-icon"
           />
-        </NuxtLink>
+        </a>
       </v-col>
       <v-col class="my-auto text-right">
         <div>
@@ -47,17 +48,18 @@
 <script setup lang="ts">
 const eventListener = (e: WheelEvent) => e.preventDefault()
 
+const emit = defineEmits(['close'])
 onMounted(() => document.addEventListener('wheel', eventListener, { passive: false }))
 onUnmounted(() => document.removeEventListener('wheel', eventListener))
 
-const hoveredNavigationLink = ref(-1);
+const hoveredNavigationLink = ref(-1)
 
 const navigationLinks = [
-  { title: 'Portfolio', to: '/' },
+  { title: 'Portfolio', to: '#cases' },
   { title: 'Approach', to: '/' },
   { title: 'Stages', to: '/' },
-  { title: 'Reviews', to: '/' },
-  { title: 'Get in touch', to: '/' }
+  { title: 'Reviews', to: '#reviews' },
+  { title: 'Get in touch', to: '#contact' }
 ]
 </script>
 

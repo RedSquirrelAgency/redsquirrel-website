@@ -12,13 +12,13 @@
         :loaded="loading === 1"
         @slide-change="onSlideChange"
       />
-      <CasesSection />
+      <CasesSection id="cases" />
       <AdvantagesSection />
       <GoalSection />
       <TeamSection />
       <!-- <StagesSection /> -->
-      <ReviewsSection />
-      <CallToActionSection />
+      <ReviewsSection id="reviews" />
+      <CallToActionSection id="contact" />
       <FooterSection />
     </BackgroundContainer>
   </v-app>
