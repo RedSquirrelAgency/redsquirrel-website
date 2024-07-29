@@ -128,6 +128,7 @@ h2 {
         height: 4.1vw;
         width: 4.1vw;
         outline: 1px solid rgba(255, 255, 255, 0.7);
+        box-shadow: 0 8px 20px 0 #67524733;
       }
 
       .avatar:not(:first-child) {
