@@ -123,18 +123,17 @@ function toggleSnackbar(display: boolean) {
   snackbar.value = display
 }
 
-const containerRef = ref()
-function onDocumentScroll() {
-  const container = containerRef.value
-  const topOffset = container.offsetTop - window.scrollY
-  const offsetHeight = container.offsetHeight
-  if ((topOffset + offsetHeight * -0.7) > 0 || (topOffset + offsetHeight * 0.5) < 0) {
-    onAudioPlayerClose()
-    toggleSnackbar(false)
-  }
+function onContainerLeave() {
+  onAudioPlayerClose()
+  toggleSnackbar(false)
 }
-document.addEventListener('wheel', onDocumentScroll, { passive: false })
 
+function onContainerEnter() {
+  if (selected.value != -1) return
+  toggleSnackbar(true)
+}
+
+const containerRef = ref()
 const { $gsap } = useNuxtApp()
 onMounted(() => {
   const container = containerRef.value
@@ -144,6 +143,18 @@ onMounted(() => {
 
   const offerItemsArray = $gsap.utils.toArray(offerItems) as HTMLElement[]
   const reviewCardsArray = $gsap.utils.toArray(reviewCards) as HTMLElement[]
+
+  $gsap.to(container, {
+    scrollTrigger: {
+      trigger: container,
+      start: 'top center',
+      end: 'bottom center',
+      scrub: true
+    },
+    onStart: onContainerEnter,
+    onComplete: onContainerLeave,
+    onReverseComplete: onContainerLeave
+  })
 
   for (const reviewCard of reviewCardsArray) {
     $gsap.effects.slideBottom(reviewCard, {
@@ -163,10 +174,6 @@ onMounted(() => {
         trigger: offerItem,
         start: 'bottom bottom',
         toggleActions: 'play none resume reverse'
-      },
-      onComplete: () => {
-        if (selected.value != -1) return
-        toggleSnackbar(true)
       }
     })
   }
