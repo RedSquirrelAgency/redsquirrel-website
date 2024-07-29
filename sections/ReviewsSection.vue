@@ -138,8 +138,11 @@ document.addEventListener('wheel', onDocumentScroll, { passive: false })
 const { $gsap } = useNuxtApp()
 onMounted(() => {
   const container = containerRef.value
-  const offer = container.querySelector('.offer')
+
+  const offerItems = container.querySelectorAll('.offer > *')
   const reviewCards = container.querySelectorAll('.review-card')
+
+  const offerItemsArray = $gsap.utils.toArray(offerItems) as HTMLElement[]
   const reviewCardsArray = $gsap.utils.toArray(reviewCards) as HTMLElement[]
 
   for (const reviewCard of reviewCardsArray) {
@@ -147,24 +150,26 @@ onMounted(() => {
       duration: 0.5,
       scrollTrigger: {
         trigger: reviewCard,
-        start: 'top center',
+        start: 'bottom bottom',
         toggleActions: 'play none resume reverse'
       }
     })
   }
 
-  $gsap.effects.slideTop(offer, {
-    duration: 0.8,
-    scrollTrigger: {
-      trigger: offer,
-      start: 'top center',
-      toggleActions: 'play none resume reverse'
-    },
-    onComplete: () => {
-      if (selected.value != -1) return
-      toggleSnackbar(true)
-    }
-  })
+  for (const offerItem of offerItemsArray) {
+    $gsap.effects.dissolve(offerItem, {
+      duration: 0.5,
+      scrollTrigger: {
+        trigger: offerItem,
+        start: 'bottom bottom',
+        toggleActions: 'play none resume reverse'
+      },
+      onComplete: () => {
+        if (selected.value != -1) return
+        toggleSnackbar(true)
+      }
+    })
+  }
 })
 
 const reviews: IReview[] = [
@@ -281,7 +286,6 @@ const reviews: IReview[] = [
 .review-card {
   width: 13vw;
   padding: 0.8vw 1.3vw 1.3vw;
-  border: 1px solid rgba(255, 255, 255, 0.7);
   transition: box-shadow 0.3s ease-in-out, scale 0.3s ease-in-out;
   cursor: pointer;
 
@@ -300,7 +304,7 @@ const reviews: IReview[] = [
     .avatar {
       height: 7vw;
       width: 7vw;
-      outline: 1px solid rgba(255, 255, 255, 0.7);
+      outline: 1px solid rgba(255, 255, 255, 1);
       margin: auto 0;
     }
 
@@ -323,6 +327,7 @@ const reviews: IReview[] = [
   .niche {
     font-size: 1.05vw;
     line-height: 1vw;
+    font-weight: 400;
     color: $redsquirrel-cream-p1;
   }
 }
