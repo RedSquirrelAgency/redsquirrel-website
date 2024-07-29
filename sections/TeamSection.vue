@@ -36,7 +36,7 @@
           </div>
           <div
             ref="videoRef"
-            class="video"
+            class="team-video"
           />
         </div>
       </v-col>
@@ -121,9 +121,9 @@
 import Player from '@vimeo/player'
 
 const { $gsap } = useNuxtApp()
-const containerRef = ref<HTMLElement | null>(null)
+const containerRef = ref()
 
-const videoRef = ref<HTMLElement | null>(null)
+const videoRef = ref()
 const isPlaying = shallowRef(false)
 let player: Player = null
 
@@ -138,7 +138,6 @@ onMounted(() => {
     isPlaying.value = false
   })
 
-  if (!containerRef.value) return
   const container = containerRef.value
   const sheetsRow = container.querySelector('.sheets-row')
   const videoWrapper = container.querySelector('.video-wrapper')
@@ -307,7 +306,7 @@ $nominee-tag-width: 13vw;
 </style>
 
 <style lang="scss">
-.video {
+.team-video {
   iframe {
     border-radius: 3vw;
     border: 1px solid rgba(255, 255, 255, 0.7);

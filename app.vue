@@ -13,12 +13,13 @@
         @slide-change="onSlideChange"
       />
       <CasesSection id="cases" />
-      <AdvantagesSection />
-      <GoalSection />
-      <TeamSection />
+      <AdvantagesSection id="advantages" />
+      <GoalSection id="goal" />
+      <TeamSection id="team" />
       <!-- <StagesSection /> -->
       <ReviewsSection id="reviews" />
       <CallToActionSection id="contact" />
+      <BlogSection id="blog" />
       <FooterSection />
     </BackgroundContainer>
   </v-app>
@@ -33,6 +34,19 @@ function onSlideChange(slideName: string) {
   if (slideName === 'HeroSection') appBarVariant.value = 'fixed'
   else appBarVariant.value = 'floating'
 }
+
+onMounted(() => {
+  const interval = setInterval(() => {
+    loading.value += 0.2
+    if (loading.value >= 1) {
+      clearInterval(interval)
+    }
+  }, 100)
+
+  for (const effect of effects) {
+    $gsap.registerEffect(effect)
+  }
+})
 
 const effects = [
   {
@@ -130,19 +144,6 @@ const effects = [
     extendTimeline: true
   }
 ]
-
-onMounted(() => {
-  const interval = setInterval(() => {
-    loading.value += 0.2
-    if (loading.value >= 1) {
-      clearInterval(interval)
-    }
-  }, 100)
-
-  for (const effect of effects) {
-    $gsap.registerEffect(effect)
-  }
-})
 </script>
 
 <style lang="scss">
