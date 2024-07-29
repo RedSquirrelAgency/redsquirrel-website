@@ -168,7 +168,7 @@ onMounted(() => {
   }
 
   for (const offerItem of offerItemsArray) {
-    $gsap.effects.dissolve(offerItem, {
+    $gsap.effects.slideTop(offerItem, {
       duration: 0.5,
       scrollTrigger: {
         trigger: offerItem,
@@ -335,7 +335,7 @@ const reviews: IReview[] = [
     font-size: 1.05vw;
     line-height: 1vw;
     font-weight: 400;
-    color: $redsquirrel-cream-p1;
+    color: $redsquirrel-cream;
   }
 }
 
