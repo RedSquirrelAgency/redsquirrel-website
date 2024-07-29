@@ -100,7 +100,7 @@ onMounted(() => {
   position: relative;
   width: 100%;
   background-color: $redsquirrel-cream-p1;
-  padding: 7vw 8vw 7vw 14vw;
+  padding: 7vw 7vw 7vw 14vw;
 
   text-transform: uppercase;
   font-weight: 300;
@@ -116,6 +116,7 @@ h2 {
   .about-meeting {
     font-size: 1.75vw;
     line-height: 2.7vw;
+    margin-top: -1.75vw;
     margin-bottom: 1.5vw;
 
     .avatars {
