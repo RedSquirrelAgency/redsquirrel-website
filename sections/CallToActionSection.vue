@@ -65,6 +65,7 @@ onMounted(() => {
       pin: true,
       trigger: container,
       start: 'bottom bottom',
+      end: '400px',
       toggleActions: 'play none resume reverse'
     }
   })
