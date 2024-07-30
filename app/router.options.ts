@@ -13,6 +13,7 @@ export default <RouterConfig>{
     if (to.hash) {
       const elem = document.querySelector(to.hash)
       const offset = elem && elem.getAttribute('anchor-offset')
+      console.log(elem, offset)
       return elem && offset
         ? { top: elem.getBoundingClientRect().top + window.scrollY + parseInt(offset) }
         : { selector: to.hash }

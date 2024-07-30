@@ -32,10 +32,14 @@
 </template>
 
 <script setup lang="ts">
+import { useGoTo } from 'vuetify'
+import AnchorTag from '~/components/AnchorTag.vue'
+
 const loading = ref(0)
 const appBarVariant = ref<AppBarVariant>('fixed')
 const { $gsap } = useNuxtApp()
 const router = useRouter()
+const goTo = useGoTo()
 
 function onSlideChange(slideName: string) {
   if (slideName === 'HeroSection') appBarVariant.value = 'fixed'
@@ -50,7 +54,7 @@ onMounted(() => {
 
       const { hash } = router.currentRoute.value
       if (hash) {
-        router.push({ hash })
+        goTo(hash)
       }
     }
   }, 100)
