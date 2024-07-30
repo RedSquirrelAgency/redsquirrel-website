@@ -11,14 +11,14 @@
       </v-row>
       <v-row>
         <v-col>
-          <NuxtLink
+          <a
             v-for="(link, index) in navigationLinks"
             :key="index"
-            :to="link.to"
+            :href="link.to"
             class="text-link"
           >
             {{ $t(link.title) }}
-          </NuxtLink>
+          </a>
         </v-col>
         <v-col>
           <div class="highlight">
@@ -51,8 +51,8 @@
 <script setup lang="ts">
 const navigationLinks = [
   { title: 'Home', to: '/' },
-  { title: 'Cases', to: '/' },
-  { title: 'Reviews', to: '/' },
+  { title: 'Cases', to: '#cases' },
+  { title: 'Reviews', to: '#reviews' },
   { title: 'FAQ', to: '/' },
   { title: 'Contacts', to: '/' },
   { title: 'Impressum', to: '/' },

@@ -12,14 +12,20 @@
         :loaded="loading === 1"
         @slide-change="onSlideChange"
       />
-      <CasesSection id="cases" />
-      <AdvantagesSection id="advantages" />
-      <GoalSection id="goal" />
-      <TeamSection id="team" />
-      <!-- <StagesSection /> -->
-      <ReviewsSection id="reviews" />
-      <CallToActionSection id="contact" />
-      <BlogSection id="blog" />
+      <AnchorTag hash="cases" />
+      <CasesSection />
+      <AnchorTag hash="advantages" />
+      <AdvantagesSection />
+      <GoalSection />
+      <TeamSection />
+      <AnchorTag hash="reviews" />
+      <ReviewsSection />
+      <AnchorTag
+        hash="contact"
+        :offset="900"
+      />
+      <CallToActionSection />
+      <BlogSection />
       <FooterSection />
     </BackgroundContainer>
   </v-app>
@@ -29,6 +35,7 @@
 const loading = ref(0)
 const appBarVariant = ref<AppBarVariant>('fixed')
 const { $gsap } = useNuxtApp()
+const router = useRouter()
 
 function onSlideChange(slideName: string) {
   if (slideName === 'HeroSection') appBarVariant.value = 'fixed'
@@ -40,6 +47,11 @@ onMounted(() => {
     loading.value += 0.2
     if (loading.value >= 1) {
       clearInterval(interval)
+
+      const { hash } = router.currentRoute.value
+      if (hash) {
+        router.push({ hash })
+      }
     }
   }, 100)
 

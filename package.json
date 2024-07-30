@@ -25,7 +25,6 @@
     "nuxt": "^3.11.2",
     "srt-parser-2": "^1.2.3",
     "three": "^0.165.0",
-    "three.quarks": "^0.14.1",
     "vue": "^3.4.27",
     "vue-router": "^4.3.2"
   },
@@ -34,7 +33,6 @@
     "@nuxtjs/google-fonts": "^3.2.0",
     "@types/howler": "^2.2.11",
     "@types/three": "^0.165.0",
-    "nuxt-particles": "^0.3.0",
     "sass": "^1.77.1",
     "vite-plugin-vuetify": "^2.0.3",
     "vuetify": "^3.6.5"

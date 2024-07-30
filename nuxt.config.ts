@@ -65,11 +65,6 @@ export default defineNuxtConfig({
       scrollTrigger: true
     }
   },
-  router: {
-    options: {
-      scrollBehaviorType: 'smooth'
-    }
-  },
   components: [
     {
       path: '~/sections',
