@@ -1,82 +1,79 @@
 <template>
-  <section
+  <div
     ref="containerRef"
-    class="stages-container"
+    class="container"
   >
     <div class="header">
       <h2 class="gradient-1 text-center">
         <HeadingText
-          :text="$t('Stages transparency')"
+          text="Stages transparency"
           :font-replacements="[[0, 2], [1, 4], [1, 10]]"
         />
       </h2>
       <h4 class="text-center">
-        <HeadingText
-          :text="$t('Thanks to aligning important stages and safeguarding our decisions, we can manage to fully meet your expectations')"
-          :line-breaks="[8]"
-        />
+        <span class="line">Thanks to aligning important stages and safeguarding our decisions,</span>
+        <span class="line">we can manage to fully meet your expectations</span>
       </h4>
     </div>
-    <div class="stages">
-      <GlassSheet
-        v-for="(stage, index) in stages"
-        :key="index"
-        :style="calculateStageSheetPosition(index)"
-        class="stage-sheet"
-        :fill="0.3"
-      >
-        <StageComponent
+    <div class="canvas">
+      <TresCanvas v-bind="gl">
+        <TresPerspectiveCamera :position="cameraPosition" />
+        <StageTresComponent
+          v-for="(stage, index) in stages"
+          v-bind="stage"
+          :key="index"
           :index="index"
-          :title="$t(stage.title)"
-          :subtitle="translateSubtitle(stage.subtitle)"
+          :visible="true"
         />
-      </GlassSheet>
+        <TresAmbientLight />
+      </TresCanvas>
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">
+import { BasicShadowMap, NoToneMapping, SRGBColorSpace } from 'three'
+
+const gl = {
+  clearColor: 0x000000,
+  shadows: true,
+  alpha: true,
+  antialias: true,
+  shadowMapType: BasicShadowMap,
+  outputColorSpace: SRGBColorSpace,
+  toneMapping: NoToneMapping
+}
+
 const { $gsap } = useNuxtApp()
-const { t } = useI18n()
-
-const containerRef = ref()
-
-function calculateStageSheetPosition(index: number) {
-  const left = index % 2 === 0 && '8.33vw'
-  const right = index % 2 !== 0 && '8.33vw'
-  const top = `${34.02 * index}vw`
-  return { left, right, top }
-}
-
-function translateSubtitle(subtitle: string | string[]) {
-  if (Array.isArray(subtitle)) {
-    return subtitle.map(item => t(item))
-  }
-  return t(subtitle)
-}
+const containerRef = ref<HTMLElement | null>(null)
+const cameraPosition = shallowRef([0, 0, 0])
 
 onMounted(() => {
+  if (!containerRef.value) return
   const container = containerRef.value
   $gsap.timeline({
     scrollTrigger: {
       trigger: container,
       start: 'top top',
-      end: `+=${stages.length * 500}px`,
+      end: '+=100%',
       scrub: true,
-      pin: true
+      pin: true,
+      onUpdate: (scroll) => {
+        const start = 3
+        const end = -13
+        const coordinate = start + (end - start) * scroll.progress
+        cameraPosition.value = [0, 0, coordinate]
+      }
     },
     defaults: { ease: 'none' }
   })
-    .fromTo(container.querySelector('.stages'),
-      { yPercent: 0 },
-      { yPercent: -420 }
-    )
 })
 
 const stages = [
   {
     title: 'Free Consultation',
-    subtitle: 'We introduce ourselves, delve into your task, ask crucial questions, provide a price proposal (up to 3 working days), and sign the contract'
+    subtitle: 'We introduce ourselves, delve into your task, ask crucial questions, provide a price proposal (up to 3 working days), and sign the contract',
+    position: [-1.5, 0, 0]
   },
   {
     title: 'Analytics',
@@ -84,14 +81,16 @@ const stages = [
       'Briefing in the format of an online meeting (usually up to 2 hours)',
       'Market and Competitor Analysis',
       'Audience research and creation of audience personas'
-    ]
+    ],
+    position: [1.5, 0, -2.5]
   },
   {
     title: 'Prototyping',
     subtitle: [
       'Writing understandable texts',
       'Prototype development + approval'
-    ]
+    ],
+    position: [-1, 0, -5]
   },
   {
     title: 'Design',
@@ -100,7 +99,8 @@ const stages = [
       'Preparation of mood board + approval',
       'Drawing up design concept + approval',
       'Drawing up the mobile version and UI kit'
-    ]
+    ],
+    position: [1, 0, -7.5]
   },
   {
     title: 'Development',
@@ -109,7 +109,8 @@ const stages = [
       'Integration with CMS WordPress + approval',
       'Website hosting and domain linking',
       'Integration of additional solutions'
-    ]
+    ],
+    position: [-1.5, 0, -10]
   },
   {
     title: 'Testing and Delivery',
@@ -119,7 +120,8 @@ const stages = [
       'Preparation of website management instructions',
       'Handover of all source files',
       '30-day free support'
-    ]
+    ],
+    position: [1.5, 0, -12.5]
   }
 ]
 </script>
@@ -127,23 +129,19 @@ const stages = [
 <style scoped lang="scss">
 @import "styles/variables";
 
-.header{
+.container {
+  padding: 50px 0;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 
-.stages {
+.canvas {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 1000px;
+}
 
-  .stage-sheet {
-    position: absolute;
-    width: 33.12vw;
-    height: 34.02vw;
-  }
+.header {
+  position: absolute;
+  width: 100%;
 }
 </style>

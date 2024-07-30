@@ -57,7 +57,7 @@ const hoveredNavigationLink = ref(-1)
 const navigationLinks = [
   { title: 'Portfolio', to: '#cases' },
   { title: 'Approach', to: '#advantages' },
-  { title: 'Stages', to: '/' },
+  { title: 'Stages', to: '#stages' },
   { title: 'Reviews', to: '#reviews' },
   { title: 'Get in touch', to: '#contact' }
 ]

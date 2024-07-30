@@ -18,6 +18,8 @@
       <AdvantagesSection />
       <GoalSection />
       <TeamSection />
+      <AnchorTag hash="stages" />
+      <StagesSection />
       <AnchorTag hash="reviews" />
       <ReviewsSection />
       <AnchorTag

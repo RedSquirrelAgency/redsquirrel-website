@@ -58,10 +58,9 @@
 
 <script setup lang="ts">
 const { $gsap } = useNuxtApp()
-const containerRef = ref<HTMLElement | null>(null)
+const containerRef = ref()
 
 onMounted(() => {
-  if (!containerRef.value) return
   const container = containerRef.value
   const tl = $gsap.timeline({
     scrollTrigger: {
