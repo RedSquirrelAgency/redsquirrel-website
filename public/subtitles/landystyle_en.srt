@@ -1,52 +1,135 @@
 1
-00:00:00,000 --> 00:00:06,000
-Our online School of Landscape design will turn three years old in the summer of 2022.
+00:00:00,200 --> 00:00:03,260
+Our online school of landscape design will turn
 
 2
-00:00:06,000 --> 00:00:11,000
-We have been working with Alina and her team for nearly a year and a half.
+00:00:03,260 --> 00:00:05,980
+three years old in the summer of 2022.
 
 3
-00:00:11,000 --> 00:00:18,000
-They are the ones who create all our landing pages and websites, which I associate with the success of our school.
+00:00:06,700 --> 00:00:08,680
+We have been working with Alena and her
 
 4
-00:00:18,000 --> 00:00:24,000
-Before starting work with Red Squirrel, at least six people failed to meet our expectations.
+00:00:08,680 --> 00:00:10,860
+team for nearly a year and a half.
 
 5
-00:00:24,000 --> 00:00:32,000
-My first work contact with the Red Squirrel team impressed me with their systematic approach and clear organization of labor.
+00:00:11,160 --> 00:00:13,020
+They are the ones who create all our
 
 6
-00:00:32,000 --> 00:00:41,000
-Later, I was convinced that they had delved so deeply into our subject matter that it sometimes seemed as though the team members could read my thoughts.
+00:00:13,020 --> 00:00:16,980
+landing pages and websites, which I associate with
 
 7
-00:00:41,000 --> 00:00:46,000
-It is pleasing that today in the frantic pace of hustle and bustle.
+00:00:16,980 --> 00:00:18,420
+the success of our school.
 
 8
-00:00:46,000 --> 00:00:52,000
-There are people you can rely on to work through all the details and find new solutions and algorithms
+00:00:18,960 --> 00:00:21,820
+Before starting work with RedSquirrel, at least
 
 9
-00:00:52,000 --> 00:00:55,000
-for improving and systematizing business.
+00:00:21,820 --> 00:00:24,160
+six people failed to meet our expectations.
 
 10
-00:00:55,000 --> 00:01:07,000
-Work is always on time, attention to detail, strict adherence to specifications, nearly 24-hour feedback, prompt responses, and keeping up with the day's trends.
+00:00:24,680 --> 00:00:27,260
+My first work contact with the RedSquirrel
 
 11
-00:01:07,000 --> 00:01:09,000
-These qualities seem rare today.
+00:00:27,260 --> 00:00:30,660
+team impressed me with their systematic approach and
 
 12
-00:01:09,000 --> 00:01:18,000
-That is exactly why I recommended the Red Squirrel team to my daughter, Alessia, who has her own small business making women's jewelry.
+00:00:30,660 --> 00:00:32,320
+clear organization of labor.
 
 13
-00:01:18,000 --> 00:01:34,000
-I want to express my deep gratitude to Elena and the Red Squirrel team for their approach to clients and wish them success in a very important aspect of any business, creating the face of your enterprise and your recognizability.
+00:00:32,800 --> 00:00:35,160
+Later, I was convinced that they had delved
 
+14
+00:00:35,160 --> 00:00:37,800
+so deeply into our subject matter that it
+
+15
+00:00:37,800 --> 00:00:40,420
+sometimes seemed as though the team members could
+
+16
+00:00:40,420 --> 00:00:41,400
+read my thoughts.
+
+17
+00:00:41,740 --> 00:00:44,080
+It is pleasing that today, in the frantic
+
+18
+00:00:44,080 --> 00:00:46,920
+pace of hustle and bustle, there are people
+
+19
+00:00:46,920 --> 00:00:48,920
+you can rely on to work through all
+
+20
+00:00:48,920 --> 00:00:52,560
+the details and find new solutions and algorithms
+
+21
+00:00:52,560 --> 00:00:55,420
+for improving and systematizing business.
+
+22
+00:00:55,740 --> 00:00:58,720
+Work is always on time, attention to detail,
+
+23
+00:00:59,160 --> 00:01:02,660
+strict adherence to specifications, nearly 24-hour
+
+24
+00:01:02,660 --> 00:01:06,220
+feedback, prompt responses, and keeping up with the
+
+25
+00:01:06,220 --> 00:01:06,940
+day's trends.
+
+26
+00:01:07,500 --> 00:01:09,320
+These qualities seem rare today.
+
+27
+00:01:09,760 --> 00:01:12,100
+That is exactly why I recommended the Red
+
+28
+00:01:12,100 --> 00:01:15,280
+Squirrel team to my daughter Olesya, who has
+
+29
+00:01:15,280 --> 00:01:18,220
+her own small business making women's jewelry.
+
+30
+00:01:18,220 --> 00:01:21,440
+I want to express my deep gratitude to
+
+31
+00:01:21,440 --> 00:01:24,120
+Alena and the RedSquirrel team for their
+
+32
+00:01:24,120 --> 00:01:27,320
+approach to clients and wish them success in
+
+33
+00:01:27,320 --> 00:01:30,780
+a very important aspect of any business - creating
+
+34
+00:01:30,780 --> 00:01:34,360
+the "face" of your enterprise and your recognizability.
