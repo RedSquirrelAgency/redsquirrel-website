@@ -23,6 +23,6 @@ const socialLinks = [
   { title: 'Whatsapp', to: 'https://wa.me/+4915209064235' },
   { title: 'Facebook', to: 'https://www.facebook.com/domozhirovaalena' },
   { title: 'Instagram', to: 'https://www.instagram.com/redsquirrel_a/' },
-  { title: 'Email', to: 'mailto: info@redsquirrel.agency' }
+  { title: 'Email', to: 'mailto:info@redsquirrel.agency' }
 ]
 </script>

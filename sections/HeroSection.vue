@@ -3,6 +3,48 @@
     ref="containerRef"
     class="container"
   >
+    <div
+      v-if="mdAndUp"
+      class="overlay desktop"
+    >
+      <v-row class="footer d-flex align-end">
+        <v-col class="d-flex justify-start">
+          <FacebookRating />
+        </v-col>
+        <v-spacer />
+        <v-col class="d-flex justify-end">
+          <div class="button-container">
+            <p>
+              <HeadingText
+                :text="$t('A website with a creative design and complex SEO promotion')"
+                :line-breaks="[5]"
+              />
+            </p>
+            <ConsultationButton block />
+          </div>
+        </v-col>
+      </v-row>
+    </div>
+    <div
+      v-else
+      class="overlay mobile"
+    >
+      <v-col class="content">
+        <v-row class="header d-flex justify-center text-center">
+          <FacebookRating />
+        </v-row>
+        <v-row class="footer">
+          <p>
+            <HeadingText
+              :text="$t('A website with a creative design and complex SEO promotion')"
+              :line-breaks="[5]"
+            />
+          </p>
+          <ConsultationButton block />
+        </v-row>
+      </v-col>
+    </div>
+
     <div class="canvas">
       <TresCanvas v-bind="gl">
         <TextureBackground>
@@ -24,44 +66,56 @@
             :count="500"
             :size="1"
           />
-          <Suspense>
+          <Suspense v-if="$vuetify.display.mdAndUp">
             <TexturedText
               map="text_gradient.png"
+              text="REDSQUIRREL"
               :size="0.8"
               :position="textPosition"
               :opacity="textOpacity"
             />
           </Suspense>
+          <TresGroup
+            v-else
+            :position="textPosition"
+          >
+            <TresMesh>
+              <Suspense>
+                <TexturedText
+                  map="text_gradient.png"
+                  text="RED"
+                  :size="2.9"
+                  :opacity="textOpacity"
+                  :position="[0, 0.65, 0]"
+                />
+              </Suspense>
+              <Suspense>
+                <TexturedText
+                  map="text_gradient.png"
+                  text="SQUIRREL"
+                  :size="1.2"
+                  :opacity="textOpacity"
+                  :position="[0, -0.65, 0]"
+                />
+              </Suspense>
+            </TresMesh>
+          </TresGroup>
           <Levioso>
             <Suspense>
               <SquirrelComponent
                 :position="squirrelPosition"
                 :rotation="squirrelRotation"
+                :scale="squirrelScale"
                 :sparkle="true"
                 :transmission="1"
                 :roughness="0"
                 :thickness="1"
                 :ior="5"
-                :scale="0.016"
               />
             </Suspense>
           </Levioso>
         </TextureBackground>
       </TresCanvas>
-    </div>
-    <div class="overlay">
-      <v-row class="footer d-flex align-end">
-        <v-col class="d-flex justify-start">
-          <FacebookRating />
-        </v-col>
-        <v-spacer />
-        <v-col class="d-flex justify-end">
-          <div class="button-container text-right">
-            <p>{{ $t("A website with a creative design and complex SEO promotion") }} </p>
-            <ConsultationButton block />
-          </div>
-        </v-col>
-      </v-row>
     </div>
   </section>
 </template>
@@ -69,12 +123,10 @@
 <script setup lang="ts">
 import { BasicShadowMap, NoToneMapping, SRGBColorSpace, Vector3 } from 'three'
 import { degToRad } from 'three/src/math/MathUtils'
+import { useDisplay } from 'vuetify'
 import type { PropType } from 'vue'
-import SquirrelComponent from '~/components/SquirrelComponent.vue'
-import TextureBackground from '~/components/TextureBackground.vue'
 import Timeline = gsap.core.Timeline
 import TexturedText from '~/components/TexturedText.vue'
-import ConsultationButton from '~/components/ConsultationButton.vue'
 
 const props = defineProps({
   tl: {
@@ -101,55 +153,38 @@ const gl = {
 }
 
 const { $gsap } = useNuxtApp()
-const containerRef = ref<HTMLElement | null>(null)
-const squirrelPosition = shallowRef([0, -2, 0])
-const squirrelRotation = shallowRef([0, 0, 0])
-const cameraPosition = shallowRef([0, 0, 0])
-const textOpacity = ref(0)
-const textPosition = ref([0, 0, -2])
-const mouseMoveEnabled = shallowRef(false)
+const { mdAndUp } = useDisplay()
+
+const containerRef = ref()
 
 const cameraPositionVector = new Vector3()
-function updateCameraPosition() {
-  cameraPosition.value = [
-    cameraPositionVector.x,
-    cameraPositionVector.y,
-    cameraPositionVector.z
-  ]
-}
+const cameraPosition = shallowRef(cameraPositionVector.toArray())
 
-const squirrelPositionVector = new Vector3()
-function updateSquirrelPosition() {
-  squirrelPosition.value = [
-    squirrelPositionVector.x,
-    squirrelPositionVector.y,
-    squirrelPositionVector.z
-  ]
-}
+const getTextPositionVectorDefault = () => mdAndUp.value
+  ? new Vector3(0, 0, -2)
+  : new Vector3(0, 0.5, -2)
+const textPositionVector = getTextPositionVectorDefault()
+const textPosition = shallowRef(textPositionVector.toArray())
+
+const getSquirrelPositionVectorDefault = () => mdAndUp.value
+  ? new Vector3(0, -1, 0)
+  : new Vector3(0, -0.7, 0)
+const squirrelPositionVector = getSquirrelPositionVectorDefault()
+const squirrelPosition = shallowRef(squirrelPositionVector.toArray())
 
 const squirrelRotationVector = new Vector3()
-function updateSquirrelRotation() {
-  squirrelRotation.value = [
-    squirrelRotationVector.x,
-    squirrelRotationVector.y,
-    squirrelRotationVector.z
-  ]
-}
+const squirrelRotation = shallowRef(squirrelRotationVector.toArray())
 
-const textPositionVector = new Vector3()
-function updateTextPosition() {
-  textPosition.value = [
-    textPositionVector.x,
-    textPositionVector.y,
-    textPositionVector.z
-  ]
-}
+const textOpacity = shallowRef(0)
+const squirrelScale = computed(() => mdAndUp.value ? 0.016 : 0.045)
+
+const mouseMoveEnabled = shallowRef(false)
 
 function onMouseUpdate(e: MouseEvent) {
   if (!mouseMoveEnabled.value) return
   const mouseMoveFactor = e.x / window.innerWidth
   squirrelRotationVector.y = degToRad(180 * mouseMoveFactor - 90)
-  updateSquirrelRotation()
+  squirrelRotation.value = squirrelRotationVector.toArray()
 }
 
 onMounted(() => {
@@ -158,40 +193,69 @@ onMounted(() => {
 
   if (!containerRef.value) return
   const container = containerRef.value
+  const header = container.querySelector('.header')
+  const footer = container.querySelector('.footer')
+
+  watch(() => mdAndUp.value, () => {
+    squirrelPositionVector.copy(getSquirrelPositionVectorDefault())
+    squirrelPosition.value = squirrelPositionVector.toArray()
+
+    textPositionVector.copy(getTextPositionVectorDefault())
+    textPosition.value = textPositionVector.toArray()
+  })
 
   props.tl.fromTo(cameraPositionVector,
     { z: 4 },
-    { z: 3, onUpdate: () => updateCameraPosition() }
+    { z: 3, onUpdate: () => { cameraPosition.value = cameraPositionVector.toArray() } }
   )
 
   watch(() => props.displayed, (displayed) => {
     if (!props.loaded) return
     if (displayed) {
+      $gsap.set(header, { opacity: 1 })
+      $gsap.set(footer, { opacity: 1 })
+
       container.style.display = 'block'
-      $gsap.timeline().to(container, { opacity: 1, duration: 0.5 })
+
+      $gsap.timeline()
+        .to(container, { opacity: 1, duration: 0.5 })
     }
     else {
-      $gsap.timeline({
+      const tl = $gsap.timeline({
         onComplete: () => {
           container.style.display = 'none'
         }
-      }).to(cameraPositionVector, {
+      })
+
+      // Squirrel fly away animation
+      tl.to(cameraPositionVector, {
         z: 1,
         duration: 0.7,
-        onUpdate: () => updateCameraPosition()
+        onUpdate: () => { cameraPosition.value = cameraPositionVector.toArray() }
       }).to(container, { opacity: 0, duration: 0.5 }, '<0.3')
+
+      tl.to(header,
+        { opacity: 0, duration: 0.5 }, '>-0.8'
+      )
+
+      tl.to(footer,
+        { opacity: 0, duration: 0.5 }, '<'
+      )
     }
   })
 
   watch(() => props.loaded, (loaded) => {
     if (loaded) {
       mouseMoveEnabled.value = false
-      $gsap.timeline(
+      const tl = $gsap.timeline(
         {
           delay: 0.7,
           onComplete: () => { mouseMoveEnabled.value = true }
         }
-      ).fromTo(textOpacity,
+      )
+
+      // REDSQUIRREL text zoom out animation
+      tl.fromTo(textOpacity,
         { value: 0 },
         {
           value: 1,
@@ -200,23 +264,35 @@ onMounted(() => {
       ).fromTo(textPositionVector,
         { z: 3 },
         {
-          z: -2,
+          z: textPositionVector.z,
           duration: 1,
-          onUpdate: () => updateTextPosition()
+          onUpdate: () => { textPosition.value = textPositionVector.toArray() }
         },
         '<='
-      ).fromTo(container.querySelector('.footer'),
+      )
+
+      // Footer appear from bottom animation
+      tl.fromTo(footer,
         { yPercent: 120 },
         { yPercent: 0, duration: 1, ease: 'circ.out' },
         '>-0.5'
-      ).fromTo(squirrelPositionVector,
+      )
+
+      // Squirrel fall down animation
+      tl.fromTo(squirrelPositionVector,
         { y: 5 },
         {
-          y: -1,
+          y: squirrelPositionVector.y,
           duration: 3,
           ease: 'circ.out',
-          onUpdate: () => updateSquirrelPosition()
+          onUpdate: () => { squirrelPosition.value = squirrelPositionVector.toArray() }
         },
+        '>-0.5'
+      )
+
+      // Header dissolve animation
+      tl.dissolve(header,
+        { duration: 1 },
         '>-0.5'
       )
     }
@@ -232,48 +308,66 @@ onMounted(() => {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   z-index: 10;
   background: -webkit-linear-gradient(#B87C6A, #DF8B6B, #EE936B, #FEAE79, #F4C5A1, #DDCABA);
 }
 
-#particles {
-  position: absolute;
-  width: 100%;
-  height: 100vh;
-}
-
-.underlay {
-  position: absolute;
-  width: 100%;
-  height: 100vh;
-}
-
 .canvas {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: inherit;
   color: transparent;
 }
 
 .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: inherit;
   display: flex;
-  padding: 2vw 8vw;
+  z-index: 10;
+  color: $redsquirrel-cream-m1;
 
-  .footer {
-    display: flex;
-    align-self: end;
-    color: $redsquirrel-cream-m1;
+  &.desktop {
+    padding: 2vw 8vw;
     font-size: 1vw;
 
     .button-container {
       width: 18vw;
+      text-align: right;
 
       p {
         text-transform: uppercase;
         margin-bottom: 2vw;
+      }
+    }
+  }
+
+  &.mobile {
+    padding: 18.75vw 3.125vw 25vw;
+    font-size: 3vw;
+    line-height: 4vw;
+
+    .content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .footer {
+      display: flex;
+      align-content: flex-end;
+      text-align: left;
+
+      font-size: 4.68vw;
+      line-height: 7vw;
+
+      p {
+        text-transform: uppercase;
+        margin-bottom: 6.25vw;
       }
     }
   }

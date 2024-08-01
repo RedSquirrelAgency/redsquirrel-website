@@ -3,6 +3,7 @@
     href="https://cal.com/redsquirrel/30min"
     v-bind="buttonProps"
     append-icon="mdi-arrow-right"
+    :class="!$vuetify.display.mdAndUp && 'mobile'"
   >
     {{ $t("Book a consultation") }}
   </v-btn>
@@ -33,7 +34,6 @@ const buttonProps = computed(() => {
     case 'default':
       props = {
         class: 'default',
-        height: '2.3vw',
         variant: 'flat'
       }
       break
@@ -66,10 +66,21 @@ const buttonProps = computed(() => {
   font-weight: 400;
   letter-spacing: 0;
   color: $redsquirrel-chocolate;
+
+  &.mobile {
+    font-size: 3.75vw;
+    line-height: 5.625vw;
+    border-radius: 3.125vw;
+  }
 }
 
 .plain {
   font-size: 1vw;
   color: $redsquirrel-cream-p1;
+
+  &.mobile {
+    font-size: 3.75vw;
+    line-height: 5.625vw;
+  }
 }
 </style>

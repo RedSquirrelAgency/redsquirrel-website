@@ -191,7 +191,7 @@ const reviews: IReview[] = [
     company: 'LandyStyle',
     niche: 'Landscape Agency',
     avatar: 'avatars/landystyle.png',
-    sound: { src: 'audio/landystyle_en.mp3', subtitlesSrc: 'subtitles/landystyle_en.srt' },
+    sound: { src: 'audio/landystyle_ru.mp3', subtitlesSrc: 'subtitles/landystyle_ru.srt' },
     position: { top: '6.9vw', left: '52.8vw' }
   },
   {

@@ -20,9 +20,10 @@
           :color="colorScheme.activeLink"
         />
       </v-app-bar-nav-icon>
-      <v-spacer v-if="variant !== 'floating'" />
+
+      <v-spacer v-if="variant !== 'floating' && mdAndUp" />
       <div
-        v-if="variant !== 'floating'"
+        v-if="variant !== 'floating' && mdAndUp"
         class="location"
       >
         <span class="icon">
@@ -30,11 +31,14 @@
         </span>
         <span>{{ $t('Munich, Germany') }}</span>
       </div>
-      <v-spacer />
+
+      <v-spacer v-if="mdAndUp" />
       <LanguageSwitcher
+        v-if="mdAndUp"
         :color="colorScheme.disabledLink"
         :selected-color="colorScheme.activeLink"
       />
+
       <v-spacer />
       <ConsultationButton
         variant="plain"
@@ -52,6 +56,7 @@
 
 <script setup lang="ts">
 import type { PropType } from 'vue'
+import { useDisplay } from 'vuetify'
 
 const menuOpen = ref<boolean>(false)
 
@@ -67,34 +72,46 @@ const variant = computed(() => {
   return props.variant
 })
 
+const { mdAndUp } = useDisplay()
 const appBarProps = computed(() => {
+  const classes = []
+  classes.push(mdAndUp.value ? 'desktop' : 'mobile')
+
+  let specificProps = {}
   switch (variant.value) {
     case 'menu':
-      return {
-        class: 'fixed-bar',
+      classes.push('fixed-bar')
+      specificProps = {
         color: 'rgba(255, 255, 255, 0)',
         elevation: 0,
         flat: true,
         tile: true
       }
+      break
     case 'fixed':
-      return {
-        class: 'fixed-bar',
+      classes.push('fixed-bar')
+      specificProps = {
         color: 'rgba(255, 255, 255, 0)',
         elevation: 0,
         flat: true,
         tile: true
       }
+      break
     case 'floating':
-      return {
-        class: 'floating-bar',
+      classes.push('floating-bar')
+      specificProps = {
         color: 'rgba(255, 255, 255, 0.6)',
         position: 'static',
         scrollBehavior: 'fully-hide',
         scrollThreshold: 1000
       }
-    default:
-      return {}
+      break
+  }
+
+  return {
+    ...specificProps,
+    class: classes.join(' '),
+    height: mdAndUp.value ? 57 : 44
   }
 })
 
@@ -127,14 +144,70 @@ const colorScheme = computed(() => {
 <style scoped lang="scss">
 @import "styles/variables";
 
+.desktop {
+  &.fixed-bar {
+    .bar-row {
+      padding: 0 8vw;
+    }
+  }
+
+  &.floating-bar {
+    top: 0.5vw !important;
+    width: 41.6vw !important;
+    border-radius: 1vw;
+
+    .bar-row {
+      padding: 0 2vw;
+    }
+  }
+
+  .bar-row {
+    .burger-button svg {
+      width: 2.77vw;
+      height: 0.97vw;
+    }
+
+    .close-button svg {
+      width: 3vw;
+      height: 3vw;
+    }
+  }
+}
+
+.mobile {
+  &.fixed-bar {
+    .bar-row {
+      padding-left: 3vw;
+      padding-right: 1vw;
+    }
+  }
+
+  &.floating-bar {
+    top: 0.5vw !important;
+    width: 96.8vw !important;
+    border-radius: 3.125vw;
+
+    .bar-row {
+      padding: 0 3.125vw;
+    }
+  }
+
+  .bar-row {
+    .burger-button svg {
+      width: 9.37vw;
+      height: 4.37vw;
+    }
+
+    .close-button svg {
+      width: 6vw;
+      height: 6vw;
+    }
+  }
+}
+
 .fixed-bar {
   display: flex;
   justify-content: center;
-  height: 4vw;
-
-  .bar-row {
-    padding: 0 8vw;
-  }
 }
 
 .floating-bar {
@@ -142,47 +215,30 @@ const colorScheme = computed(() => {
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.7);
   background: rgba(255, 255, 255, 0.5);
-  border-radius: 1vw;
 
-  top: 0.5vw !important;
-  width: 41.6vw !important;
   margin-left: auto;
   margin-right: auto;
   left: 0;
   right: 0;
-
-  .bar-row {
-    padding: 0 2vw;
-  }
 }
 
 .bar-row {
   display: flex;
   align-items: center;
-}
 
-.burger-button svg {
-  width: 2.77vw;
-  height: 0.97vw;
-}
+  .location {
+    text-transform: uppercase;
+    font-size: 1vw;
+    color: #D49A87;
 
-.close-button svg {
-  width: 3vw;
-  height: 3vw;
-}
+    .icon {
+      margin-right: 0.7em;
+      vertical-align: middle;
 
-.location {
-  text-transform: uppercase;
-  font-size: 1vw;
-  color: #D49A87;
-
-  .icon {
-    margin-right: 0.7em;
-    vertical-align: middle;
-
-    svg {
-      width: 1vw;
-      height: 1vw;
+      svg {
+        width: 1vw;
+        height: 1vw;
+      }
     }
   }
 }

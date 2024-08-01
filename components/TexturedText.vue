@@ -1,7 +1,7 @@
 <template>
   <Text3D
     font="Poppins_Medium_Regular.json"
-    text="REDSQUIRREL"
+    :text="props.text"
     :size="relativeSize"
     :position="props.position"
     :height="0"
@@ -22,6 +22,10 @@ import { SRGBColorSpace, TextureLoader } from 'three'
 import type { Texture } from 'three/src/textures/Texture'
 
 const props = defineProps({
+  text: {
+    type: String,
+    required: true
+  },
   size: {
     type: Number,
     default: 1
