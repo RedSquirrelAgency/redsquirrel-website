@@ -1,6 +1,7 @@
 <template>
   <div
     :key="progress"
+    :class="mdAndUp ? 'desktop' : 'mobile'"
     class="container"
   >
     <div>{{ formatPercentage(progress) }}</div>
@@ -16,6 +17,9 @@
 </template>
 
 <script setup lang="ts">
+import { useDisplay } from 'vuetify'
+
+const { mdAndUp } = useDisplay()
 const { progress } = defineProps({
   progress: {
     type: Number,
@@ -49,8 +53,16 @@ function formatPercentage(value: number) {
   background-color: $redsquirrel-peach;
 
   text-transform: uppercase;
-  font-size: 20px;
-  line-height: 30px;
   font-weight: 500;
+}
+
+.desktop {
+  font-size: 1.38vw;
+  line-height: 2vw;
+}
+
+.mobile {
+  font-size: 4.5vw;
+  line-height: 6.75vw;
 }
 </style>

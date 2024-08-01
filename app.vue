@@ -20,7 +20,7 @@
       <!--      <TeamSection /> -->
       <!--      <AnchorTag hash="stages" /> -->
       <!--      <StagesSection /> -->
-      <!--      <AnchorTag hash="reviews" /> -->
+      <AnchorTag hash="reviews" />
       <ReviewsSection />
       <!--      <AnchorTag -->
       <!--        hash="contact" -->

@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <div class="background">
+    <div
+      v-if="mdAndUp"
+      class="background"
+    >
       <img
         class="star"
         src="/figures/star.svg"
@@ -18,6 +21,10 @@
         src="/figures/rectangle.svg"
       >
     </div>
+    <div
+      v-else
+      class="background"
+    />
     <div class="content">
       <slot />
     </div>
@@ -25,7 +32,9 @@
 </template>
 
 <script setup lang="ts">
+import { useDisplay } from 'vuetify'
 
+const { mdAndUp } = useDisplay()
 </script>
 
 <style scoped lang="scss">

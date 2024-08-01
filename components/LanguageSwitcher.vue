@@ -1,16 +1,18 @@
 <template>
-  <v-btn
-    v-for="localeCode in localeCodes"
-    :key="localeCode"
-    class="language-switcher-button"
-    :style="{ color: localeCode === locale ? selectedColor : color }"
-    :ripple="false"
-    variant="plain"
-    min-width="2.5vw"
-    @click.stop="setLocale(localeCode)"
-  >
-    {{ localeCode }}
-  </v-btn>
+  <div>
+    <v-btn
+      v-for="localeCode in localeCodes"
+      :key="localeCode"
+      class="language-switcher-button"
+      :style="{ color: localeCode === locale ? selectedColor : color }"
+      :ripple="false"
+      variant="plain"
+      :min-width="minItemWidth"
+      @click.stop="setLocale(localeCode)"
+    >
+      {{ localeCode }}
+    </v-btn>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -22,6 +24,10 @@ const { color, selectedColor } = defineProps({
   },
   selectedColor: {
     type: String
+  },
+  minItemWidth: {
+    type: String,
+    default: '2.5vw'
   }
 })
 </script>
@@ -30,7 +36,6 @@ const { color, selectedColor } = defineProps({
 @import "styles/variables";
 
 .language-switcher-button {
-  font-size: 1vw;
   text-transform: uppercase;
 
   margin: 0;
