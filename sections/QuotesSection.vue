@@ -2,14 +2,15 @@
   <section
     ref="containerRef"
     class="container"
+    :class="mdAndUp ? 'desktop' : 'mobile'"
   >
     <div class="header">
       <h2 class="gradient-1">
         <HeadingText
           :text="$t('Clients\' words inspire us to new masterpieces')"
           :font-replacements="[[0, 3], [1, 4], [4, 1], [6, 1]]"
-          :line-breaks="[1, 5]"
-          :line-spacers="{ 0: '1em', 2: '3.5em' }"
+          :line-breaks="mdAndUp ? [1, 5] : [0, 2, 5]"
+          :line-spacers="mdAndUp ? { 0: '1em', 2: '3.5em' } : { 0: '0.6em', 2: '0.6em' }"
         />
       </h2>
     </div>
@@ -31,7 +32,10 @@
 
 <script setup lang="ts">
 import type { PropType } from 'vue'
+import { useDisplay } from 'vuetify'
 import Timeline = gsap.core.Timeline
+
+const { mdAndUp } = useDisplay()
 
 const props = defineProps({
   tl: {
@@ -125,8 +129,6 @@ $backdrop-color: #fc7733;
 
   h2 {
     text-align: left;
-    font-size: 7vw;
-    line-height: 7vw;
     text-transform: uppercase;
     font-weight: 300;
   }
@@ -142,9 +144,8 @@ $backdrop-color: #fc7733;
   backdrop-filter: blur(7px);
 
   .quote {
+    font-weight: 400;
     text-transform: uppercase;
-    font-size: 6.5vh;
-    line-height: 10.1vh;
     margin-right: 1.3em;
     color: $redsquirrel-peach;
 
@@ -166,6 +167,30 @@ $backdrop-color: #fc7733;
   }
   100% {
     background-position: center, 50% 50%, 30% 100%, 100% 10%, 23% 23%, 0 80%;
+  }
+}
+
+.desktop {
+  h2 {
+    font-size: 7vw;
+    line-height: 7vw;
+  }
+
+  .quote {
+    font-size: 6.5vh;
+    line-height: 10.1vh;
+  }
+}
+
+.mobile {
+  h2 {
+    font-size: 12.5vw;
+    line-height: 18.75vw;
+  }
+
+  .quote {
+    font-size: 12vw;
+    line-height: 16vw;
   }
 }
 </style>

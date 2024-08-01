@@ -56,6 +56,7 @@ onMounted(() => {
       pin: true,
       onUpdate: () => {
         const label = scrollTl.previousLabel()
+        if (!label) return
         currentSlideIndex.value = parseInt(label)
       }
     },

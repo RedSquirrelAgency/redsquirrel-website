@@ -2,10 +2,11 @@
   <section
     ref="containerRef"
     class="container"
+    :class="mdAndUp ? 'desktop' : 'mobile'"
   >
     <div
       v-if="mdAndUp"
-      class="overlay desktop"
+      class="overlay"
     >
       <v-row class="footer d-flex align-end">
         <v-col class="d-flex justify-start">
@@ -27,7 +28,7 @@
     </div>
     <div
       v-else
-      class="overlay mobile"
+      class="overlay"
     >
       <v-col class="content">
         <v-row class="header d-flex justify-center text-center">
@@ -181,7 +182,9 @@ const squirrelScale = computed(() => mdAndUp.value ? 0.016 : 0.045)
 const mouseMoveEnabled = shallowRef(false)
 
 function onMouseUpdate(e: MouseEvent) {
-  if (!mouseMoveEnabled.value) return
+  if (!mouseMoveEnabled.value) {
+    return
+  }
   const mouseMoveFactor = e.x / window.innerWidth
   squirrelRotationVector.y = degToRad(180 * mouseMoveFactor - 90)
   squirrelRotation.value = squirrelRotationVector.toArray()
@@ -191,7 +194,9 @@ onMounted(() => {
   document.addEventListener('mouseenter', onMouseUpdate)
   document.addEventListener('mousemove', onMouseUpdate)
 
-  if (!containerRef.value) return
+  if (!containerRef.value) {
+    return
+  }
   const container = containerRef.value
   const header = container.querySelector('.header')
   const footer = container.querySelector('.footer')
@@ -210,7 +215,9 @@ onMounted(() => {
   )
 
   watch(() => props.displayed, (displayed) => {
-    if (!props.loaded) return
+    if (!props.loaded) {
+      return
+    }
     if (displayed) {
       $gsap.set(header, { opacity: 1 })
       $gsap.set(footer, { opacity: 1 })
@@ -331,44 +338,44 @@ onMounted(() => {
   display: flex;
   z-index: 10;
   color: $redsquirrel-cream-m1;
+}
 
-  &.desktop {
-    padding: 2vw 8vw;
-    font-size: 1vw;
+.desktop .overlay {
+  padding: 2vw 8vw;
+  font-size: 1vw;
 
-    .button-container {
-      width: 18vw;
-      text-align: right;
+  .button-container {
+    width: 18vw;
+    text-align: right;
 
-      p {
-        text-transform: uppercase;
-        margin-bottom: 2vw;
-      }
+    p {
+      text-transform: uppercase;
+      margin-bottom: 2vw;
     }
   }
+}
 
-  &.mobile {
-    padding: 18.75vw 3.125vw 25vw;
-    font-size: 3vw;
-    line-height: 4vw;
+.mobile .overlay {
+  padding: 18.75vw 3.125vw 25vw;
+  font-size: 3vw;
+  line-height: 4vw;
 
-    .content {
-      display: flex;
-      flex-direction: column;
-    }
+  .content {
+    display: flex;
+    flex-direction: column;
+  }
 
-    .footer {
-      display: flex;
-      align-content: flex-end;
-      text-align: left;
+  .footer {
+    display: flex;
+    align-content: flex-end;
+    text-align: left;
 
-      font-size: 4.68vw;
-      line-height: 7vw;
+    font-size: 4.68vw;
+    line-height: 7vw;
 
-      p {
-        text-transform: uppercase;
-        margin-bottom: 6.25vw;
-      }
+    p {
+      text-transform: uppercase;
+      margin-bottom: 6.25vw;
     }
   }
 }
