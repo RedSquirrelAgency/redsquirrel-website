@@ -358,8 +358,6 @@ const reviews: IReview[] = [
   margin-right: auto;
   left: 0;
   right: 0;
-  bottom: 20px;
-  width: 600px;
 }
 
 @keyframes pulsate {

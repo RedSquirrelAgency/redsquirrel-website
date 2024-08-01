@@ -1,7 +1,7 @@
 <template>
   <v-sheet
     class="glass"
-    :style="{ 'border-radius': border, 'background': `rgba(255, 255, 255, ${fill})` }"
+    :style="style"
     :class="`elevation-${elevation}`"
   >
     <slot />
@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-const { border, elevation } = defineProps({
+const { border, fill, plain} = defineProps({
   border: {
     type: String,
     required: false,
@@ -24,6 +24,19 @@ const { border, elevation } = defineProps({
     type: Number,
     required: false,
     default: 0.2
+  },
+  plain: {
+    type: Boolean,
+    required: false,
+    default: false
+  }
+})
+
+const style = computed(() => {
+  return {
+    border: plain ? 'none' : '1px solid rgba(255, 255, 255, 0.7)',
+    borderRadius: border,
+    background: `rgba(255, 255, 255, ${fill})`
   }
 })
 </script>
@@ -34,6 +47,5 @@ const { border, elevation } = defineProps({
 .glass {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.7);
 }
 </style>

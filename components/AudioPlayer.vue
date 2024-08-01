@@ -1,7 +1,9 @@
 <template>
   <GlassSheet
-    border="1vw"
+    :border="mdAndUp ? '1vw' : '0'"
+    :class="mdAndUp ? 'desktop' : 'mobile'"
     :fill="0.5"
+    plain
   >
     <v-toolbar
       class="toolbar"
@@ -13,10 +15,10 @@
           rounded
           size="24"
           color="#C38D72"
-          @click="fullTranscription = !fullTranscription"
+          @click="showFullTranscription = !showFullTranscription"
         >
           <v-icon size="19">
-            {{ fullTranscription ? 'mdi-fullscreen-exit' : 'mdi-fullscreen' }}
+            {{ showFullTranscription ? 'mdi-fullscreen-exit' : 'mdi-fullscreen' }}
           </v-icon>
         </v-btn>
         <v-btn
@@ -37,27 +39,28 @@
     >
       <Transition mode="out-in">
         <v-card-text
-          v-if="fullTranscription"
+          v-if="showFullTranscription"
           class="subtitles full"
         >
-          <div
-            v-for="({ text }, index) in subtitles"
-            :key="index"
-          >
-            {{ text }}
-          </div>
+          {{ fullTranscription }}
         </v-card-text>
         <v-card-text
           v-else-if="currentSubtitleFrame"
           class="subtitles"
         >
-          <div class="previous">
+          <div
+            v-if="mdAndUp"
+            class="previous"
+          >
             {{ currentSubtitleFrame.previous }}
           </div>
           <div class="current">
             {{ currentSubtitleFrame.current }}
           </div>
-          <div class="next">
+          <div
+            v-if="mdAndUp"
+            class="next"
+          >
             {{ currentSubtitleFrame.next }}
           </div>
         </v-card-text>
@@ -83,8 +86,9 @@
           </v-col>
           <v-col>
             <v-btn
-              rounded
+              class="control-button"
               :size="CONTROLS_SIZE"
+              rounded
               :disabled="loading"
               @click="rewind(-0.5)"
             >
@@ -92,8 +96,9 @@
             </v-btn>
             <v-btn
               v-if="playing"
-              rounded
               :size="CONTROLS_SIZE"
+              class="control-button"
+              rounded
               :disabled="loading"
               @click="player.pause()"
             >
@@ -101,8 +106,9 @@
             </v-btn>
             <v-btn
               v-else
-              rounded
               :size="CONTROLS_SIZE"
+              class="control-button"
+              rounded
               :disabled="loading"
               @click="player.play()"
             >
@@ -111,6 +117,7 @@
             <v-btn
               rounded
               :size="CONTROLS_SIZE"
+              class="control-button"
               :disabled="loading"
               @click="rewind(0.5)"
             >
@@ -120,6 +127,7 @@
           <v-col class="d-flex justify-center align-center">
             <v-btn
               rounded
+              class="mr-2"
               size="24"
               color="#85553D"
               :disabled="loading"
@@ -156,9 +164,10 @@
 import { Howl } from 'howler'
 import type { PropType } from 'vue'
 import SrtParser2 from 'srt-parser-2'
+import { useDisplay } from 'vuetify'
 
 const CONTROLS_COLOR = '#85553D'
-const CONTROLS_SIZE = 48
+const CONTROLS_SIZE = computed(() => mdAndUp.value ? '48px' : '7vw')
 
 interface ISubtitleFrame {
   previous: string
@@ -177,6 +186,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['play', 'pause', 'stop', 'end', 'close'])
+const { mdAndUp } = useDisplay()
 
 const loading = ref(false)
 const playing = ref(false)
@@ -185,7 +195,10 @@ const seek = ref(0)
 const volume = ref(1)
 const subtitles = ref<ISubtitleItem[] | undefined>()
 const currentSubtitleFrame = ref<ISubtitleFrame | undefined>()
-const fullTranscription = ref(false)
+const showFullTranscription = ref(false)
+const fullTranscription = computed(() => {
+  return subtitles.value?.map(({ text }) => text).join(' ')
+})
 
 let seekInterval: ReturnType<typeof setInterval>
 let player: Howl
@@ -340,30 +353,67 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 @import "styles/variables";
-.toolbar {
-  padding: 0 12px;
+
+.desktop {
+  bottom: 20px;
+  width: 600px;
+
+  .toolbar {
+    padding: 0 12px;
+  }
+
+  .subtitles {
+    padding: 0 20px;
+    font-size: 15px;
+    line-height: 20px;
+    height: auto;
+    max-height: 100%;
+  }
+
+  .sound-name {
+    font-size: 15px;
+  }
+
+  .controls-container {
+    padding: 16px 12px 12px;
+  }
+
+  .volume-slider {
+    padding-left: 10px;
+  }
 }
 
-.controls-container {
-  padding: 16px 12px 12px;
+.mobile {
+  width: 100%;
+  bottom: 0;
+
+  .sound-name {
+    font-size: 2.75vw;
+    line-height: 3.5vw;
+  }
+
+  .controls-container {
+    padding: 2vw 2vw 5vw;
+  }
+
+  .subtitles {
+    font-size: 3.75vw;
+    line-height: 5.62vw;
+
+    &.full {
+      max-height: 79vh;
+      overflow-y: auto;
+    }
+  }
 }
 
 .sound-name {
   text-transform: uppercase;
   color: $redsquirrel-chocolate-m1;
   font-weight: 600;
-  font-size: 15px;
-}
-
-.volume-slider {
-  padding-left: 10px;
 }
 
 .subtitles {
-  padding: 0 20px;
-  font-size: 15px;
-  line-height: 20px;
-  height: auto;
   color: $redsquirrel-chocolate-m1;
 
   .current {
@@ -371,8 +421,6 @@ onUnmounted(() => {
   }
 
   &.full {
-    font-size: 15px;
-    line-height: 20px;
     color: $redsquirrel-chocolate;
   }
 }
