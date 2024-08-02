@@ -185,6 +185,16 @@ const props = defineProps({
   sound: { type: Object as PropType<ISound>, required: true }
 })
 
+const model = defineModel<boolean>()
+watch(() => model.value, (value) => {
+  if (value && !playing.value) {
+    player.play()
+  }
+  else if (!value && playing.value) {
+    player.pause()
+  }
+})
+
 const emit = defineEmits(['play', 'pause', 'stop', 'end', 'close'])
 const { mdAndUp } = useDisplay()
 
@@ -240,6 +250,7 @@ function registerPlayerCallbacks(player: Howl) {
     playing.value = true
     seekInterval = setInterval(onSeekInterval, 100)
     emit('play')
+    model.value = true
   })
 
   player.on('end', () => {
@@ -248,12 +259,14 @@ function registerPlayerCallbacks(player: Howl) {
     updateSubtitles()
     clearInterval(seekInterval)
     emit('end')
+    model.value = false
   })
 
   player.on('pause', () => {
     playing.value = false
     clearInterval(seekInterval)
     emit('pause')
+    model.value = false
   })
 
   player.on('stop', () => {
@@ -262,6 +275,7 @@ function registerPlayerCallbacks(player: Howl) {
     updateSubtitles()
     clearInterval(seekInterval)
     emit('stop')
+    model.value = false
   })
 
   player.on('mute', () => {
@@ -355,7 +369,10 @@ onUnmounted(() => {
 @import "styles/variables";
 
 .desktop {
-  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: auto !important;
   width: 600px;
 
   .toolbar {
@@ -385,6 +402,7 @@ onUnmounted(() => {
 
 .mobile {
   width: 100%;
+  height: auto !important;
   bottom: 0;
 
   .sound-name {
