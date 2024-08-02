@@ -86,9 +86,8 @@
           </v-col>
           <v-col>
             <v-btn
-              class="control-button"
-              :size="CONTROLS_SIZE"
               rounded
+              :size="CONTROLS_SIZE"
               :disabled="loading"
               @click="rewind(-0.5)"
             >
@@ -96,9 +95,8 @@
             </v-btn>
             <v-btn
               v-if="playing"
-              :size="CONTROLS_SIZE"
-              class="control-button"
               rounded
+              :size="CONTROLS_SIZE"
               :disabled="loading"
               @click="player.pause()"
             >
@@ -106,9 +104,8 @@
             </v-btn>
             <v-btn
               v-else
-              :size="CONTROLS_SIZE"
-              class="control-button"
               rounded
+              :size="CONTROLS_SIZE"
               :disabled="loading"
               @click="player.play()"
             >
@@ -117,7 +114,6 @@
             <v-btn
               rounded
               :size="CONTROLS_SIZE"
-              class="control-button"
               :disabled="loading"
               @click="rewind(0.5)"
             >
@@ -167,7 +163,7 @@ import SrtParser2 from 'srt-parser-2'
 import { useDisplay } from 'vuetify'
 
 const CONTROLS_COLOR = '#85553D'
-const CONTROLS_SIZE = computed(() => mdAndUp.value ? '48px' : '7vw')
+const CONTROLS_SIZE = computed(() => mdAndUp.value ? '48px' : '6vw')
 
 interface ISubtitleFrame {
   previous: string
@@ -313,6 +309,7 @@ function rewind(seconds: number) {
 
 function onSeekInterval() {
   seek.value = player.seek() / player.duration()
+  console.log(seek.value)
   updateSubtitles()
 }
 

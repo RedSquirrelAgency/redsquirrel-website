@@ -69,18 +69,18 @@
       v-model="snackbar"
       :timeout="10000"
       :text="$t('Click on the card to play the review')"
+      :width="mdAndUp ? '600px' : undefined"
       timer="#C38D72"
       color="rgba(255, 255, 255, 0.5)"
       rounded="lg"
-      width="600px"
       height="63px"
     />
     <Transition>
       <AudioPlayer
         v-if="sound"
         v-model="playing"
-        class="player"
         :sound="sound"
+        class="player"
         @close="onAudioPlayerClose()"
       />
     </Transition>
