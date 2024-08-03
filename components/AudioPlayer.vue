@@ -1,7 +1,7 @@
 <template>
   <GlassSheet
     :border="mdAndUp ? '1vw' : '0'"
-    :class="mdAndUp ? 'desktop' : 'mobile'"
+    :class="sheetClass"
     :fill="0.5"
     plain
   >
@@ -10,24 +10,32 @@
       color="transparent"
       height="44"
     >
+      <template #prepend>
+        <div
+          v-if="!mdAndUp"
+          class="sound-name"
+        >
+          {{ props.sound.name || '' }}
+        </div>
+      </template>
       <template #append>
         <v-btn
           rounded
-          size="24"
           color="#C38D72"
-          @click="showFullTranscription = !showFullTranscription"
+          :size="toolbarButtonsSize"
+          @click="onFullButtonClick"
         >
-          <v-icon size="19">
+          <v-icon :size="toolbarIconsSize">
             {{ showFullTranscription ? 'mdi-fullscreen-exit' : 'mdi-fullscreen' }}
           </v-icon>
         </v-btn>
         <v-btn
-          size="24"
           icon="mdi-close"
           color="#C38D72"
+          :size="toolbarButtonsSize"
           @click="emit('close')"
         >
-          <v-icon size="19">
+          <v-icon :size="toolbarIconsSize">
             mdi-close
           </v-icon>
         </v-btn>
@@ -67,7 +75,7 @@
       </Transition>
     </v-skeleton-loader>
     <v-card-actions class="pt-0">
-      <v-container class="controls-container">
+      <v-container class="actions-container">
         <v-slider
           v-model="seek"
           min="0"
@@ -81,22 +89,25 @@
           @update:model-value="player.seek(player.duration() * seek)"
         />
         <v-row class="d-flex align-center justify-center">
-          <v-col class="sound-name">
+          <v-col
+            v-if="mdAndUp"
+            class="sound-name"
+          >
             {{ props.sound.name || '' }}
           </v-col>
-          <v-col>
+          <v-col class="controls">
             <v-btn
               rounded
-              :size="CONTROLS_SIZE"
+              :size="controlsSize"
               :disabled="loading"
-              @click="rewind(-0.5)"
+              @click="rewind(-15)"
             >
               <Rewind15Icon :color="CONTROLS_COLOR" />
             </v-btn>
             <v-btn
               v-if="playing"
               rounded
-              :size="CONTROLS_SIZE"
+              :size="controlsSize"
               :disabled="loading"
               @click="player.pause()"
             >
@@ -105,7 +116,7 @@
             <v-btn
               v-else
               rounded
-              :size="CONTROLS_SIZE"
+              :size="controlsSize"
               :disabled="loading"
               @click="player.play()"
             >
@@ -113,14 +124,17 @@
             </v-btn>
             <v-btn
               rounded
-              :size="CONTROLS_SIZE"
+              :size="controlsSize"
               :disabled="loading"
-              @click="rewind(0.5)"
+              @click="rewind(15)"
             >
               <FastForward15Icon :color="CONTROLS_COLOR" />
             </v-btn>
           </v-col>
-          <v-col class="d-flex justify-center align-center">
+          <v-col
+            v-if="mdAndUp"
+            class="d-flex justify-center align-center"
+          >
             <v-btn
               rounded
               class="mr-2"
@@ -163,7 +177,9 @@ import SrtParser2 from 'srt-parser-2'
 import { useDisplay } from 'vuetify'
 
 const CONTROLS_COLOR = '#85553D'
-const CONTROLS_SIZE = computed(() => mdAndUp.value ? '48px' : '6vw')
+const controlsSize = computed(() => mdAndUp.value ? '48px' : '10vw')
+const toolbarButtonsSize = computed(() => mdAndUp.value ? '24px' : '8vw')
+const toolbarIconsSize = computed(() => mdAndUp.value ? '19px' : '6vw')
 
 interface ISubtitleFrame {
   previous: string
@@ -177,21 +193,13 @@ interface ISubtitleItem {
   text: string
 }
 
+const model = defineModel<boolean>()
+
 const props = defineProps({
   sound: { type: Object as PropType<ISound>, required: true }
 })
 
-const model = defineModel<boolean>()
-watch(() => model.value, (value) => {
-  if (value && !playing.value) {
-    player.play()
-  }
-  else if (!value && playing.value) {
-    player.pause()
-  }
-})
-
-const emit = defineEmits(['play', 'pause', 'stop', 'end', 'close'])
+const emit = defineEmits(['close'])
 const { mdAndUp } = useDisplay()
 
 const loading = ref(false)
@@ -208,6 +216,21 @@ const fullTranscription = computed(() => {
 
 let seekInterval: ReturnType<typeof setInterval>
 let player: Howl
+
+function onFullButtonClick() {
+  if (showFullTranscription.value) {
+    if (document.documentElement.style.overflow === 'hidden') {
+      document.documentElement.style.overflow = ''
+    }
+    showFullTranscription.value = false
+  }
+  else {
+    if (!mdAndUp.value) {
+      document.documentElement.style.overflow = 'hidden'
+    }
+    showFullTranscription.value = true
+  }
+}
 
 async function setRecording(audioSrc: string, subtitlesSrc: string, volume: number) {
   loading.value = true
@@ -241,46 +264,46 @@ async function loadPlayer(audioSrc: string): Promise<Howl> {
   })
 }
 
+async function loadSubtitles(src: string): Promise<ISubtitleItem[]> {
+  const srt = await (await fetch(src)).text()
+  const parser = new SrtParser2()
+  return parser.fromSrt(srt)
+}
+
 function registerPlayerCallbacks(player: Howl) {
   player.on('play', () => {
     playing.value = true
-    seekInterval = setInterval(onSeekInterval, 100)
-    emit('play')
     model.value = true
+    seekInterval = setInterval(onSeekChange, 100)
   })
 
   player.on('end', () => {
     playing.value = false
     seek.value = 0
+    model.value = false
     updateSubtitles()
     clearInterval(seekInterval)
-    emit('end')
-    model.value = false
   })
 
   player.on('pause', () => {
     playing.value = false
-    clearInterval(seekInterval)
-    emit('pause')
     model.value = false
+    clearInterval(seekInterval)
   })
 
   player.on('stop', () => {
     playing.value = false
+    model.value = false
     seek.value = 0
     updateSubtitles()
     clearInterval(seekInterval)
-    emit('stop')
-    model.value = false
   })
 
   player.on('mute', () => {
     muted.value = player.mute()
   })
 
-  player.on('seek', () => {
-    updateSubtitles()
-  })
+  player.on('seek', onSeekChange)
 }
 
 function mute(mute: boolean) {
@@ -307,9 +330,8 @@ function rewind(seconds: number) {
   player.seek(seek)
 }
 
-function onSeekInterval() {
+function onSeekChange() {
   seek.value = player.seek() / player.duration()
-  console.log(seek.value)
   updateSubtitles()
 }
 
@@ -328,11 +350,14 @@ function updateSubtitles() {
   })
 }
 
-async function loadSubtitles(src: string): Promise<ISubtitleItem[]> {
-  const srt = await (await fetch(src)).text()
-  const parser = new SrtParser2()
-  return parser.fromSrt(srt)
-}
+const sheetClass = computed(() => {
+  const classes = []
+  classes.push(mdAndUp.value ? 'desktop' : 'mobile')
+  if (showFullTranscription.value) {
+    classes.push('full-screen')
+  }
+  return classes.join(' ')
+})
 
 const volumeIcon = computed(() => {
   if (muted.value) {
@@ -342,6 +367,15 @@ const volumeIcon = computed(() => {
     return 'mdi-volume-low'
   }
   return 'mdi-volume-high'
+})
+
+watch(() => model.value, (value) => {
+  if (value && !playing.value) {
+    player.play()
+  }
+  else if (!value && playing.value) {
+    player.pause()
+  }
 })
 
 watch(() => props.sound, async (sound) => {
@@ -359,11 +393,23 @@ onMounted(async () => {
 
 onUnmounted(() => {
   player.fade(player.volume(), 0, 1000)
+  if (document.documentElement.style.overflow === 'hidden') {
+    document.documentElement.style.overflow = ''
+  }
 })
 </script>
 
 <style scoped lang="scss">
 @import "styles/variables";
+
+.desktop, .mobile {
+  position: fixed !important;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 5;
+  left: 0;
+  right: 0;
+}
 
 .desktop {
   display: flex;
@@ -371,6 +417,7 @@ onUnmounted(() => {
   justify-content: center;
   height: auto !important;
   width: 600px;
+  bottom: 20px;
 
   .toolbar {
     padding: 0 12px;
@@ -388,35 +435,68 @@ onUnmounted(() => {
     font-size: 15px;
   }
 
-  .controls-container {
+  .actions-container {
     padding: 16px 12px 12px;
   }
 
   .volume-slider {
     padding-left: 10px;
   }
+
+  .controls {
+    svg {
+      height: 30px;
+      width: 30px;
+    }
+  }
 }
 
 .mobile {
-  width: 100%;
-  height: auto !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
   bottom: 0;
 
-  .sound-name {
-    font-size: 2.75vw;
-    line-height: 3.5vw;
+  width: 100%;
+  height: auto !important;
+
+  &.full-screen {
+    height: 100% !important;
+    z-index: 20000;
   }
 
-  .controls-container {
-    padding: 2vw 2vw 5vw;
+  .sound-name {
+    font-size: 3.75vw;
+    line-height: 5.625vw;
+  }
+
+  .toolbar {
+    padding-left: 2vw;
+  }
+
+  .actions-container {
+    padding: 2vw 0 5vw;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 4vw;
+    gap: 10vw;
+
+    svg {
+      height: 10vw;
+      width: 10vw;
+    }
   }
 
   .subtitles {
     font-size: 3.75vw;
-    line-height: 5.62vw;
+    line-height: 5.625vw;
+    padding: 0 2vw !important;
 
     &.full {
-      max-height: 79vh;
+      max-height: 65vh;
       overflow-y: auto;
     }
   }

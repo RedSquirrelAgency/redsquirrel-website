@@ -18,5 +18,8 @@
 
   $skeleton-loader-background: rgb(255, 255, 255, 0),
   $skeleton-loader-text-background: #E0B29B,
-  $skeleton-loader-bone-background: linear-gradient(90deg, rgba(225,196,182,0), rgba(225,196,182,0.7), rgba(225,196,182,0))
+  $skeleton-loader-bone-background: linear-gradient(90deg, rgba(225,196,182,0), rgba(225,196,182,0.7), rgba(225,196,182,0)),
+
+  $toolbar-prepend-btn-margin-start: 0,
+  $toolbar-append-btn-margin-end: 0
 );

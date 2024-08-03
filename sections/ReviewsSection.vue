@@ -37,7 +37,7 @@
           <v-avatar class="avatar">
             <v-img
               :alt="review.company"
-              :src="review.avatar"
+              :src="getAvatarUrlById(review.id)"
               eager
             />
           </v-avatar>
@@ -91,6 +91,7 @@
 import { useDisplay } from 'vuetify'
 
 const { mdAndUp } = useDisplay()
+const { locale } = useI18n()
 
 interface IReviewPosition {
   top?: string
@@ -100,10 +101,9 @@ interface IReviewPosition {
 }
 
 interface IReview {
+  id: string
   company: string
   niche: string
-  avatar: string
-  sound: ISound
   position: IReviewPosition
 }
 
@@ -119,7 +119,11 @@ function onReviewClick(review: IReview, index: number) {
     return
   }
   selected.value = index
-  sound.value = { name: review.company, ...review.sound }
+  sound.value = {
+    name: review.company,
+    src: getAudioUrlById(review.id),
+    subtitlesSrc: getSubtitlesUrlById(review.id)
+  }
   snackbar.value = false
 }
 
@@ -137,18 +141,30 @@ function isReviewCardElevated(index: number) {
   return (isCardPlaying(index) || (hovered.value === index))
 }
 
-function toggleSnackbar(display: boolean) {
-  snackbar.value = display
+function getAvatarUrlById(id: string): string {
+  return `avatars/${id}.png`
 }
 
-function onContainerLeave() {
-  onAudioPlayerClose()
-  toggleSnackbar(false)
+function getAudioUrlById(id: string): string {
+  return `audio/${id}_${locale.value}.mp3`
+}
+
+function getSubtitlesUrlById(id: string): string {
+  return `subtitles/${id}_${locale.value}.srt`
+}
+
+function toggleSnackbar(display: boolean) {
+  snackbar.value = display
 }
 
 function onContainerEnter() {
   if (selected.value != -1) return
   toggleSnackbar(true)
+}
+
+function onContainerLeave() {
+  onAudioPlayerClose()
+  toggleSnackbar(false)
 }
 
 const containerRef = ref()
@@ -166,7 +182,7 @@ onMounted(() => {
     scrollTrigger: {
       trigger: container,
       start: 'top center',
-      end: 'bottom center',
+      end: 'bottom bottom',
       scrub: true
     },
     onStart: onContainerEnter,
@@ -199,73 +215,63 @@ onMounted(() => {
 
 const reviews: IReview[] = [
   {
+    id: 'oom_store',
     company: 'OOM Store',
     niche: 'Handmade Wrap Pants',
-    avatar: 'avatars/oom_store.png',
-    sound: { src: 'audio/landystyle_en.mp3', subtitlesSrc: 'subtitles/landystyle_en.srt' },
     position: { top: '10.4vw', left: '33.8vw' }
   },
   {
+    id: 'landystyle',
     company: 'LandyStyle',
     niche: 'Landscape Agency',
-    avatar: 'avatars/landystyle.png',
-    sound: { src: 'audio/landystyle_ru.mp3', subtitlesSrc: 'subtitles/landystyle_ru.srt' },
     position: { top: '6.9vw', left: '52.8vw' }
   },
   {
+    id: 'natalie_herzel',
     company: 'Natalie Herzel',
     niche: 'Dental Clinic',
-    avatar: 'avatars/natalie_herzel.png',
-    sound: { src: 'audio/landystyle_en.mp3', subtitlesSrc: 'subtitles/landystyle_en.srt' },
     position: { top: '8.3vw', left: '14.9vw' }
   },
   {
+    id: 'ambre_akadeemia',
     company: 'Ambre Akadeemia',
     niche: 'Language School',
-    avatar: 'avatars/ambre_akadeemia.png',
-    sound: { src: 'audio/landystyle_en.mp3', subtitlesSrc: 'subtitles/landystyle_en.srt' },
     position: { top: '12.5vw', left: '71.8vw' }
   },
   {
+    id: 'dreamlis',
     company: 'Dreamlis',
     niche: 'Jewelry Brand',
-    avatar: 'avatars/dreamlis.png',
-    sound: { src: 'audio/landystyle_en.mp3', subtitlesSrc: 'subtitles/landystyle_en.srt' },
     position: { top: '28vw', left: '8.3vw' }
   },
   {
+    id: 'integrator_digital',
     company: 'Integrator Digital',
     niche: 'CRM Systems for Business',
-    avatar: 'avatars/integrator_digital.png',
-    sound: { src: 'audio/landystyle_en.mp3', subtitlesSrc: 'subtitles/landystyle_en.srt' },
     position: { top: '32.2vw', left: '78.4vw' }
   },
   {
+    id: 'marketing_etico',
     company: 'Marketing Etico',
     niche: 'Marketing Agency',
-    avatar: 'avatars/marketing_etico.png',
-    sound: { src: 'audio/landystyle_en.mp3', subtitlesSrc: 'subtitles/landystyle_en.srt' },
     position: { top: '47.8vw', left: '14.9vw' }
   },
   {
+    id: 'ezdesign',
     company: 'EZdesign',
     niche: 'Bureau of Architecture',
-    avatar: 'avatars/ezdesign.png',
-    sound: { src: 'audio/landystyle_en.mp3', subtitlesSrc: 'subtitles/landystyle_en.srt' },
     position: { top: '50.5vw', left: '71.8vw' }
   },
   {
+    id: 'nuga_best_eesti',
     company: 'Nuga Best Eesti',
     niche: 'Medical Equipment',
-    avatar: 'avatars/nuga_best_eesti.png',
-    sound: { src: 'audio/landystyle_en.mp3', subtitlesSrc: 'subtitles/landystyle_en.srt' },
     position: { top: '56.9vw', left: '33.8vw' }
   },
   {
+    id: 'laruhelpsukraine',
     company: 'LaruHelpsUkraine',
     niche: 'Charity Organization',
-    avatar: 'avatars/laruhelpsukraine.png',
-    sound: { src: 'audio/landystyle_en.mp3', subtitlesSrc: 'subtitles/landystyle_en.srt' },
     position: { top: '54.8vw', left: '52.8vw' }
   }
 ]
@@ -461,27 +467,6 @@ h2 {
     font-weight: 400;
     color: $redsquirrel-cream;
   }
-}
-
-.snackbar {
-  position: fixed;
-  z-index: 5;
-  margin-left: auto;
-  margin-right: auto;
-  left: 0;
-  right: 0;
-  bottom: 20px;
-  width: 600px;
-  padding: 20px;
-}
-
-.player {
-  position: fixed;
-  margin-left: auto;
-  margin-right: auto;
-  z-index: 5;
-  left: 0;
-  right: 0;
 }
 
 @keyframes pulsate-desktop {
