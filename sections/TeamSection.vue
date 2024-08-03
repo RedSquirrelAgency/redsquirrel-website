@@ -2,20 +2,24 @@
   <section
     ref="containerRef"
     class="container"
+    :class="mdAndUp ? 'desktop' : 'mobile'"
   >
     <AnimatedText>
       <h2 class="gradient-1">
         <HeadingText
           :text="$t('A-team dedicated to excellent results')"
           :font-replacements="[[0, 0], [1, 0], [1, 4], [3, 3], [4, 2]]"
-          :line-breaks="[0, 3]"
-          :word-spacers="{ 0: '3.5em' }"
-          :line-spacers="{ 2: '1.5em' }"
+          :line-breaks="mdAndUp ? [0, 3] : [0, 1, 3, 4]"
+          :word-spacers="mdAndUp ? { 0: '3.5em' } : {}"
+          :line-spacers="mdAndUp ? { 2: '1.5em' } : { 0: '0.5em' }"
         />
       </h2>
     </AnimatedText>
-    <v-row class="sheets-row">
-      <v-col class="d-flex justify-end">
+    <div
+      class="sheets"
+      :class="mdAndUp ? 'v-row' : 'v-col'"
+    >
+      <div :class="mdAndUp ? 'v-col d-flex justify-end' : 'v-row'">
         <div class="video-wrapper">
           <div
             class="overlay"
@@ -25,13 +29,11 @@
             <v-btn
               v-if="!isPlaying"
               class="play-button"
-              rounded
+              rounded="circle"
+              :size="mdAndUp ? '5vw' : '12.5vw'"
               @click="onPlay"
             >
-              <PlayIcon
-                class="icon"
-                color="#FFFBF7"
-              />
+              <PlayIcon color="#FFFBF7" />
             </v-btn>
           </div>
           <div
@@ -39,10 +41,13 @@
             class="team-video"
           />
         </div>
-      </v-col>
-      <v-col class="d-flex justify-start">
+      </div>
+      <div :class="mdAndUp ? 'v-col d-flex justify-start' : 'v-row'">
         <div class="about-team-wrapper">
-          <GlassSheet class="about-team">
+          <GlassSheet
+            class="about-team"
+            :border="mdAndUp ? '3vw' : '6.25vw'"
+          >
             <h3>{{ $t('Using modern technologies in development, we make reliable fast websites') }}</h3>
             <div class="content">
               <div class="location">
@@ -111,14 +116,15 @@
             />
           </v-card>
         </div>
-      </v-col>
-    </v-row>
+      </div>
+    </div>
   </section>
 </template>
 
 <script setup lang="ts">
 // @ts-expect-error
 import Player from '@vimeo/player'
+import { useDisplay } from 'vuetify'
 
 const { $gsap } = useNuxtApp()
 const containerRef = ref()
@@ -128,6 +134,8 @@ const isPlaying = shallowRef(false)
 let player: Player = null
 
 const technologiesExpanded = ref(false)
+
+const { mdAndUp } = useDisplay()
 
 onMounted(() => {
   player = new Player(videoRef.value, { id: 8837024, responsive: true, controls: false })
@@ -139,7 +147,7 @@ onMounted(() => {
   })
 
   const container = containerRef.value
-  const sheetsRow = container.querySelector('.sheets-row')
+  const sheetsRow = container.querySelector('.sheets')
   const videoWrapper = container.querySelector('.video-wrapper')
   const aboutTeam = container.querySelector('.about-team')
   const nomineeTag = container.querySelector('.nominee-tag')
@@ -169,66 +177,171 @@ function onPause() {
 <style scoped lang="scss">
 @import "styles/variables";
 
-$cards-size: 41vw;
-$nominee-tag-height: 4vw;
-$nominee-tag-width: 13vw;
+h3 {
+  text-transform: uppercase;
+  font-weight: 300;
+}
 
-.container {
+.desktop {
+  $cards-size: 41vw;
+  $cards-border-radius: 3vw;
+
+  $play-icon-size: 1.5vw;
+
+  $nominee-tag-height: 4vw;
+  $nominee-tag-width: 13vw;
+
   padding: 8vw 0;
 
   h2 {
     margin-bottom: 70px;
   }
+
+  h3 {
+    font-size: 2vw;
+    line-height: 3vw;
+  }
+
+  .video-wrapper {
+    width: $cards-size;
+    height: $cards-size;
+
+    .overlay {
+      border-radius: $cards-border-radius;
+    }
+
+    .play-button svg {
+      width: $play-icon-size;
+      height: $play-icon-size;
+    }
+  }
+
+  .about-team {
+    width: $cards-size;
+    height: $cards-size;
+    padding: 4.2em 2.4em;
+
+    .content {
+      gap: 1.8em;
+    }
+  }
+
+  .nominee-tag {
+    left: calc($cards-size - $nominee-tag-width - 3vw);
+    bottom: calc($cards-size + $nominee-tag-height / 2);
+    height: $nominee-tag-height;
+    width: $nominee-tag-width;
+    border-radius: 1.527vw;
+
+    .image {
+      border-radius: 1.458vw;
+    }
+  }
 }
 
-.nominee-tag {
+.mobile {
+  $cards-size: 93.75vw;
+  $cards-border-radius: 6.25vw;
+
+  $play-icon-size: 6.25vw;
+
+  $nominee-tag-height: 9.71vw;
+  $nominee-tag-width: 32.12vw;
+  $nominee-tag-border-radius: 3.125vw;
+
+  padding: 3.125vw;
+
+  h2 {
+    text-align: left;
+    margin-bottom: 15.625vw;
+  }
+
+  h3 {
+    font-size: 7.5vw;
+    line-height: 9.375vw;
+  }
+
+  .video-wrapper {
+    width: $cards-size;
+    height: $cards-size;
+
+    .overlay {
+      border-radius: $cards-border-radius;
+    }
+  }
+
+  .play-button svg {
+    width: $play-icon-size;
+    height: $play-icon-size;
+  }
+
+  .about-team {
+    width: $cards-size;
+    padding: 6.25vw 3.125vw;
+    margin-top: 6.25vw;
+
+    h3 {
+      margin-bottom: 9.375vw;
+    }
+
+    .location {
+      margin-bottom: 9.375vw;
+    }
+  }
+
+  .nominee-tag {
+    left: 62%;
+    top: -90%;
+    height: $nominee-tag-height;
+    width: $nominee-tag-width;
+    border-radius: $nominee-tag-border-radius;
+
+    .image {
+      border-radius: calc($nominee-tag-border-radius - 0.5vw);
+    }
+  }
+}
+
+.video-wrapper {
   position: relative;
-  left: calc($cards-size - $nominee-tag-width - 3vw);
-  bottom: calc($cards-size + $nominee-tag-height / 2);
-  transform: rotate(3.8deg);
 
-  height: $nominee-tag-height;
-  width: $nominee-tag-width;
+  .overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #FFD6C3CC;
+    z-index: 2;
+    transition: opacity 0.3s ease;
 
-  border: 1px solid #FFFFFF;
-  border-radius: 22px;
-  box-shadow: 0 4px 10px 0 #5050501A;
+    &.playing {
+      background-color: transparent;
+      cursor: pointer;
+    }
 
-  background: rgb(255, 255, 255, 0);
-  backdrop-filter: blur(5px) opacity(1);
-  -webkit-backdrop-filter: blur(5px) opacity(1);
+    .play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
 
-  .image {
-    border-radius: 21px;
-    opacity: 0.7;
+      transform: translate(-50%, -50%);
+
+      background-color: #EEEEEEB2;
+      border: 1px solid #FFFFFF;
+      box-shadow: 0 1.85px 3.15px 0 #67676704;
+    }
   }
 }
 
 .about-team {
-  width: $cards-size;
-  height: $cards-size;
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
   color: $redsquirrel-chocolate;
-  padding: 4.2em 2.4em;
-
-  h3 {
-    text-transform: uppercase;
-    font-size: 2vw;
-    line-height: 3vw;
-    font-weight: 300;
-  }
 
   .content {
     display: flex;
     flex-direction: column;
-
-    font-size: 1em;
     font-weight: 300;
-    gap: 1.8em;
 
     p b {
       font-weight: 400;
@@ -263,54 +376,40 @@ $nominee-tag-width: 13vw;
   }
 }
 
-.video-wrapper {
+.nominee-tag {
   position: relative;
-  width: $cards-size;
-  height: $cards-size;
+  transform: rotate(3.8deg);
 
-  .overlay {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: #FFD6C3CC;
-    border-radius: 3vw;
-    z-index: 2;
-    transition: opacity 0.3s ease;
+  border: 1px solid #FFFFFF;
+  box-shadow: 0 4px 10px 0 #5050501A;
 
-    &.playing {
-      opacity: 0;
-      cursor: pointer;
-    }
-  }
+  background: rgb(255, 255, 255, 0);
+  backdrop-filter: blur(5px) opacity(1);
+  -webkit-backdrop-filter: blur(5px) opacity(1);
 
-  .play-button {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 5vw;
-    height: 5vw;
-
-    transform: translate(-50%, -50%);
-
-    background-color: #EEEEEEB2;
-    border-radius: 50%;
-    border: 1px solid #FFFFFF;
-    box-shadow: 0 1.85px 3.15px 0 #67676704;
-
-    .icon {
-      width: 1.5vw;
-      height: 1.5vw;
-    }
+  .image {
+    opacity: 0.7;
   }
 }
 </style>
 
 <style lang="scss">
-.team-video {
-  iframe {
+@import "vuetify/settings";
+
+@media #{map-get($display-breakpoints, 'md-and-up')} {
+  .team-video iframe {
     border-radius: 3vw;
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    box-shadow: 0 1.85px 3.15px 0 #CA5E3C04;
   }
+}
+
+@media #{map-get($display-breakpoints, 'sm-and-down')} {
+  .team-video iframe {
+    border-radius: 6.25vw;
+  }
+}
+
+.team-video iframe {
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 1.85px 3.15px 0 #CA5E3C04;
 }
 </style>

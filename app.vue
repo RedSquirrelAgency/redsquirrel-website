@@ -17,7 +17,7 @@
       <!--      <AnchorTag hash="advantages" /> -->
       <!--      <AdvantagesSection /> -->
       <!--      <GoalSection /> -->
-      <!--      <TeamSection /> -->
+      <TeamSection />
       <!--      <AnchorTag hash="stages" /> -->
       <!--      <StagesSection /> -->
       <AnchorTag hash="reviews" />

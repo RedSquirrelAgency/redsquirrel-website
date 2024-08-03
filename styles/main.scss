@@ -1,14 +1,31 @@
 @import "styles/variables";
+@import "vuetify/settings";
 
-body {
-	font-size: 1vw;
-	line-height: 1.5vw;
-	font-weight: 300;
+@media #{map-get($display-breakpoints, 'md-and-up')} {
+	body {
+		font-size: 1vw;
+		line-height: 1.5vw;
+	}
+
+	h2 {
+		font-size: 5.3vw;
+		line-height: 6.3vw;
+	}
+}
+
+@media #{map-get($display-breakpoints, 'sm-and-down')} {
+	body {
+		font-size: 3.75vw;
+		line-height: 5.625vw;
+	}
+
+	h2 {
+		font-size: 12.5vw;
+		line-height: 14vw;
+	}
 }
 
 h2 {
-	font-size: 5.3vw;
-	line-height: 6.3vw;
 	font-weight: 300;
 	text-transform: uppercase;
 	text-align: center;
