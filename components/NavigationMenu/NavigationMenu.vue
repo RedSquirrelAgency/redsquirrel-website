@@ -23,8 +23,8 @@
             @click="emit('close')"
           />
         </v-col>
-        <v-col class="my-auto text-right">
-          <CompanyInfo />
+        <v-col class="d-flex justify-end my-auto text-right">
+          <CompanyInfo class="company-info" />
         </v-col>
       </v-row>
       <v-row>
@@ -47,11 +47,10 @@
       <v-row class="d-flex flex-column">
         <CompanyInfo />
       </v-row>
-      <v-row class="d-flex flex-column">
+      <v-row class="d-flex flex-column align-center">
         <LanguageSwitcher
-          color="#FFD2BB"
-          selected-color="#C38D72"
-          min-item-width="10vw"
+          inactive-color="#FFD2BB"
+          active-color="#C38D72"
         />
       </v-row>
       <v-row class="d-flex flex-column">
@@ -101,6 +100,9 @@ const navigationLinks = [
   background-color: #FFFBF7E5;
   color: $redsquirrel-chocolate-m1;
   text-transform: uppercase;
+
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
 }
 
 .copyright {
@@ -118,7 +120,18 @@ const navigationLinks = [
   }
 
   .social-links {
+    font-size: 1.38vw;
     line-height: 2vw;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.69vw;
+  }
+
+  .company-info {
+    width: 11.59vw;
+    font-size: 1.25vw;
+    line-height: 1.875vw;
   }
 
   .copyright {
@@ -132,7 +145,7 @@ const navigationLinks = [
 
   font-size: 3.75vw;
   line-height: 5.625vw;
-  padding: 1.56vw;
+  padding: 1.56vw 1.56vw 2.81vw;
 
   .menu-items {
     display: flex;

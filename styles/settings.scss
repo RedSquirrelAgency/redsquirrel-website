@@ -2,6 +2,8 @@
 @use 'vuetify/settings' with (
   $body-font-family: "Poppins",
 
+  $button-plain-opacity: 1,
+
   $slide-group-prev-basis: 0,
   $divider-border-color: $redsquirrel-cream-p1,
 

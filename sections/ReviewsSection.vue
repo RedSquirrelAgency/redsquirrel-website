@@ -23,7 +23,7 @@
         :key="index"
         :style="mdAndUp && { ...review.position }"
         :elevation="isReviewCardElevated(index) ? 24 : 8"
-        :class="isReviewCardElevated(index) && 'closer'"
+        :class="isReviewCardElevated(index) && 'elevated'"
         :border="mdAndUp ? '1vw' : '7.81vw'"
         class="review-card"
         @click="onReviewClick(review, index)"
@@ -55,7 +55,7 @@
           class="play-pause-icon"
         >
           <PauseCircleFilledIcon
-            v-if="isCardPlaying(index)"
+            v-if="isReviewCardPlaying(index)"
             color="#FFE6DA"
           />
           <PlayCircleFilledIcon
@@ -133,24 +133,25 @@ function onAudioPlayerClose() {
   playing.value = false
 }
 
-function isCardPlaying(index: number) {
+function isReviewCardPlaying(index: number) {
   return selected.value === index && playing.value
 }
 
 function isReviewCardElevated(index: number) {
-  return (isCardPlaying(index) || (hovered.value === index))
+  if (!mdAndUp.value) return false
+  return isReviewCardPlaying(index) || hovered.value === index
 }
 
 function getAvatarUrlById(id: string): string {
-  return `avatars/${id}.png`
+  return `reviews/avatars/${id}.png`
 }
 
 function getAudioUrlById(id: string): string {
-  return `audio/${id}_${locale.value}.mp3`
+  return `reviews/audio/${id}_${locale.value}.mp3`
 }
 
 function getSubtitlesUrlById(id: string): string {
-  return `subtitles/${id}_${locale.value}.srt`
+  return `reviews/subtitles/${id}_${locale.value}.srt`
 }
 
 function toggleSnackbar(display: boolean) {
@@ -324,8 +325,8 @@ const reviews: IReview[] = [
     align-items: center;
     flex-direction: column;
 
-    &.closer {
-      scale: 1.05;
+    &.elevated {
+      scale: 1.05 !important;
     }
 
     .avatar-wrapper {
@@ -358,10 +359,6 @@ const reviews: IReview[] = [
       line-height: 1vw;
       text-align: center;
     }
-  }
-
-  .player {
-    bottom: 20px;
   }
 }
 

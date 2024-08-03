@@ -3,7 +3,6 @@
     href="https://cal.com/redsquirrel/30min"
     v-bind="buttonProps"
     append-icon="mdi-arrow-right"
-    :class="!$vuetify.display.mdAndUp && 'mobile'"
   >
     {{ $t("Book a consultation") }}
   </v-btn>
@@ -11,6 +10,7 @@
 
 <script setup lang="ts">
 import type { PropType } from 'vue'
+import { useDisplay } from 'vuetify'
 
 type ConsultationButtonVariant = 'default' | 'plain'
 
@@ -28,31 +28,45 @@ const { variant, block, textColor } = defineProps({
   }
 })
 
+const { mdAndUp } = useDisplay()
 const buttonProps = computed(() => {
   let props: any = {}
+
+  const classes = []
+  classes.push('button')
+  classes.push(variant)
+  classes.push(mdAndUp.value ? 'desktop' : 'mobile')
+
   switch (variant) {
     case 'default':
       props = {
-        class: 'default',
         variant: 'flat'
       }
       break
     case 'plain':
       props = {
-        class: 'plain',
         variant: 'plain',
         ripple: false
       }
       break
   }
-  props.style = { color: textColor }
+
+  props.style = { color: textColor, opacity: 1 }
+  props.class = classes.join(' ')
   props.block = block
+  props.baseColor = textColor
+  props.color = textColor
+
   return props
 })
 </script>
 
 <style scoped lang="scss">
 @import "styles/variables";
+
+.button {
+  letter-spacing: 0;
+}
 
 .default {
   background: #FFDFCFE5;

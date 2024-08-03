@@ -1,13 +1,12 @@
 <template>
-  <div>
+  <div :class="mdAndUp ? 'desktop' : 'mobile'">
     <v-btn
       v-for="localeCode in localeCodes"
       :key="localeCode"
-      class="language-switcher-button"
-      :style="{ color: localeCode === locale ? selectedColor : color }"
+      class="button"
+      :style="{ color: localeCode === locale ? activeColor : inactiveColor }"
       :ripple="false"
       variant="plain"
-      :min-width="minItemWidth"
       @click.stop="setLocale(localeCode)"
     >
       {{ localeCode }}
@@ -16,18 +15,17 @@
 </template>
 
 <script setup lang="ts">
+import { useDisplay } from 'vuetify'
+
+const { mdAndUp } = useDisplay()
 const { localeCodes, setLocale, locale } = useI18n()
 
-const { color, selectedColor } = defineProps({
-  color: {
+const { inactiveColor, activeColor } = defineProps({
+  inactiveColor: {
     type: String
   },
-  selectedColor: {
+  activeColor: {
     type: String
-  },
-  minItemWidth: {
-    type: String,
-    default: '2.5vw'
   }
 })
 </script>
@@ -35,9 +33,21 @@ const { color, selectedColor } = defineProps({
 <style scoped lang="scss">
 @import "styles/variables";
 
-.language-switcher-button {
-  text-transform: uppercase;
+.desktop .button {
+  font-size: 1vw;
+  line-height: 1.45vw;
+  min-width: 2vw;
+}
 
+.mobile .button {
+  font-size: 4.375vw;
+  line-height: 6.562vw;
+  min-width: 10vw;
+}
+
+.button {
+  text-transform: uppercase;
+  letter-spacing: 0;
   margin: 0;
   padding: 0;
 }

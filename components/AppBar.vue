@@ -13,11 +13,11 @@
       >
         <BurgerIcon
           v-if="!menuOpen"
-          :color="colorScheme.activeLink"
+          :color="colorScheme.burger"
         />
         <CloseIcon
           v-else
-          :color="colorScheme.activeLink"
+          :color="colorScheme.burger"
         />
       </v-app-bar-nav-icon>
 
@@ -25,9 +25,10 @@
       <div
         v-if="variant !== 'floating' && mdAndUp"
         class="location"
+        :style="{ color: colorScheme.location }"
       >
         <span class="icon">
-          <MapPinIcon color="#D49A87" />
+          <MapPinIcon :color="colorScheme.location" />
         </span>
         <span>{{ $t('Munich, Germany') }}</span>
       </div>
@@ -35,14 +36,14 @@
       <v-spacer v-if="mdAndUp" />
       <LanguageSwitcher
         v-if="mdAndUp"
-        :color="colorScheme.disabledLink"
-        :selected-color="colorScheme.activeLink"
+        :inactive-color="colorScheme.inactiveLanguage"
+        :active-color="colorScheme.activeLanguage"
       />
 
       <v-spacer />
       <ConsultationButton
         variant="plain"
-        :text-color="colorScheme.activeLink"
+        :text-color="colorScheme.link"
       />
     </v-row>
   </v-app-bar>
@@ -119,21 +120,27 @@ const colorScheme = computed(() => {
   switch (variant.value) {
     case 'menu':
       return {
-        text: '#C38D72',
-        activeLink: '#C38D72',
-        disabledLink: '#FFD2BB'
+        burger: '#85553D', // $redsquirrel-chocolate
+        location: '#C38D72', // $redsquirrel-chocolate-m1
+        activeLanguage: '#C38D72', // $redsquirrel-chocolate-m1
+        inactiveLanguage: '#FFD2BB', // $redsquirrel-cream-p1
+        link: '#85553D' // $redsquirrel-chocolate
       }
     case 'fixed':
       return {
-        text: '#D49A87',
-        activeLink: '#FFD2BB',
-        disabledLink: '#D49A87'
+        burger: '#FFD2BB', // $redsquirrel-cream-p1
+        location: '#D49A87',
+        activeLanguage: '#FFD2BB', // $redsquirrel-cream-p1
+        inactiveLanguage: '#D49A87',
+        link: '#FFD2BB', // $redsquirrel-cream-p1
       }
     case 'floating':
       return {
-        text: '#85553D',
-        activeLink: '#85553D',
-        disabledLink: '#E3B1A1'
+        burger: '#85553D', // $redsquirrel-chocolate
+        location: '#E3B1A1',
+        activeLanguage: '#85553D', // $redsquirrel-chocolate
+        inactiveLanguage: '#E3B1A1',
+        link: '#85553D' // $redsquirrel-chocolate
       }
     default:
       return {}
@@ -199,8 +206,8 @@ const colorScheme = computed(() => {
     }
 
     .close-button svg {
-      width: 6vw;
-      height: 6vw;
+      width: 9.37vw;
+      height: 9.37vw;
     }
   }
 }
