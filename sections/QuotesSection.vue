@@ -171,11 +171,6 @@ $backdrop-color: #fc7733;
 }
 
 .desktop {
-  h2 {
-    font-size: 7vw;
-    line-height: 7vw;
-  }
-
   .quote {
     font-size: 6.5vh;
     line-height: 10.1vh;
@@ -183,11 +178,6 @@ $backdrop-color: #fc7733;
 }
 
 .mobile {
-  h2 {
-    font-size: 12.5vw;
-    line-height: 18.75vw;
-  }
-
   .quote {
     font-size: 12vw;
     line-height: 16vw;

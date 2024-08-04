@@ -10,6 +10,7 @@
 	h2 {
 		font-size: 5.3vw;
 		line-height: 6.3vw;
+		text-align: center;
 	}
 }
 
@@ -22,13 +23,13 @@
 	h2 {
 		font-size: 12.5vw;
 		line-height: 14vw;
+		text-align: left;
 	}
 }
 
 h2 {
 	font-weight: 300;
 	text-transform: uppercase;
-	text-align: center;
 
 	&.gradient-1 .line {
 		background: -webkit-linear-gradient($redsquirrel-cream-m1, $redsquirrel-peach);

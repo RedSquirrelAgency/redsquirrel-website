@@ -1,7 +1,6 @@
 <template>
   <section
     ref="containerRef"
-    class="container"
     :class="mdAndUp ? 'desktop' : 'mobile'"
   >
     <AnimatedText>
@@ -246,7 +245,7 @@ h3 {
   $nominee-tag-width: 13vw;
   $nominee-tag-border-radius: 1.388vw;
 
-  padding: 8vw 0;
+  padding: $section-padding-desktop 0;
 
   h2 {
     margin-bottom: 70px;
@@ -322,7 +321,7 @@ h3 {
   $nominee-tag-width: 32.12vw;
   $nominee-tag-border-radius: 3.125vw;
 
-  padding: 3.125vw;
+  padding: $section-padding-mobile;
 
   h2 {
     text-align: left;

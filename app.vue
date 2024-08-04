@@ -12,8 +12,8 @@
         :loaded="loading === 1"
         @slide-change="onSlideChange"
       />
-      <!--      <AnchorTag hash="cases" /> -->
-      <!--      <CasesSection /> -->
+      <AnchorTag hash="cases" />
+      <CasesSection />
       <!--      <AnchorTag hash="advantages" /> -->
       <!--      <AdvantagesSection /> -->
       <!--      <GoalSection /> -->

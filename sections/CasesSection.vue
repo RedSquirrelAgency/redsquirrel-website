@@ -2,19 +2,22 @@
   <section
     ref="containerRef"
     class="container"
+    :class="mdAndUp ? 'desktop' : 'mobile'"
   >
-    <div class="content">
+    <div class="header">
       <AnimatedText>
         <h2 class="gradient-1">
           <HeadingText
             :text="$t('Immersing deeply into each project and finding successful solutions')"
-            :font-replacements="[[0, 4], [4, 2], [7, 0]]"
-            :line-breaks="[1, 5]"
-            :line-spacers="{ 0: '5.5em' }"
-            :word-spacers="{ 4: '4em' }"
+            :font-replacements="[[0, 4], [4, 2], [7, 0], [8, 1], [8, 6]]"
+            :line-breaks="mdAndUp ? [1, 5] : [0, 2, 4, 6, 7, 8]"
+            :line-spacers="mdAndUp ? { 0: '5.5em' } : { 0: '0.5em', 4: '1.5em' }"
+            :word-spacers="mdAndUp ? { 4: '4em' } : {}"
           />
         </h2>
       </AnimatedText>
+    </div>
+    <div class="overlay">
       <v-row class="cases">
         <v-col
           v-for="(item, index) in cases"
@@ -59,12 +62,15 @@
 </template>
 
 <script setup lang="ts">
+import { useDisplay } from 'vuetify'
+
 const { $gsap } = useNuxtApp()
-const containerRef = ref<HTMLElement | null>(null)
+const { mdAndUp } = useDisplay()
+const containerRef = ref()
 
 onMounted(() => {
-  if (!containerRef.value) return
   const container = containerRef.value
+  const cardsXRange = mdAndUp.value ? [50, -51] : [50, -87.4]
   $gsap.timeline({
     scrollTrigger: {
       trigger: container,
@@ -74,7 +80,10 @@ onMounted(() => {
       pin: true
     },
     defaults: { ease: 'none' }
-  }).fromTo(container.querySelector('.cases'), { xPercent: 50 }, { xPercent: -51 })
+  }).fromTo(container.querySelector('.cases'),
+    { xPercent: cardsXRange[0] },
+    { xPercent: cardsXRange[1] }
+  )
 })
 
 const cases = [
@@ -122,76 +131,152 @@ const cases = [
 <style scoped lang="scss">
 @import "styles/variables";
 
-$case-card-width: 24vw;
-$case-card-height: calc($case-card-width * 0.9);
+.desktop {
+  $case-card-width: 24vw;
+  $case-card-height: calc($case-card-width * 0.9);
+  $case-border-radius: 1.38vw;
 
-.container {
-  height: 100vh;
-  padding-top: 120px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.content {
-  width: 100%;
+  .header {
+    padding: $section-padding-desktop;
+  }
 
   .cases {
-    position: relative;
-    width: max-content;
-    top: -10vw;
+    top: 17vw;
+  }
 
-    .case-wrapper {
-      text-decoration: none;
+  .case {
+    height: $case-card-height;
+    width: $case-card-width;
+
+    .backdrop {
+      border-radius: $case-border-radius;
     }
 
-    .case {
-      height: $case-card-height;
-      width: $case-card-width;
+    .image {
+      border-radius: $case-border-radius;
+    }
 
-      .backdrop {
-        border-radius: 5%;
-        background: rgb(255, 255, 255, 0);
-        backdrop-filter: blur(5px) opacity(1);
-        -webkit-backdrop-filter: blur(5px) opacity(1);
+    .caption {
+      margin-top: 0.347vw;
+      margin-left: 0.694vw;
+
+      .title {
+        font-size: 1.18vw;
+        line-height: 1.77vw;
       }
 
-      .image {
-        border-radius: 5%;
-        height: 100%;
-        opacity: 0.8;
+      .subtitle {
+        font-size: 1vw;
+        line-height: 1.56vw;
+      }
+    }
+  }
+
+  .spacer {
+    width: $case-card-width;
+    height: $case-card-height;
+  }
+
+  .case:not(:hover) {
+    .image {
+      opacity: 0.5;
+    }
+
+    .caption {
+      opacity: 0.7;
+    }
+  }
+}
+
+.mobile {
+  $case-card-width: 98.125vw;
+  $case-card-height: calc($case-card-width * 0.9);
+  $case-border-radius: 6.25vw;
+
+  .header {
+    padding: $section-padding-mobile;
+  }
+
+  .cases {
+    top: 20vh;
+  }
+
+  .case {
+    height: $case-card-height;
+    width: $case-card-width;
+
+    .backdrop {
+      border-radius: $case-border-radius;
+    }
+
+    .image {
+      border-radius: $case-border-radius;
+    }
+
+    .caption {
+      margin-top: 1.56vw;
+      margin-left: 3.125vw;
+
+      .title {
+        font-size: 4.68vw;
+        line-height: 7vw;
       }
 
-      .caption {
-        margin-top: 5px;
-        margin-left: 10px;
-        font-size: 17px;
-        line-height: 25.5px;
-        color: $redsquirrel-chocolate;
-
-        .title {
-          text-transform: uppercase;
-        }
+      .subtitle {
+        font-size: 3.75vw;
+        line-height: 5.625vw;
       }
+    }
+  }
 
-      .image, .caption {
-        transition: opacity .2s ease-in-out;
+  .spacer {
+    width: $case-card-width;
+    height: $case-card-height;
+  }
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.overlay {
+  width: 100%;
+  position: absolute;
+  overflow: hidden;
+}
+
+.cases {
+  position: relative;
+  width: max-content;
+  height: 100vh;
+
+  .case-wrapper {
+    text-decoration: none;
+  }
+
+  .case {
+    .backdrop {
+      background: rgb(255, 255, 255, 0);
+      backdrop-filter: blur(5px) opacity(1);
+      -webkit-backdrop-filter: blur(5px) opacity(1);
+    }
+
+    .image {
+      height: 100%;
+      opacity: 0.8;
+    }
+
+    .caption {
+      color: $redsquirrel-chocolate;
+
+      .title {
+        text-transform: uppercase;
       }
     }
 
-    .case:not(:hover) {
-      .image {
-        opacity: 0.5;
-      }
-
-      .caption {
-        opacity: 0.7;
-      }
-    }
-
-    .spacer {
-      width: $case-card-width;
-      height: $case-card-height;
+    .image, .caption {
+      transition: opacity .2s ease-in-out;
     }
   }
 }
