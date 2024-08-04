@@ -22,12 +22,11 @@
       <div :class="mdAndUp ? 'v-col d-flex justify-end' : 'v-row'">
         <div class="video-wrapper">
           <div
-            class="overlay"
-            :class="isPlaying ? 'playing' : ''"
-            @click="isPlaying && onPause()"
+            class="video-overlay"
+            :class="isLoaded && 'loaded'"
           >
             <v-btn
-              v-if="!isPlaying"
+              v-if="!isLoaded"
               class="play-button"
               rounded="circle"
               :size="mdAndUp ? '5vw' : '12.5vw'"
@@ -35,6 +34,40 @@
             >
               <PlayIcon color="#FFFBF7" />
             </v-btn>
+            <div
+              v-if="isLoaded"
+              class="video-controls"
+            >
+              <v-btn
+                class="video-control play-pause-button"
+                :size="mdAndUp ? '3.47vw' : '12.5vw'"
+                :max-width="mdAndUp ? '3vw' : undefined"
+                flat
+                @click="() => isPlaying ? onPause() : onPlay()"
+              >
+                <PauseBoxFilledIcon
+                  v-if="isPlaying"
+                  color="#85553D"
+                />
+                <PlayBoxFilledIcon
+                  v-else
+                  color="#85553D"
+                />
+              </v-btn>
+              <div class="video-control seek-slider">
+                <v-slider
+                  v-model="seek"
+                  min="0"
+                  max="1"
+                  color="#85553D"
+                  track-size="5"
+                  thumb-size="12"
+                  elevation="0"
+                  :hide-details="true"
+                  @update:model-value="onSeek"
+                />
+              </div>
+            </div>
           </div>
           <div
             ref="videoRef"
@@ -44,6 +77,18 @@
       </div>
       <div :class="mdAndUp ? 'v-col d-flex justify-start' : 'v-row'">
         <div class="about-team-wrapper">
+          <v-card
+            class="nominee-tag"
+            flat
+          >
+            <v-img
+              class="image"
+              alt="Awwwards nominee"
+              src="/awwwards.jpg"
+              eager
+              cover
+            />
+          </v-card>
           <GlassSheet
             class="about-team"
             :border="mdAndUp ? '3vw' : '6.25vw'"
@@ -103,18 +148,6 @@
               </i18n-t>
             </div>
           </GlassSheet>
-          <v-card
-            class="nominee-tag"
-            flat
-          >
-            <v-img
-              class="image"
-              alt="Awwwards nominee"
-              src="/awwwards.jpg"
-              eager
-              cover
-            />
-          </v-card>
         </div>
       </div>
     </div>
@@ -130,37 +163,53 @@ const { $gsap } = useNuxtApp()
 const containerRef = ref()
 
 const videoRef = ref()
+const seek = shallowRef()
+const isLoaded = shallowRef(false)
 const isPlaying = shallowRef(false)
 let player: Player = null
+let videoDuration: number
 
 const technologiesExpanded = ref(false)
 
 const { mdAndUp } = useDisplay()
 
-onMounted(() => {
+onMounted(async () => {
   player = new Player(videoRef.value, { id: 8837024, responsive: true, controls: false })
+  videoDuration = await player.getDuration()
+
   player.on('play', () => {
     isPlaying.value = true
+    isLoaded.value = true
   })
   player.on('pause', () => {
     isPlaying.value = false
   })
+  player.on('timeupdate', (e: any) => {
+    seek.value = e.percent
+  })
 
   const container = containerRef.value
-  const sheetsRow = container.querySelector('.sheets')
   const videoWrapper = container.querySelector('.video-wrapper')
   const aboutTeam = container.querySelector('.about-team')
   const nomineeTag = container.querySelector('.nominee-tag')
 
   $gsap.timeline({
     scrollTrigger: {
-      trigger: sheetsRow,
+      trigger: videoWrapper,
       start: 'top center',
       toggleActions: 'play none resume reverse'
     }
   }).slideTop(videoWrapper, { duration: 0.8 })
-    .slideTop(aboutTeam, { duration: 0.8 }, '>-0.3')
-    .slideBottom(nomineeTag, { duration: 0.5 }, '>-0.3')
+
+  const aboutTeamAppearDelay = mdAndUp ? 0.5 : 0
+  $gsap.timeline({
+    scrollTrigger: {
+      trigger: aboutTeam,
+      start: 'top center',
+      toggleActions: 'play none resume reverse'
+    }
+  }).slideTop(aboutTeam, { duration: 0.8, delay: aboutTeamAppearDelay })
+    .slideBottom(nomineeTag, { duration: 0.5 })
 })
 
 function onPlay() {
@@ -171,6 +220,11 @@ function onPlay() {
 function onPause() {
   if (!player) return
   player.pause()
+}
+
+function onSeek() {
+  if (!player) return
+  player.setCurrentTime(seek.value * videoDuration)
 }
 </script>
 
@@ -190,6 +244,7 @@ h3 {
 
   $nominee-tag-height: 4vw;
   $nominee-tag-width: 13vw;
+  $nominee-tag-border-radius: 1.388vw;
 
   padding: 8vw 0;
 
@@ -206,13 +261,32 @@ h3 {
     width: $cards-size;
     height: $cards-size;
 
-    .overlay {
+    .video-overlay {
       border-radius: $cards-border-radius;
-    }
+      padding: 2.77vw;
 
-    .play-button svg {
-      width: $play-icon-size;
-      height: $play-icon-size;
+      .play-button svg {
+        width: $play-icon-size;
+        height: $play-icon-size;
+      }
+
+      .video-controls {
+        gap: 0.41vw;
+
+        .video-control {
+          border-radius: 0.69vw;
+        }
+
+        .play-pause-button svg {
+          width: 1.66vw;
+          height: 1.66vw;
+        }
+
+        .seek-slider {
+          padding: 0 1vw;
+          height: 3.47vw;
+        }
+      }
     }
   }
 
@@ -227,14 +301,13 @@ h3 {
   }
 
   .nominee-tag {
-    left: calc($cards-size - $nominee-tag-width - 3vw);
-    bottom: calc($cards-size + $nominee-tag-height / 2);
+    top: -2vw;
     height: $nominee-tag-height;
     width: $nominee-tag-width;
-    border-radius: 1.527vw;
+    border-radius: $nominee-tag-border-radius;
 
     .image {
-      border-radius: 1.458vw;
+      border-radius: calc($nominee-tag-border-radius - 0.5vw);
     }
   }
 }
@@ -265,14 +338,33 @@ h3 {
     width: $cards-size;
     height: $cards-size;
 
-    .overlay {
+    .video-overlay {
       border-radius: $cards-border-radius;
-    }
-  }
+      padding: 3.125vw;
 
-  .play-button svg {
-    width: $play-icon-size;
-    height: $play-icon-size;
+      .play-button svg {
+        width: $play-icon-size;
+        height: $play-icon-size;
+      }
+
+      .video-controls {
+        gap: 1.56vw;
+
+        .video-control {
+          border-radius: 3.125vw;
+        }
+
+        .play-pause-button svg {
+          width: 7.5vw;
+          height: 7.5vw;
+        }
+
+        .seek-slider {
+          padding: 0 4.687vw;
+          height: 12.5vw;
+        }
+      }
+    }
   }
 
   .about-team {
@@ -290,8 +382,7 @@ h3 {
   }
 
   .nominee-tag {
-    left: 62%;
-    top: -90%;
+    top: 3vw;
     height: $nominee-tag-height;
     width: $nominee-tag-width;
     border-radius: $nominee-tag-border-radius;
@@ -305,15 +396,17 @@ h3 {
 .video-wrapper {
   position: relative;
 
-  .overlay {
+  .video-overlay {
     position: absolute;
+    display: flex;
+    align-items: end;
     width: 100%;
     height: 100%;
     background-color: #FFD6C3CC;
     z-index: 2;
     transition: opacity 0.3s ease;
 
-    &.playing {
+    &.loaded {
       background-color: transparent;
       cursor: pointer;
     }
@@ -322,12 +415,27 @@ h3 {
       position: absolute;
       top: 50%;
       left: 50%;
-
       transform: translate(-50%, -50%);
-
       background-color: #EEEEEEB2;
       border: 1px solid #FFFFFF;
       box-shadow: 0 1.85px 3.15px 0 #67676704;
+    }
+
+    .video-controls {
+      display: flex;
+      flex: 1;
+    }
+
+    .video-control {
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .seek-slider {
+      display: flex;
+      align-items: center;
+      flex: 1;
     }
   }
 }
@@ -376,19 +484,25 @@ h3 {
   }
 }
 
-.nominee-tag {
+.about-team-wrapper {
   position: relative;
-  transform: rotate(3.8deg);
 
-  border: 1px solid #FFFFFF;
-  box-shadow: 0 4px 10px 0 #5050501A;
+  .nominee-tag {
+    position: absolute;
+    left: 62%;
+    z-index: 5;
+    transform: rotate(3.8deg);
 
-  background: rgb(255, 255, 255, 0);
-  backdrop-filter: blur(5px) opacity(1);
-  -webkit-backdrop-filter: blur(5px) opacity(1);
+    border: 1px solid #FFFFFF;
+    box-shadow: 0 4px 10px 0 #5050501A;
 
-  .image {
-    opacity: 0.7;
+    background: rgb(255, 255, 255, 0);
+    backdrop-filter: blur(5px) opacity(1);
+    -webkit-backdrop-filter: blur(5px) opacity(1);
+
+    .image {
+      opacity: 0.7;
+    }
   }
 }
 </style>
