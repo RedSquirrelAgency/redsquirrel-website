@@ -11,10 +11,10 @@ $redsquirrel-chocolate: #85553D;
 
 $redsquirrel-black: #10151B;
 
-$section-padding-side-desktop: 8.33vw;
-$section-padding-top-desktop: 6.94vw;
-$section-padding-desktop: $section-padding-top-desktop $section-padding-side-desktop 0;
+$section-padding-y-desktop: 8.33vw;
+$section-padding-x-desktop: 6.94vw;
+$section-padding-desktop: $section-padding-x-desktop $section-padding-y-desktop;
 
-$section-padding-side-mobile: 3.125vw;
-$section-padding-top-mobile: 25vw;
-$section-padding-mobile: $section-padding-top-mobile $section-padding-side-mobile 0;
+$section-padding-y-mobile: 3.125vw;
+$section-padding-x-mobile: 25vw;
+$section-padding-mobile: $section-padding-x-mobile $section-padding-y-mobile;

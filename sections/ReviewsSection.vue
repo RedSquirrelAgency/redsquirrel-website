@@ -1,7 +1,6 @@
 <template>
-  <div
+  <section
     ref="containerRef"
-    class="container"
     :class="mdAndUp ? 'desktop' : 'mobile'"
   >
     <div class="offer text-center">
@@ -84,7 +83,7 @@
         @close="onAudioPlayerClose()"
       />
     </Transition>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -281,7 +280,7 @@ const reviews: IReview[] = [
 <style scoped lang="scss">
 @import "styles/variables";
 
-.container {
+section {
   color: $redsquirrel-cream;
 }
 
@@ -363,12 +362,12 @@ const reviews: IReview[] = [
 }
 
 .mobile {
-  height: 100vh;
   font-size: 3.75vw;
   line-height: 5.625vw;
-  padding: 3.125vw;
+  padding: $section-padding-mobile;
 
   h2 {
+    text-align: center;
     font-size: 9.375vw;
     line-height: 12.656vw;
     margin: 6.25vw 0;

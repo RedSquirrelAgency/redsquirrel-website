@@ -1,26 +1,25 @@
 <template>
-  <section
-    ref="containerRef"
-    class="container"
-  >
+  <section ref="containerRef">
     <h2 class="gradient-2">
       <HeadingText
         :text="$t('Book a free online meeting to get a price proposal')"
         :font-replacements="[[1, 0], [3, 0], [6, 1], [8, 3], [9, 5]]"
-        :line-breaks="[2, 4]"
-        :word-spacers="{ 2: '3.8em', 9: '2em' }"
+        :line-breaks="mdAndUp ? [2, 4] : [2, 4, 8]"
+        :word-spacers="mdAndUp ? { 2: '3.8em', 9: '2em' } : {}"
+        :line-spacers="mdAndUp ? {} : { 0: '0.5em', 3: '2.5em' }"
       />
     </h2>
-    <v-row>
+    <div :class="mdAndUp ? 'v-row' : 'v-col'">
       <v-col
+        v-if="mdAndUp"
         cols="4"
         class="contacts"
       >
         <SocialLinks />
       </v-col>
-      <v-col
-        cols="8"
+      <div
         class="meeting"
+        :class="mdAndUp ? 'v-col-8': 'v-row'"
       >
         <div class="about-meeting">
           <div class="avatars">
@@ -43,15 +42,24 @@
             {{ $t('During the 30-min meeting, Alena and Kate will ask you questions to make an accurate assessment of the work and tell a little more about our team') }}
           </p>
         </div>
-        <ConsultationButton />
-      </v-col>
-    </v-row>
+        <ConsultationButton :block="!mdAndUp" />
+      </div>
+      <v-row
+        v-if="!mdAndUp"
+        class="contacts"
+      >
+        <SocialLinks />
+      </v-row>
+    </div>
   </section>
 </template>
 
 <script setup lang="ts">
+import { useDisplay } from 'vuetify'
+
 const containerRef = ref()
 const { $gsap } = useNuxtApp()
+const { mdAndUp } = useDisplay()
 
 onMounted(() => {
   const container = containerRef.value
@@ -60,87 +68,160 @@ onMounted(() => {
   const meeting = container.querySelector('.meeting')
   const avatars = container.querySelectorAll('.avatar')
 
-  $gsap.timeline({
-    scrollTrigger: {
-      pin: true,
-      trigger: container,
-      start: 'bottom bottom',
-      end: '400px',
-      toggleActions: 'play none resume reverse'
-    }
-  })
-    .dissolve(
+  if (mdAndUp.value) {
+    $gsap.timeline({
+      scrollTrigger: {
+        pin: true,
+        trigger: container,
+        start: 'bottom bottom',
+        end: '400px',
+        toggleActions: 'play none resume reverse'
+      }
+    })
+      .dissolve(
+        container,
+        { duration: 0.8 }
+      )
+      .slideTop(
+        header,
+        { duration: 0.8 }
+      )
+      .slideRight(
+        contacts,
+        { duration: 0.8 },
+        '<'
+      )
+      .slideLeft(
+        meeting,
+        { duration: 0.8 },
+        '<'
+      )
+      .scaleIn(
+        avatars,
+        { duration: 1.3, stagger: 0.3, ease: 'elastic.out(1,0.5)' }
+      )
+  }
+  else {
+    $gsap.timeline({
+      scrollTrigger: {
+        pin: true,
+        trigger: container,
+        start: 'top top',
+        end: '+=100px',
+        toggleActions: 'play none resume reverse'
+      }
+    }).dissolve(
       container,
       { duration: 0.8 }
     )
-    .slideTop(
-      header,
-      { duration: 0.8 }
-    )
-    .slideRight(
-      contacts,
-      { duration: 0.8 },
-      '<'
-    )
-    .slideLeft(
-      meeting,
-      { duration: 0.8 },
-      '<'
-    )
-    .scaleIn(
-      avatars,
-      { duration: 1.3, stagger: 0.3, ease: 'elastic.out(1,0.5)' }
-    )
+  }
 })
 </script>
 
 <style scoped lang="scss">
 @import "styles/variables";
+@import "vuetify/settings";
 
-.container {
-  position: relative;
-  width: 100%;
-  background-color: $redsquirrel-cream-p1;
-  padding: 7vw 7vw 7vw 14vw;
+@media #{map-get($display-breakpoints, 'md-and-up')} {
+  $avatar-size: 4.1vw;
 
-  text-transform: uppercase;
-  font-weight: 300;
-}
+  section {
+    padding: 7vw 7vw 7vw 14vw;
+  }
 
-h2 {
-  margin-bottom: 7vw;
-}
-
-.meeting {
-  color: $redsquirrel-chocolate;
+  h2 {
+    margin-bottom: 7vw;
+  }
 
   .about-meeting {
     font-size: 1.75vw;
     line-height: 2.7vw;
     margin-top: -1.75vw;
     margin-bottom: 1.5vw;
+  }
 
-    .avatars {
-      display: inline-block;
-      vertical-align: bottom;
-      margin-right: 0.4vw;
+  .avatars {
+    margin-right: 0.4vw;
+  }
 
-      .avatar {
-        height: 4.1vw;
-        width: 4.1vw;
-        outline: 1px solid rgba(255, 255, 255, 0.7);
-        box-shadow: 0 8px 20px 0 #67524733;
-      }
+  .avatar {
+    height: $avatar-size;
+    width: $avatar-size;
+  }
 
-      .avatar:not(:first-child) {
-        position: relative;
-        left: -0.3vw;
-      }
+  .avatar:not(:first-child) {
+    left: -0.3vw;
+  }
+}
+
+@media #{map-get($display-breakpoints, 'sm-and-down')} {
+  $avatar-size: 15vw;
+
+  section {
+    padding: $section-padding-mobile;
+  }
+
+  h2 {
+    margin-bottom: 17.5vw;
+  }
+
+  .about-meeting {
+    font-size: 6.875vw;
+    line-height: 10.31vw;
+    margin-bottom: 6.25vw;
+  }
+
+  .avatars {
+    margin-right: 1.5vw;
+  }
+
+  .avatar {
+    height: $avatar-size;
+    width: $avatar-size;
+  }
+
+  .avatar:not(:first-child) {
+    left: -2vw;
+  }
+
+  .contacts {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    font-size: 5vw;
+    line-height: 7.5vw;
+    margin-top: 12.5vw;
+  }
+}
+
+section {
+  position: relative;
+  width: 100%;
+  background-color: $redsquirrel-cream-p1;
+
+  text-transform: uppercase;
+  font-weight: 300;
+}
+
+.meeting {
+  color: $redsquirrel-chocolate;
+
+  .avatars {
+    display: inline-block;
+    vertical-align: bottom;
+
+    .avatar {
+      outline: 1px solid rgba(255, 255, 255, 0.7);
+      box-shadow: 0 8px 20px 0 #67524733;
     }
 
-    p {
-      display: inline;
+    .avatar:not(:first-child) {
+      position: relative;
     }
+  }
+
+  p {
+    display: inline;
   }
 }
 </style>

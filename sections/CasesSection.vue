@@ -1,7 +1,6 @@
 <template>
   <section
     ref="containerRef"
-    class="container"
     :class="mdAndUp ? 'desktop' : 'mobile'"
   >
     <div class="header">
@@ -235,7 +234,7 @@ const cases = [
   }
 }
 
-.container {
+section {
   display: flex;
   height: 100vh;
 }

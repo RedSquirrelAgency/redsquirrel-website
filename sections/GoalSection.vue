@@ -1,8 +1,5 @@
 <template>
-  <section
-    ref="containerRef"
-    class="container"
-  >
+  <section ref="containerRef">
     <p>
       <FillingText
         :key="progress"
@@ -46,9 +43,33 @@ onMounted(() => {
 
 <style scoped lang="scss">
 @import "styles/variables";
+@import "vuetify/settings";
 
-.container {
-  padding: 8vw;
+@media #{map-get($display-breakpoints, 'md-and-up')} {
+  section {
+    padding: 8vw;
+  }
+
+  p {
+    font-size: 3.1vw;
+    line-height: 3.5vw;
+    text-indent: 5vw;
+  }
+}
+
+@media #{map-get($display-breakpoints, 'sm-and-down')} {
+  section {
+    padding: $section-padding-mobile;
+  }
+
+  p {
+    font-size: 8.125vw;
+    line-height: 12.187vw;
+    text-indent: 12.5vw;
+  }
+}
+
+section {
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -56,9 +77,6 @@ onMounted(() => {
 }
 
 p {
-  font-size: 3.1vw;
-  text-indent: 5vw;
-  line-height: 3.5vw;
   text-transform: uppercase;
   font-weight: 400;
 }

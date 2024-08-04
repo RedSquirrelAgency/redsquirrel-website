@@ -16,17 +16,17 @@
       <CasesSection />
       <!--      <AnchorTag hash="advantages" /> -->
       <!--      <AdvantagesSection /> -->
-      <!--      <GoalSection /> -->
+      <GoalSection />
       <TeamSection />
       <!--      <AnchorTag hash="stages" /> -->
       <!--      <StagesSection /> -->
       <AnchorTag hash="reviews" />
       <ReviewsSection />
-      <!--      <AnchorTag -->
-      <!--        hash="contact" -->
-      <!--        :offset="900" -->
-      <!--      /> -->
-      <!--      <CallToActionSection /> -->
+      <AnchorTag
+        hash="contact"
+        :offset="900"
+      />
+      <CallToActionSection />
       <!--      <BlogSection /> -->
       <!--      <FooterSection /> -->
     </BackgroundContainer>
