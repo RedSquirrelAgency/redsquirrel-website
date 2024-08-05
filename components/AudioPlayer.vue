@@ -235,6 +235,8 @@ function onFullButtonClick() {
 
 async function setRecording(audioSrc: string, subtitlesSrc: string, volume: number) {
   loading.value = true
+  subtitles.value = undefined
+  currentSubtitleFrame.value = undefined
 
   const [loadedPlayer, loadedSubtitles] = await Promise.all([
     loadPlayer(audioSrc),
@@ -248,6 +250,7 @@ async function setRecording(audioSrc: string, subtitlesSrc: string, volume: numb
   player.mute(muted.value)
 
   loading.value = false
+  setInitialSubtitlesFrame()
   player.play()
 }
 
@@ -336,15 +339,27 @@ function onSeekChange() {
   updateSubtitles()
 }
 
+function setInitialSubtitlesFrame() {
+  const currentSubtitles = subtitles.value
+  if (!currentSubtitles || !currentSubtitles.length) return
+
+  currentSubtitleFrame.value = {
+    previous: '',
+    current: currentSubtitles[0].text,
+    next: currentSubtitles.length > 1 ? currentSubtitles[1].text : ''
+  }
+}
+
 function updateSubtitles() {
-  const _subtitles = subtitles.value
-  if (!_subtitles) return
-  _subtitles.find(({ startSeconds, endSeconds, text }, index) => {
+  const currentSubtitles = subtitles.value
+  if (!currentSubtitles) return
+
+  currentSubtitles.find(({ startSeconds, endSeconds, text }, index) => {
     if (player.seek() >= startSeconds && player.seek() <= endSeconds) {
       currentSubtitleFrame.value = {
-        previous: index >= 1 ? _subtitles[index - 1]?.text : '',
+        previous: index >= 1 ? currentSubtitles[index - 1]?.text : '',
         current: text,
-        next: index < _subtitles.length ? _subtitles[index + 1]?.text : ''
+        next: index < currentSubtitles.length ? currentSubtitles[index + 1]?.text : ''
       }
       return true
     }
