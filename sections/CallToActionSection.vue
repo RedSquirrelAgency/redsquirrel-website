@@ -104,7 +104,6 @@ onMounted(() => {
   else {
     $gsap.timeline({
       scrollTrigger: {
-        pin: true,
         trigger: container,
         start: 'top top',
         end: '+=100px',

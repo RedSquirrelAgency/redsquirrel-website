@@ -1,8 +1,5 @@
 <template>
-  <section
-    ref="containerRef"
-    :class="mdAndUp ? 'desktop' : 'mobile'"
-  >
+  <section ref="containerRef">
     <div class="header">
       <AnimatedText>
         <h2 class="gradient-1">
@@ -89,7 +86,7 @@ const cases = [
   {
     title: 'Natalie Herzel Praxis',
     subtitle: 'Dental Clinic',
-    image: 'banners/natalie_herzel_praxis.png',
+    image: 'banners/natalieherzelpraxis.png',
     url: 'https://herzel-zahnarzt.de/'
   },
   null,
@@ -108,14 +105,14 @@ const cases = [
   {
     title: 'Anna Soboleva',
     subtitle: 'Metaphysics Expert',
-    image: 'banners/anna_soboleva.png',
+    image: 'banners/annasoboleva.png',
     url: 'https://www.behance.net/alenadomozhirova'
   },
   null,
   {
     title: 'Yes! Mallorca Property',
     subtitle: 'Estate Agency',
-    image: 'banners/yes!_mallorca_property.png',
+    image: 'banners/yesmallorcaproperty.png',
     url: 'https://www.behance.net/gallery/128711407/agentstvo-nedvizhimosti-na-majorke'
   },
   {
@@ -129,8 +126,9 @@ const cases = [
 
 <style scoped lang="scss">
 @import "styles/variables";
+@import "vuetify/settings";
 
-.desktop {
+@media #{map-get($display-breakpoints, 'md-and-up')} {
   $case-card-width: 24vw;
   $case-card-height: calc($case-card-width * 0.9);
   $case-border-radius: 1.38vw;
@@ -187,7 +185,7 @@ const cases = [
   }
 }
 
-.mobile {
+@media #{map-get($display-breakpoints, 'sm-and-down')} {
   $case-card-width: 98.125vw;
   $case-card-height: calc($case-card-width * 0.9);
   $case-border-radius: 6.25vw;

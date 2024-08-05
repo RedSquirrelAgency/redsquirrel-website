@@ -1,9 +1,5 @@
 <template>
-  <section
-    ref="containerRef"
-    class="container"
-    :class="mdAndUp ? 'desktop' : 'mobile'"
-  >
+  <section ref="containerRef">
     <div
       v-if="mdAndUp"
       class="overlay"
@@ -309,8 +305,9 @@ onMounted(() => {
 
 <style scoped lang="scss">
 @import "styles/variables";
+@import "vuetify/settings";
 
-.container {
+section {
   position: absolute;
   top: 0;
   left: 0;
@@ -340,42 +337,46 @@ onMounted(() => {
   color: $redsquirrel-cream-m1;
 }
 
-.desktop .overlay {
-  padding: 2vw 8vw;
-  font-size: 1vw;
+@media #{map-get($display-breakpoints, 'md-and-up')} {
+  .overlay {
+    padding: 2vw 8vw;
+    font-size: 1vw;
 
-  .button-container {
-    width: 18vw;
-    text-align: right;
+    .button-container {
+      width: 18vw;
+      text-align: right;
 
-    p {
-      text-transform: uppercase;
-      margin-bottom: 2vw;
+      p {
+        text-transform: uppercase;
+        margin-bottom: 2vw;
+      }
     }
   }
 }
 
-.mobile .overlay {
-  padding: 18.75vw 3.125vw 25vw;
-  font-size: 3vw;
-  line-height: 4vw;
+@media #{map-get($display-breakpoints, 'sm-and-down')} {
+  .overlay {
+    padding: 18.75vw 3.125vw 25vw;
+    font-size: 3vw;
+    line-height: 4vw;
 
-  .content {
-    display: flex;
-    flex-direction: column;
-  }
+    .content {
+      display: flex;
+      flex-direction: column;
+    }
 
-  .footer {
-    display: flex;
-    align-content: flex-end;
-    text-align: left;
+    .footer {
+      display: flex;
+      align-content: flex-end;
+      text-align: left;
 
-    font-size: 4.68vw;
-    line-height: 7vw;
+      font-size: 4.68vw;
+      line-height: 7vw;
 
-    p {
-      text-transform: uppercase;
-      margin-bottom: 6.25vw;
+      p {
+        text-transform: uppercase;
+        margin-bottom: 6.25vw;
+      }
     }
   }
 }

@@ -1,8 +1,5 @@
 <template>
-  <section
-    ref="containerRef"
-    :class="mdAndUp ? 'desktop' : 'mobile'"
-  >
+  <section ref="containerRef">
     <AnimatedText>
       <h2 class="gradient-1">
         <HeadingText
@@ -21,8 +18,9 @@
       <div :class="mdAndUp ? 'v-col d-flex justify-end' : 'v-row'">
         <div class="video-wrapper">
           <div
+            v-if="!isLoaded"
             class="video-overlay"
-            :class="isLoaded && 'loaded'"
+            @click="onPlay"
           >
             <v-btn
               v-if="!isLoaded"
@@ -33,10 +31,12 @@
             >
               <PlayIcon color="#FFFBF7" />
             </v-btn>
-            <div
-              v-if="isLoaded"
-              class="video-controls"
-            >
+          </div>
+          <div
+            v-else
+            class="video-controls"
+          >
+            <div class="panel">
               <v-btn
                 class="video-control play-pause-button"
                 :size="mdAndUp ? '3.47vw' : '12.5vw'"
@@ -69,8 +69,8 @@
             </div>
           </div>
           <div
+            id="team-video"
             ref="videoRef"
-            class="team-video"
           />
         </div>
       </div>
@@ -229,14 +229,10 @@ function onSeek() {
 
 <style scoped lang="scss">
 @import "styles/variables";
+@import "vuetify/settings";
 
-h3 {
-  text-transform: uppercase;
-  font-weight: 300;
-}
-
-.desktop {
-  $cards-size: 41vw;
+@media #{map-get($display-breakpoints, 'md-and-up')} {
+  $cards-size: 40vw;
   $cards-border-radius: 3vw;
 
   $play-icon-size: 1.5vw;
@@ -245,7 +241,9 @@ h3 {
   $nominee-tag-width: 13vw;
   $nominee-tag-border-radius: 1.388vw;
 
-  padding: $section-padding-desktop 0;
+  section {
+    padding: $section-padding-desktop;
+  }
 
   h2 {
     margin-bottom: 70px;
@@ -262,29 +260,32 @@ h3 {
 
     .video-overlay {
       border-radius: $cards-border-radius;
-      padding: 2.77vw;
 
       .play-button svg {
         width: $play-icon-size;
         height: $play-icon-size;
       }
+    }
 
-      .video-controls {
+    .video-controls {
+      padding: 2.77vw;
+
+      .panel {
         gap: 0.41vw;
+      }
 
-        .video-control {
-          border-radius: 0.69vw;
-        }
+      .video-control {
+        border-radius: 0.69vw;
+      }
 
-        .play-pause-button svg {
-          width: 1.66vw;
-          height: 1.66vw;
-        }
+      .play-pause-button svg {
+        width: 1.66vw;
+        height: 1.66vw;
+      }
 
-        .seek-slider {
-          padding: 0 1vw;
-          height: 3.47vw;
-        }
+      .seek-slider {
+        padding: 0 1vw;
+        height: 3.47vw;
       }
     }
   }
@@ -311,7 +312,7 @@ h3 {
   }
 }
 
-.mobile {
+@media #{map-get($display-breakpoints, 'sm-and-down')} {
   $cards-size: 93.75vw;
   $cards-border-radius: 6.25vw;
 
@@ -321,7 +322,9 @@ h3 {
   $nominee-tag-width: 32.12vw;
   $nominee-tag-border-radius: 3.125vw;
 
-  padding: $section-padding-mobile;
+  section {
+    padding: $section-padding-mobile;
+  }
 
   h2 {
     text-align: left;
@@ -339,29 +342,32 @@ h3 {
 
     .video-overlay {
       border-radius: $cards-border-radius;
-      padding: 3.125vw;
 
       .play-button svg {
         width: $play-icon-size;
         height: $play-icon-size;
       }
+    }
 
-      .video-controls {
+    .video-controls {
+      padding: 3.125vw;
+
+      .panel {
         gap: 1.56vw;
+      }
 
-        .video-control {
-          border-radius: 3.125vw;
-        }
+      .video-control {
+        border-radius: 3.125vw;
+      }
 
-        .play-pause-button svg {
-          width: 7.5vw;
-          height: 7.5vw;
-        }
+      .play-pause-button svg {
+        width: 7.5vw;
+        height: 7.5vw;
+      }
 
-        .seek-slider {
-          padding: 0 4.687vw;
-          height: 12.5vw;
-        }
+      .seek-slider {
+        padding: 0 4.687vw;
+        height: 12.5vw;
       }
     }
   }
@@ -392,23 +398,22 @@ h3 {
   }
 }
 
+h3 {
+  text-transform: uppercase;
+  font-weight: 200;
+}
+
 .video-wrapper {
   position: relative;
 
   .video-overlay {
     position: absolute;
-    display: flex;
-    align-items: end;
     width: 100%;
     height: 100%;
     background-color: #FFD6C3CC;
     z-index: 2;
     transition: opacity 0.3s ease;
-
-    &.loaded {
-      background-color: transparent;
-      cursor: pointer;
-    }
+    cursor: pointer;
 
     .play-button {
       position: absolute;
@@ -419,8 +424,18 @@ h3 {
       border: 1px solid #FFFFFF;
       box-shadow: 0 1.85px 3.15px 0 #67676704;
     }
+  }
 
-    .video-controls {
+  .video-controls {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+
+    display: flex;
+    align-items: end;
+
+    .panel {
       display: flex;
       flex: 1;
     }
@@ -463,7 +478,7 @@ h3 {
 
       .icon {
         margin-right: 0.7em;
-        vertical-align: middle;
+        vertical-align: top;
 
         svg {
           width: 1.44em;
@@ -510,18 +525,18 @@ h3 {
 @import "vuetify/settings";
 
 @media #{map-get($display-breakpoints, 'md-and-up')} {
-  .team-video iframe {
+  #team-video iframe {
     border-radius: 3vw;
   }
 }
 
 @media #{map-get($display-breakpoints, 'sm-and-down')} {
-  .team-video iframe {
+  #team-video iframe {
     border-radius: 6.25vw;
   }
 }
 
-.team-video iframe {
+#team-video iframe {
   border: 1px solid rgba(255, 255, 255, 0.7);
   box-shadow: 0 1.85px 3.15px 0 #CA5E3C04;
 }

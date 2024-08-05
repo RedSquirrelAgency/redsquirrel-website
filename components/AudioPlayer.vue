@@ -1,8 +1,9 @@
 <template>
   <GlassSheet
     :border="mdAndUp ? '1vw' : '0'"
-    :class="sheetClass"
+    :class="showFullTranscription ? 'full-screen' : ''"
     :fill="0.5"
+    class="player"
     plain
   >
     <v-toolbar
@@ -350,15 +351,6 @@ function updateSubtitles() {
   })
 }
 
-const sheetClass = computed(() => {
-  const classes = []
-  classes.push(mdAndUp.value ? 'desktop' : 'mobile')
-  if (showFullTranscription.value) {
-    classes.push('full-screen')
-  }
-  return classes.join(' ')
-})
-
 const volumeIcon = computed(() => {
   if (muted.value) {
     return 'mdi-volume-off'
@@ -401,8 +393,9 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 @import "styles/variables";
+@import "vuetify/settings";
 
-.desktop, .mobile {
+.player {
   position: fixed !important;
   margin-left: auto;
   margin-right: auto;
@@ -411,13 +404,15 @@ onUnmounted(() => {
   right: 0;
 }
 
-.desktop {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: auto !important;
-  width: 600px;
-  bottom: 20px;
+@media #{map-get($display-breakpoints, 'md-and-up')} {
+  .player {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: auto !important;
+    width: 600px;
+    bottom: 20px;
+  }
 
   .toolbar {
     padding: 0 12px;
@@ -451,18 +446,21 @@ onUnmounted(() => {
   }
 }
 
-.mobile {
-  display: flex;
-  flex-direction: column;
-  justify-content: end;
-  bottom: 0;
+@media #{map-get($display-breakpoints, 'sm-and-down')} {
+  .player {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    padding: 3.125vw;
+    bottom: 0;
 
-  width: 100%;
-  height: auto !important;
+    width: 100%;
+    height: auto !important;
 
-  &.full-screen {
-    height: 100% !important;
-    z-index: 20000;
+    &.full-screen {
+      height: 100% !important;
+      z-index: 20000;
+    }
   }
 
   .sound-name {

@@ -1,8 +1,5 @@
 <template>
-  <section
-    ref="containerRef"
-    :class="mdAndUp ? 'desktop' : 'mobile'"
-  >
+  <section ref="containerRef">
     <div class="offer text-center">
       <FacebookRating class="facebook-rating" />
       <h2>
@@ -182,7 +179,7 @@ onMounted(() => {
     scrollTrigger: {
       trigger: container,
       start: 'top center',
-      end: 'bottom bottom',
+      end: mdAndUp.value ? '+=120% bottom' : '+=140% bottom ',
       scrub: true
     },
     onStart: onContainerEnter,
@@ -215,7 +212,7 @@ onMounted(() => {
 
 const reviews: IReview[] = [
   {
-    id: 'oom_store',
+    id: 'oomstore',
     company: 'OOM Store',
     niche: 'Handmade Wrap Pants',
     position: { top: '10.4vw', left: '33.8vw' }
@@ -227,13 +224,13 @@ const reviews: IReview[] = [
     position: { top: '6.9vw', left: '52.8vw' }
   },
   {
-    id: 'natalie_herzel',
+    id: 'natalieherzel',
     company: 'Natalie Herzel',
     niche: 'Dental Clinic',
     position: { top: '8.3vw', left: '14.9vw' }
   },
   {
-    id: 'ambre_akadeemia',
+    id: 'ambreakadeemia',
     company: 'Ambre Akadeemia',
     niche: 'Language School',
     position: { top: '12.5vw', left: '71.8vw' }
@@ -245,13 +242,13 @@ const reviews: IReview[] = [
     position: { top: '28vw', left: '8.3vw' }
   },
   {
-    id: 'integrator_digital',
+    id: 'integratordigital',
     company: 'Integrator Digital',
     niche: 'CRM Systems for Business',
     position: { top: '32.2vw', left: '78.4vw' }
   },
   {
-    id: 'marketing_etico',
+    id: 'marketingetico',
     company: 'Marketing Etico',
     niche: 'Marketing Agency',
     position: { top: '47.8vw', left: '14.9vw' }
@@ -263,7 +260,7 @@ const reviews: IReview[] = [
     position: { top: '50.5vw', left: '71.8vw' }
   },
   {
-    id: 'nuga_best_eesti',
+    id: 'nugabesteesti',
     company: 'Nuga Best Eesti',
     niche: 'Medical Equipment',
     position: { top: '56.9vw', left: '33.8vw' }
@@ -279,20 +276,15 @@ const reviews: IReview[] = [
 
 <style scoped lang="scss">
 @import "styles/variables";
+@import "vuetify/settings";
 
-section {
-  color: $redsquirrel-cream;
-}
-
-.facebook-rating {
-  color: $redsquirrel-cream;
-}
-
-.desktop {
-  display: flex;
-  justify-content: center;
-  position: relative;
-  height: 78vw;
+@media #{map-get($display-breakpoints, 'md-and-up')} {
+  section {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    height: 78vw;
+  }
 
   .offer {
     position: absolute;
@@ -361,10 +353,12 @@ section {
   }
 }
 
-.mobile {
-  font-size: 3.75vw;
-  line-height: 5.625vw;
-  padding: $section-padding-mobile;
+@media #{map-get($display-breakpoints, 'sm-and-down')} {
+  section {
+    font-size: 3.75vw;
+    line-height: 5.625vw;
+    padding: $section-padding-mobile;
+  }
 
   h2 {
     text-align: center;
@@ -422,6 +416,14 @@ section {
       }
     }
   }
+}
+
+section {
+  color: $redsquirrel-cream;
+}
+
+.facebook-rating {
+  color: $redsquirrel-cream;
 }
 
 h2 {

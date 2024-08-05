@@ -1,9 +1,5 @@
 <template>
-  <section
-    ref="containerRef"
-    class="container"
-    :class="mdAndUp ? 'desktop' : 'mobile'"
-  >
+  <section ref="containerRef">
     <div class="header">
       <h2 class="gradient-1">
         <HeadingText
@@ -102,10 +98,11 @@ onMounted(() => {
 
 <style scoped lang="scss">
 @import "styles/variables";
+@import "vuetify/settings";
 
 $backdrop-color: #fc7733;
 
-.container {
+section {
   width: 100%;
   height: 100vh;
   background-color: $redsquirrel-peach;
@@ -170,14 +167,14 @@ $backdrop-color: #fc7733;
   }
 }
 
-.desktop {
+@media #{map-get($display-breakpoints, 'md-and-up')} {
   .quote {
     font-size: 6.5vh;
     line-height: 10.1vh;
   }
 }
 
-.mobile {
+@media #{map-get($display-breakpoints, 'sm-and-down')} {
   .quote {
     font-size: 12vw;
     line-height: 16vw;
