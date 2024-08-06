@@ -14,8 +14,8 @@
       />
       <AnchorTag hash="cases" />
       <CasesSection />
-      <!--      <AnchorTag hash="advantages" /> -->
-      <!--      <AdvantagesSection /> -->
+      <AnchorTag hash="advantages" />
+      <AdvantagesSection />
       <GoalSection />
       <TeamSection />
       <AnchorTag hash="stages" />
