@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-const { border, fill, plain} = defineProps({
+const { border, fill, blur, plain } = defineProps({
   border: {
     type: String,
     required: false,
@@ -25,6 +25,11 @@ const { border, fill, plain} = defineProps({
     required: false,
     default: 0.2
   },
+  blur: {
+    type: Number,
+    required: false,
+    default: 12
+  },
   plain: {
     type: Boolean,
     required: false,
@@ -34,9 +39,11 @@ const { border, fill, plain} = defineProps({
 
 const style = computed(() => {
   return {
-    border: plain ? 'none' : '1px solid rgba(255, 255, 255, 0.7)',
-    borderRadius: border,
-    background: `rgba(255, 255, 255, ${fill})`
+    'border': plain ? 'none' : '1px solid rgba(255, 255, 255, 0.7)',
+    'borderRadius': border,
+    'background': `rgba(255, 255, 255, ${fill})`,
+    'backdropFilter': `blur(${blur}px)`,
+    '-webkit-backdrop-filter': `blur(${blur}px)`
   }
 })
 </script>

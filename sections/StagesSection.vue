@@ -1,21 +1,20 @@
 <template>
-  <section
-    ref="containerRef"
-    class="stages-container"
-  >
+  <section ref="containerRef">
     <div class="header">
-      <h2 class="gradient-1 text-center">
+      <h2 class="gradient-1">
         <HeadingText
           :text="$t('Stages transparency')"
           :font-replacements="[[0, 2], [1, 4], [1, 10]]"
+          :line-breaks="mdAndUp ? [] : [0]"
+          :line-spacers="mdAndUp ? {} : { 0: '0.5em' }"
         />
       </h2>
-      <h4 class="text-center">
+      <p class="section-subtitle">
         <HeadingText
           :text="$t('Thanks to aligning important stages and safeguarding our decisions, we can manage to fully meet your expectations')"
-          :line-breaks="[8]"
+          :line-breaks="mdAndUp ? [8] : []"
         />
-      </h4>
+      </p>
     </div>
     <div class="stages">
       <GlassSheet
@@ -24,6 +23,8 @@
         :style="calculateStageSheetPosition(index)"
         class="stage-sheet"
         :fill="0.3"
+        :blur="mdAndUp ? 12 : 24"
+        :border="mdAndUp ? '3vw' : '6.25vw'"
       >
         <StageComponent
           :index="index"
@@ -36,16 +37,25 @@
 </template>
 
 <script setup lang="ts">
+import { useDisplay } from 'vuetify'
+
 const { $gsap } = useNuxtApp()
 const { t } = useI18n()
+const { mdAndUp } = useDisplay()
 
 const containerRef = ref()
 
 function calculateStageSheetPosition(index: number) {
-  const left = index % 2 === 0 && '8.33vw'
-  const right = index % 2 !== 0 && '8.33vw'
-  const top = `${34.02 * index}vw`
-  return { left, right, top }
+  if (mdAndUp.value) {
+    const left = index % 2 === 0 && '8.33vw'
+    const right = index % 2 !== 0 && '8.33vw'
+    const top = `${34.02 * index}vw`
+    return { left, right, top }
+  }
+  else {
+    const top = `${10 * index + 10}vw`
+    return { top }
+  }
 }
 
 function translateSubtitle(subtitle: string | string[]) {
@@ -57,20 +67,44 @@ function translateSubtitle(subtitle: string | string[]) {
 
 onMounted(() => {
   const container = containerRef.value
-  $gsap.timeline({
-    scrollTrigger: {
-      trigger: container,
-      start: 'top top',
-      end: `+=${stages.length * 500}px`,
-      scrub: true,
-      pin: true
-    },
-    defaults: { ease: 'none' }
-  })
-    .fromTo(container.querySelector('.stages'),
-      { yPercent: 0 },
-      { yPercent: -420 }
-    )
+  if (mdAndUp.value) {
+    $gsap.timeline({
+      scrollTrigger: {
+        trigger: container,
+        start: 'top top',
+        end: `+=${stages.length * 500}px`,
+        scrub: true,
+        pin: true
+      },
+      defaults: { ease: 'none' }
+    })
+      .fromTo(container.querySelector('.stages'),
+        { yPercent: 0 },
+        { yPercent: -420 }
+      )
+  }
+  else {
+    const stageSheets = container.querySelectorAll('.stage-sheet')
+    const stageSheetsArray = $gsap.utils.toArray(stageSheets) as HTMLElement[]
+
+    const tl = $gsap.timeline({
+      scrollTrigger: {
+        trigger: container.querySelector('.stages'),
+        start: 'top top',
+        end: `+=${stages.length * 1000}px`,
+        scrub: true,
+        pin: true
+      },
+      defaults: { ease: 'none' }
+    })
+
+    for (const stageSheet of stageSheetsArray) {
+      tl.fromTo(stageSheet,
+        { yPercent: 200 },
+        { yPercent: 0 }
+      )
+    }
+  }
 })
 
 const stages = [
@@ -126,24 +160,54 @@ const stages = [
 
 <style scoped lang="scss">
 @import "styles/variables";
+@import "vuetify/settings";
 
-.header{
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+@media #{map-get($display-breakpoints, 'md-and-up')} {
+  .header {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .stages {
+    height: 100%;
+  }
+
+  .stage-sheet {
+    width: 33.12vw;
+    height: 34.02vw;
+  }
+}
+
+@media #{map-get($display-breakpoints, 'sm-and-down')} {
+  section {
+    padding: $section-padding-x-mobile $section-padding-y-mobile 0;
+  }
+
+  h2 {
+    margin-bottom: 3.125vw;
+  }
+
+  .stages {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  .stage-sheet {
+    width: 93.75vw;
+    height: 93.75vw;
+  }
 }
 
 .stages {
   position: relative;
   width: 100%;
-  height: 100%;
 
   .stage-sheet {
     position: absolute;
-    width: 33.12vw;
-    height: 34.02vw;
   }
 }
 </style>

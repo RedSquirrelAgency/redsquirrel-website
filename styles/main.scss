@@ -12,6 +12,12 @@
 		line-height: 6.3vw;
 		text-align: center;
 	}
+
+	.section-subtitle {
+		font-size: 1.3vw;
+		line-height: 2vw;
+		text-align: center;
+	}
 }
 
 @media #{map-get($display-breakpoints, 'sm-and-down')} {
@@ -23,6 +29,12 @@
 	h2 {
 		font-size: 12.3vw;
 		line-height: 14vw;
+		text-align: left;
+	}
+
+	.section-subtitle {
+		font-size: 4.687vw;
+		line-height: 7vw;
 		text-align: left;
 	}
 }
@@ -44,6 +56,12 @@ h2 {
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 	}
+}
+
+.section-subtitle {
+	color: $redsquirrel-cream;
+	font-weight: 400;
+	text-transform: uppercase;
 }
 
 .style-script {
