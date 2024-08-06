@@ -74,7 +74,7 @@ onMounted(() => {
   const container = containerRef.value
 
   if (mdAndUp.value) {
-    const tl = $gsap.timeline({
+    $gsap.timeline({
       scrollTrigger: {
         trigger: container,
         start: 'top top',
@@ -83,11 +83,30 @@ onMounted(() => {
         pin: true
       },
       defaults: { ease: 'none' }
-    })
-    tl.fromTo(container.querySelector('.advantages'),
+    }).fromTo(container.querySelector('.advantages'),
       { rotate: 10, yPercent: 150, rotationY: 40, opacity: 0 },
       { rotate: 0, yPercent: 0, rotationY: 0, opacity: 1 }
     )
+  }
+  else {
+    const items = container.querySelectorAll('.item')
+    const itemsArray = $gsap.utils.toArray(items) as HTMLElement[]
+
+    for (const item of itemsArray) {
+      $gsap.timeline({
+        scrollTrigger: {
+          trigger: item,
+          start: 'top center',
+          end: '+=200px',
+          scrub: true
+        }
+      }).fromTo(item,
+        { opacity: 0.2 },
+        { opacity: 1 }
+      ).to(item,
+        { opacity: 0.2 }
+      )
+    }
   }
 })
 
@@ -196,6 +215,7 @@ function formatIndex(index: number) {
       .title p {
         font-size: 7.5vw;
         line-height: 10.25vw;
+        margin-bottom: 3.125vw;
 
         .index {
           font-size: 3.125vw;

@@ -28,7 +28,7 @@
       />
       <CallToActionSection />
       <!--      <BlogSection /> -->
-      <!--      <FooterSection /> -->
+      <FooterSection />
     </BackgroundContainer>
   </v-app>
 </template>

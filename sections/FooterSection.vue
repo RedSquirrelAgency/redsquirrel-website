@@ -1,5 +1,5 @@
 <template>
-  <div class="container d-flex justify-center">
+  <div class="footer d-flex justify-center">
     <GlassSheet
       class="sheet"
       :fill="0.3"
@@ -62,9 +62,18 @@ const navigationLinks = [
 
 <style scoped lang="scss">
 @import "styles/variables";
+@import "vuetify/settings";
 
-.container {
-  padding: 5vw 8vw 0.8vw;
+@media #{map-get($display-breakpoints, 'md-and-up')} {
+  .footer {
+    padding: 5vw 8vw 0.8vw;
+  }
+}
+
+@media #{map-get($display-breakpoints, 'sm-and-down')} {
+  .footer {
+    padding: 1.56vw;
+  }
 }
 
 .sheet {

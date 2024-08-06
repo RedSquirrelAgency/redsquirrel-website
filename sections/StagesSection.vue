@@ -53,7 +53,7 @@ function calculateStageSheetPosition(index: number) {
     return { left, right, top }
   }
   else {
-    const top = `${10 * index + 10}vw`
+    const top = `${10 * index}vw`
     return { top }
   }
 }
@@ -89,7 +89,7 @@ onMounted(() => {
 
     const tl = $gsap.timeline({
       scrollTrigger: {
-        trigger: container.querySelector('.stages'),
+        trigger: container,
         start: 'top top',
         end: `+=${stages.length * 1000}px`,
         scrub: true,
@@ -183,6 +183,7 @@ const stages = [
 
 @media #{map-get($display-breakpoints, 'sm-and-down')} {
   section {
+    height: 100vh;
     padding: $section-padding-x-mobile $section-padding-y-mobile 0;
   }
 
@@ -191,9 +192,10 @@ const stages = [
   }
 
   .stages {
+    position: relative;
+    top: -45%;
     display: flex;
     justify-content: center;
-    height: 100vh;
   }
 
   .stage-sheet {
