@@ -47,12 +47,3 @@ const style = computed(() => {
   }
 })
 </script>
-
-<style scoped lang="scss">
-@import "styles/variables";
-
-.glass {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-</style>

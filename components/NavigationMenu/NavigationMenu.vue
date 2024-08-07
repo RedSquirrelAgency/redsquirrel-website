@@ -1,15 +1,12 @@
 <template>
-  <div
-    class="container"
-    :class="mdAndUp ? 'desktop' : 'mobile'"
-  >
+  <div class="menu">
     <v-col
       v-if="mdAndUp"
-      class="d-flex flex-column h-100"
+      class="menu-items"
     >
       <v-row>
-        <v-col class="my-auto text-left social-links">
-          <SocialLinks />
+        <v-col class="my-auto text-left">
+          <SocialLinks class="social-links" />
         </v-col>
         <v-col
           cols="6"
@@ -54,9 +51,7 @@
         />
       </v-row>
       <v-row class="d-flex flex-column">
-        <div class="d-flex justify-space-between social-links">
-          <SocialLinks />
-        </div>
+        <SocialLinks class="social-links" />
         <CopyRight class="copyright" />
       </v-row>
     </v-col>
@@ -85,34 +80,20 @@ const navigationLinks = [
 
 <style scoped lang="scss">
 @import "styles/variables";
+@import "vuetify/settings";
 
-.container {
-  position: fixed;
-  z-index: 10;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+@media #{map-get($display-breakpoints, 'md-and-up')} {
+  .menu {
+    font-size: 1vw;
+    line-height: 1.5vw;
+    padding: 10vw 8vw 0.69vw;
+  }
 
-  display: flex;
-  align-items: center;
-
-  background-color: #FFFBF7E5;
-  color: $redsquirrel-chocolate-m1;
-  text-transform: uppercase;
-
-  backdrop-filter: blur(7px);
-  -webkit-backdrop-filter: blur(7px);
-}
-
-.copyright {
-  color: $redsquirrel-cream-p1;
-}
-
-.desktop {
-  font-size: 1vw;
-  line-height: 1.5vw;
-  padding: 10vw 8vw 0.69vw;
+  .menu-items {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
 
   .navigation-link {
     font-size: 4vw;
@@ -135,20 +116,21 @@ const navigationLinks = [
   }
 
   .copyright {
+    display: flex;
     gap: 1.38vw;
   }
 }
 
-.mobile {
-  display: flex;
-  align-items: end;
-
-  font-size: 3.75vw;
-  line-height: 5.625vw;
-  padding: 1.56vw 1.56vw 2.81vw;
+@media #{map-get($display-breakpoints, 'sm-and-down')} {
+  .menu {
+    font-size: 3.75vw;
+    line-height: 5.625vw;
+    padding: 1.56vw 1.56vw 2.81vw;
+  }
 
   .menu-items {
     display: flex;
+    align-self: end;
     flex-direction: column;
     text-align: center;
     gap: 8vh;
@@ -160,11 +142,39 @@ const navigationLinks = [
   }
 
   .social-links {
+    display: flex;
+    justify-content: space-between;
     margin-bottom: 3.125vw;
   }
 
   .copyright {
+    display: flex;
+    align-self: center;
     gap: 6.25vw;
   }
+}
+
+.menu {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+
+  background-color: #FFFBF7E5;
+  color: $redsquirrel-chocolate-m1;
+  text-transform: uppercase;
+  font-weight: 300;
+
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+}
+
+.copyright {
+  color: $redsquirrel-cream-p1;
 }
 </style>

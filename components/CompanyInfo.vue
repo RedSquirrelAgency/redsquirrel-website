@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      Munich, 81927 Germany
+      {{ $t('Munich, 81927 Germany') }}
     </div>
     <div>
       144/202/21135

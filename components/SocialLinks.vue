@@ -1,20 +1,24 @@
 <template>
-  <NuxtLink
-    v-for="(link, index) in socialLinks"
-    :key="index"
-    :to="link.to"
-    :class="linkClass"
-    target="_blank"
-    class="text-link"
-  >
-    {{ link.title }}
-  </NuxtLink>
+  <div>
+    <NuxtLink
+      v-for="(link, index) in socialLinks"
+      :key="index"
+      :to="link.to"
+      :class="highlight ? 'highlight' : ''"
+      target="_blank"
+      class="text-link"
+    >
+      {{ link.title }}
+    </NuxtLink>
+  </div>
 </template>
 
 <script setup lang="ts">
 const { linkClass } = defineProps({
-  linkClass: {
-    type: String
+  highlight: {
+    type: Boolean,
+    required: false,
+    default: false
   }
 })
 

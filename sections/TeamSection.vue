@@ -200,15 +200,15 @@ onMounted(async () => {
     }
   }).slideTop(videoWrapper, { duration: 0.8 })
 
-  const aboutTeamAppearDelay = mdAndUp ? 0.5 : 0
+  const aboutTeamAppearDelay = mdAndUp.value ? 0.5 : 0
   $gsap.timeline({
     scrollTrigger: {
       trigger: aboutTeam,
-      start: 'top center',
+      start: mdAndUp.value ? 'top center' : 'top bottom',
       toggleActions: 'play none resume reverse'
     }
   }).slideTop(aboutTeam, { duration: 0.8, delay: aboutTeamAppearDelay })
-    .slideBottom(nomineeTag, { duration: 0.5 })
+    .dissolve(nomineeTag, { duration: 0.3 })
 })
 
 function onPlay() {

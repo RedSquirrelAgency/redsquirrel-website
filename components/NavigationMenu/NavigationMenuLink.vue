@@ -1,7 +1,7 @@
 <template>
   <a
     :href="link.to"
-    class="text-link"
+    class="text-link navigation-menu-link"
     @click.stop="emit('click')"
     @mouseover="hovered = true"
     @mouseleave="hovered = false"
@@ -37,8 +37,9 @@ defineProps({
 <style scoped lang="scss">
 @import "styles/variables";
 
-.text-link {
+.navigation-menu-link {
   color: $redsquirrel-peach-p1;
+  font-weight: 300;
 
   &:hover {
     color: $redsquirrel-chocolate;

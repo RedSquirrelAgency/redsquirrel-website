@@ -48,7 +48,7 @@
             </div>
           </NuxtLink>
           <div
-            v-else
+            v-else-if="mdAndUp"
             class="spacer"
           />
         </v-col>
@@ -66,7 +66,7 @@ const containerRef = ref()
 
 onMounted(() => {
   const container = containerRef.value
-  const cardsXRange = mdAndUp.value ? [50, -51] : [50, -87.4]
+  const cardsXRange = mdAndUp.value ? [50, -51] : [50, -83.5]
   $gsap.timeline({
     scrollTrigger: {
       trigger: container,

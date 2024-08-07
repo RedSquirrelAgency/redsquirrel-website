@@ -1,20 +1,24 @@
 <template>
   <section ref="containerRef">
     <div class="header">
-      <h2 class="gradient-1">
-        <HeadingText
-          :text="$t('Stages transparency')"
-          :font-replacements="[[0, 2], [1, 4], [1, 10]]"
-          :line-breaks="mdAndUp ? [] : [0]"
-          :line-spacers="mdAndUp ? {} : { 0: '0.5em' }"
-        />
-      </h2>
-      <p class="section-subtitle">
-        <HeadingText
-          :text="$t('Thanks to aligning important stages and safeguarding our decisions, we can manage to fully meet your expectations')"
-          :line-breaks="mdAndUp ? [8] : []"
-        />
-      </p>
+      <AnimatedText>
+        <h2 class="gradient-1">
+          <HeadingText
+            :text="$t('Stages transparency')"
+            :font-replacements="[[0, 2], [1, 4], [1, 10]]"
+            :line-breaks="mdAndUp ? [] : [0]"
+            :line-spacers="mdAndUp ? {} : { 0: '0.5em' }"
+          />
+        </h2>
+      </AnimatedText>
+      <AnimatedText>
+        <p class="section-subtitle">
+          <HeadingText
+            :text="$t('Thanks to aligning important stages and safeguarding our decisions, we can manage to fully meet your expectations')"
+            :line-breaks="mdAndUp ? [8] : []"
+          />
+        </p>
+      </AnimatedText>
     </div>
     <div class="stages">
       <GlassSheet

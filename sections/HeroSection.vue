@@ -123,7 +123,6 @@ import { degToRad } from 'three/src/math/MathUtils'
 import { useDisplay } from 'vuetify'
 import type { PropType } from 'vue'
 import Timeline = gsap.core.Timeline
-import TexturedText from '~/components/TexturedText.vue'
 
 const props = defineProps({
   tl: {

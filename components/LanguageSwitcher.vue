@@ -1,5 +1,5 @@
 <template>
-  <div :class="mdAndUp ? 'desktop' : 'mobile'">
+  <div>
     <v-btn
       v-for="localeCode in localeCodes"
       :key="localeCode"
@@ -15,9 +15,6 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
-
-const { mdAndUp } = useDisplay()
 const { localeCodes, setLocale, locale } = useI18n()
 
 const { inactiveColor, activeColor } = defineProps({
@@ -32,17 +29,22 @@ const { inactiveColor, activeColor } = defineProps({
 
 <style scoped lang="scss">
 @import "styles/variables";
+@import "vuetify/settings";
 
-.desktop .button {
-  font-size: 1vw;
-  line-height: 1.45vw;
-  min-width: 2vw;
+@media #{map-get($display-breakpoints, 'md-and-up')} {
+  .button {
+    font-size: 1vw;
+    line-height: 1.45vw;
+    min-width: 2vw;
+  }
 }
 
-.mobile .button {
-  font-size: 4.375vw;
-  line-height: 6.562vw;
-  min-width: 10vw;
+@media #{map-get($display-breakpoints, 'sm-and-down')} {
+  .button {
+    font-size: 4.375vw;
+    line-height: 6.562vw;
+    min-width: 10vw;
+  }
 }
 
 .button {

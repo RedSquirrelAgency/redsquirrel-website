@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex justify-center">
+  <div>
     <div>© 2024 RedSquirrel</div>
     <div>By RedSquirrel</div>
   </div>

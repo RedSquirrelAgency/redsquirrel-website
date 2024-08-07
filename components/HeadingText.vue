@@ -69,6 +69,3 @@ const transformedText = computed(() => {
   return lines
 })
 </script>
-
-<style scoped lang="scss">
-</style>
