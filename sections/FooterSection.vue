@@ -54,7 +54,6 @@ const navigationLinks = [
   { title: 'Home', to: '/' },
   { title: 'Cases', to: '#cases' },
   { title: 'Reviews', to: '#reviews' },
-  { title: 'FAQ', to: '/' },
   { title: 'Contacts', to: '/' },
   { title: 'Impressum', to: '/' },
   { title: 'Privacy Policy', to: '/' }
