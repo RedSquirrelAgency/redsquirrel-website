@@ -42,7 +42,12 @@
             {{ $t('During the 30-min meeting, Alena and Kate will ask you questions to make an accurate assessment of the work and tell a little more about our team') }}
           </p>
         </div>
-        <ConsultationButton :block="!mdAndUp" />
+        <CTAButton
+          :href="CONSULTATION_URL"
+          :block="!mdAndUp"
+        >
+          {{ $t("Book a consultation") }}
+        </CTAButton>
       </div>
       <v-row
         v-if="!mdAndUp"
@@ -56,6 +61,7 @@
 
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
+import { CONSULTATION_URL } from '~/constants/urls'
 
 const containerRef = ref()
 const { $gsap } = useNuxtApp()

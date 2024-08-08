@@ -14,7 +14,9 @@
 </template>
 
 <script setup lang="ts">
-const { linkClass } = defineProps({
+import { TELEGRAM_URL, WHATSAPP_URL, FACEBOOK_URL, INSTAGRAM_URL, EMAIL_URL } from '~/constants/urls'
+
+defineProps({
   highlight: {
     type: Boolean,
     required: false,
@@ -23,10 +25,10 @@ const { linkClass } = defineProps({
 })
 
 const socialLinks = [
-  { title: 'Telegram', to: 'https://t.me/alenadomozhirova' },
-  { title: 'Whatsapp', to: 'https://wa.me/+4915209064235' },
-  { title: 'Facebook', to: 'https://www.facebook.com/domozhirovaalena' },
-  { title: 'Instagram', to: 'https://www.instagram.com/redsquirrel_a/' },
-  { title: 'Email', to: 'mailto:info@redsquirrel.agency' }
+  { title: 'Telegram', to: TELEGRAM_URL },
+  { title: 'Whatsapp', to: WHATSAPP_URL },
+  { title: 'Facebook', to: FACEBOOK_URL },
+  { title: 'Instagram', to: INSTAGRAM_URL },
+  { title: 'Email', to: EMAIL_URL }
 ]
 </script>

@@ -17,7 +17,12 @@
                 :line-breaks="[5]"
               />
             </p>
-            <ConsultationButton block />
+            <CTAButton
+              :href="CONSULTATION_URL"
+              block
+            >
+              {{ $t("Book a consultation") }}
+            </CTAButton>
           </div>
         </v-col>
       </v-row>
@@ -37,7 +42,12 @@
               :line-breaks="[5]"
             />
           </p>
-          <ConsultationButton block />
+          <CTAButton
+            :href="CONSULTATION_URL"
+            block
+          >
+            {{ $t("Book a consultation") }}
+          </CTAButton>
         </v-row>
       </v-col>
     </div>
@@ -123,6 +133,7 @@ import { degToRad } from 'three/src/math/MathUtils'
 import { useDisplay } from 'vuetify'
 import type { PropType } from 'vue'
 import Timeline = gsap.core.Timeline
+import { CONSULTATION_URL } from '~/constants/urls'
 
 const props = defineProps({
   tl: {

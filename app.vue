@@ -27,7 +27,7 @@
         :offset="900"
       />
       <CallToActionSection />
-      <!--      <BlogSection /> -->
+      <BlogSection />
       <FooterSection />
     </BackgroundContainer>
   </v-app>

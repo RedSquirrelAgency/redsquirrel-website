@@ -1,7 +1,6 @@
 {
 	"Please wait until the website is ready.": "Please wait until the website is ready.",
 
-	"Munich, Germany": "Munich, Germany",
 	"A website with a creative design and complex SEO promotion": "A website with a creative design and complex SEO promotion",
 	"Book a consultation": "Book a consultation",
 	"5/5 rating on Facebook": "5/5 rating on Facebook",
@@ -18,20 +17,6 @@
 	"Work like a Swiss watch": "Work like a Swiss watch",
 
 	"Immersing deeply into each project and finding successful solutions": "Immersing deeply into each project and finding successful solutions",
-	"Dental Clinic": "Dental Clinic",
-	"Car Wash & Detailing Center": "Car Wash & Detailing Center",
-	"Bureau of Architecture": "Bureau of Architecture",
-	"Metaphysics Expert": "Metaphysics Expert",
-	"Estate Agency": "Estate Agency",
-	"Tattoo Online Store": "Tattoo Online Store",
-	"Language School": "Language School",
-	"Jewelry Brand": "Jewelry Brand",
-	"Medical Equipment": "Medical Equipment",
-	"Landscape Agency": "Landscape Agency",
-	"Handmade Wrap Pants": "Handmade Wrap Pants",
-	"CRM Systems for Business": "CRM Systems for Business",
-	"Marketing Agency": "Marketing Agency",
-	"Charity Organization": "Charity Organization",
 
 	"We value your time and keep our promises": "We value your time and keep our promises",
 	"Expertise": "Expertise",
@@ -106,6 +91,21 @@
 	"Alena, cofounder of RedSquirrel": "Alena, cofounder of RedSquirrel",
 	"Follow": "Follow",
 
+	"Dental Clinic": "Dental Clinic",
+	"Car Wash & Detailing Center": "Car Wash & Detailing Center",
+	"Bureau of Architecture": "Bureau of Architecture",
+	"Metaphysics Expert": "Metaphysics Expert",
+	"Estate Agency": "Estate Agency",
+	"Tattoo Online Store": "Tattoo Online Store",
+	"Language School": "Language School",
+	"Jewelry Brand": "Jewelry Brand",
+	"Medical Equipment": "Medical Equipment",
+	"Landscape Agency": "Landscape Agency",
+	"Handmade Wrap Pants": "Handmade Wrap Pants",
+	"CRM Systems for Business": "CRM Systems for Business",
+	"Marketing Agency": "Marketing Agency",
+	"Charity Organization": "Charity Organization",
+
 	"Home": "Home",
 	"Cases": "Cases",
 	"Reviews": "Reviews",
@@ -116,5 +116,8 @@
 	"Portfolio": "Portfolio",
 	"Approach": "Approach",
 	"Stages": "Stages",
-	"Get in touch": "Get in touch"
+	"Get in touch": "Get in touch",
+
+	"Munich, Germany": "Munich, Germany",
+	"Munich, 81927 Germany": "Munich, 81927 Germany"
 }

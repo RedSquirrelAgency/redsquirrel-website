@@ -1,21 +1,28 @@
 <template>
   <v-btn
-    href="https://cal.com/redsquirrel/30min"
+    :href="href"
     v-bind="buttonProps"
+    class="button"
     append-icon="mdi-arrow-right"
   >
-    {{ $t("Book a consultation") }}
+    <slot />
   </v-btn>
 </template>
 
 <script setup lang="ts">
 import type { PropType } from 'vue'
+import { useDisplay } from 'vuetify'
 
-type ConsultationButtonVariant = 'default' | 'plain'
+type CTAButtonVariant = 'default' | 'plain'
 
-const { variant, block, textColor } = defineProps({
+const { mdAndUp } = useDisplay()
+const { variant, block, textColor, openInNewTab } = defineProps({
+  href: {
+    type: String,
+    required: true
+  },
   variant: {
-    type: String as PropType<ConsultationButtonVariant>,
+    type: String as PropType<CTAButtonVariant>,
     default: 'default'
   },
   block: {
@@ -24,20 +31,21 @@ const { variant, block, textColor } = defineProps({
   },
   textColor: {
     type: String
+  },
+  openInNewTab: {
+    type: Boolean,
+    default: false
   }
 })
 
 const buttonProps = computed(() => {
   let props: any = {}
 
-  const classes = []
-  classes.push('button')
-  classes.push(variant)
-
   switch (variant) {
     case 'default':
       props = {
-        variant: 'flat'
+        variant: 'flat',
+        height: mdAndUp.value ? '2.36vw' : '10.625vw'
       }
       break
     case 'plain':
@@ -49,10 +57,14 @@ const buttonProps = computed(() => {
   }
 
   props.style = { color: textColor, opacity: 1 }
-  props.class = classes.join(' ')
+  props.class = variant
   props.block = block
   props.baseColor = textColor
   props.color = textColor
+
+  if (openInNewTab) {
+    props.target = '_blank'
+  }
 
   return props
 })

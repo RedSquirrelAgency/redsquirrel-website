@@ -54,7 +54,7 @@ const navigationLinks = [
   { title: 'Home', to: '/' },
   { title: 'Cases', to: '#cases' },
   { title: 'Reviews', to: '#reviews' },
-  { title: 'Contacts', to: '/' },
+  { title: 'Contacts', to: '#contact' },
   { title: 'Impressum', to: '/' },
   { title: 'Privacy Policy', to: '/' }
 ]
@@ -102,7 +102,7 @@ const navigationLinks = [
 
 @media #{map-get($display-breakpoints, 'sm-and-down')} {
   section {
-    padding: 1.56vw;
+    padding: 1.56vw 1.56vw 6vw;
   }
 
   .sheet {

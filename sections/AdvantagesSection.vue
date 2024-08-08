@@ -37,6 +37,12 @@
                 {{ formatIndex(index) }}
               </span>
             </p>
+            <div
+              v-if="!mdAndUp"
+              class="index"
+            >
+              {{ formatIndex(index) }}
+            </div>
           </div>
           <div
             class="subtitle"
@@ -167,6 +173,7 @@ function formatIndex(index: number) {
         font-size: 2.5em;
 
         .index {
+          position: relative;
           font-size: 0.3em;
           top: -2.5em;
           left: 0.7em;
@@ -212,15 +219,19 @@ function formatIndex(index: number) {
     .item {
       margin-top: 6.25vw;
 
-      .title p {
-        font-size: 7.5vw;
-        line-height: 10.25vw;
-        margin-bottom: 3.125vw;
+      .title {
+        display: flex;
+        justify-content: space-between;
+
+        p {
+          font-size: 7.5vw;
+          line-height: 10.25vw;
+          margin-bottom: 3.125vw;
+        }
 
         .index {
           font-size: 3.125vw;
           line-height: 4.68vw;
-          right: 0;
         }
       }
 
@@ -238,11 +249,10 @@ function formatIndex(index: number) {
     .title p {
       font-weight: 300;
       text-transform: uppercase;
+    }
 
-      .index {
-        position: relative;
-        font-style: italic;
-      }
+    .index {
+      font-style: italic;
     }
   }
 }

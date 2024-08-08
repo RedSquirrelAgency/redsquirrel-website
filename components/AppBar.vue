@@ -41,10 +41,13 @@
       />
 
       <v-spacer />
-      <ConsultationButton
+      <CTAButton
         variant="plain"
+        :href="CONSULTATION_URL"
         :text-color="colorScheme.link"
-      />
+      >
+        {{ $t("Book a consultation") }}
+      </CTAButton>
     </v-row>
   </v-app-bar>
   <Transition>
@@ -58,6 +61,7 @@
 <script setup lang="ts">
 import type { PropType } from 'vue'
 import { useDisplay } from 'vuetify'
+import { CONSULTATION_URL } from '~/constants/urls'
 
 const menuOpen = ref<boolean>(false)
 
