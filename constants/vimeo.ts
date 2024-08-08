@@ -1,0 +1,2 @@
+export const TEAM_VIDEO_VIMEO_ID = 8837024
+export const BLOG_VIDEO_VIMEO_ID = 988400344

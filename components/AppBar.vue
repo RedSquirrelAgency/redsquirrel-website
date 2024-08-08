@@ -116,7 +116,7 @@ const appBarProps = computed(() => {
   return {
     ...specificProps,
     class: classes.join(' '),
-    height: mdAndUp.value ? 57 : 44
+    height: 0.07 * window.innerHeight
   }
 })
 
@@ -136,7 +136,7 @@ const colorScheme = computed(() => {
         location: '#D49A87',
         activeLanguage: '#FFD2BB', // $redsquirrel-cream-p1
         inactiveLanguage: '#D49A87',
-        link: '#FFD2BB', // $redsquirrel-cream-p1
+        link: '#FFD2BB' // $redsquirrel-cream-p1
       }
     case 'floating':
       return {
@@ -165,7 +165,7 @@ const colorScheme = computed(() => {
   &.floating-bar {
     top: 0.5vw !important;
     width: 41.6vw !important;
-    border-radius: 1vw;
+    border-radius: 1.38vw;
 
     .bar-row {
       padding: 0 2vw;
@@ -194,7 +194,6 @@ const colorScheme = computed(() => {
   }
 
   &.floating-bar {
-    top: 0.5vw !important;
     width: 96.8vw !important;
     border-radius: 3.125vw;
 

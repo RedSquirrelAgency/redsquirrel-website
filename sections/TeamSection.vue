@@ -157,6 +157,7 @@
 // @ts-expect-error
 import Player from '@vimeo/player'
 import { useDisplay } from 'vuetify'
+import { TEAM_VIDEO_VIMEO_ID } from '~/constants/vimeo'
 
 const { $gsap } = useNuxtApp()
 const containerRef = ref()
@@ -173,16 +174,22 @@ const technologiesExpanded = ref(false)
 const { mdAndUp } = useDisplay()
 
 onMounted(async () => {
-  player = new Player(videoRef.value, { id: 8837024, responsive: true, controls: false })
+  player = new Player(videoRef.value, {
+    id: TEAM_VIDEO_VIMEO_ID,
+    responsive: true,
+    controls: false
+  })
   videoDuration = await player.getDuration()
 
   player.on('play', () => {
     isPlaying.value = true
     isLoaded.value = true
   })
+
   player.on('pause', () => {
     isPlaying.value = false
   })
+
   player.on('timeupdate', (e: any) => {
     seek.value = e.percent
   })
@@ -204,7 +211,7 @@ onMounted(async () => {
   $gsap.timeline({
     scrollTrigger: {
       trigger: aboutTeam,
-      start: mdAndUp.value ? 'top center' : 'top bottom',
+      start: mdAndUp.value ? 'top center' : 'top center',
       toggleActions: 'play none resume reverse'
     }
   }).slideTop(aboutTeam, { duration: 0.8, delay: aboutTeamAppearDelay })

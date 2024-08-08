@@ -6,6 +6,7 @@
           :text="$t('Follow the Instagram blog to get closer and get life hacks for your website!')"
           :font-replacements="[[0, 4], [2, 2], [3, 0], [4, 0], [6, 0], [6, 0], [9, 3], [10, 3], [12, 1], [13, 3]]"
           :line-breaks="mdAndUp ? [3, 9] : [1, 2, 5, 7, 10, 12]"
+          :line-spacers="mdAndUp ? {} : { 0: '0.5em', 3: '0.8em', 5: '1.3em', 6: '2.2em' }"
         />
       </h2>
     </AnimatedText>
@@ -41,6 +42,7 @@
 import Player from '@vimeo/player'
 import { useDisplay } from 'vuetify'
 import { INSTAGRAM_URL } from '~/constants/urls'
+import { BLOG_VIDEO_VIMEO_ID } from '~/constants/vimeo'
 
 const { $gsap } = useNuxtApp()
 const { mdAndUp } = useDisplay()
@@ -50,7 +52,14 @@ const videoRef = ref()
 let player: Player
 
 onMounted(() => {
-  player = new Player(videoRef.value, { id: 988400344, responsive: true, controls: false, autoplay: true, loop: true, muted: true })
+  player = new Player(videoRef.value, {
+    id: BLOG_VIDEO_VIMEO_ID,
+    responsive: true,
+    controls: false,
+    autoplay: true,
+    loop: true,
+    muted: true
+  })
 
   const container = containerRef.value
   const sectionSubtitle = container.querySelector('.section-subtitle')

@@ -81,10 +81,6 @@ const buttonProps = computed(() => {
     letter-spacing: 0;
     border-radius: 0.7vw;
   }
-
-  .plain {
-    font-size: 1vw;
-  }
 }
 
 @media #{map-get($display-breakpoints, 'sm-and-down')} {
@@ -92,11 +88,6 @@ const buttonProps = computed(() => {
     font-size: 3.75vw;
     line-height: 5.625vw;
     border-radius: 3.125vw;
-  }
-
-  .plain {
-    font-size: 3.75vw;
-    line-height: 5.625vw;
   }
 }
 

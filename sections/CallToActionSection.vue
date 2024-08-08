@@ -80,13 +80,14 @@ onMounted(() => {
         pin: true,
         trigger: container,
         start: 'bottom bottom',
-        end: '400px',
-        toggleActions: 'play none resume reverse'
+        end: '+=30%',
+        toggleActions: 'play none resume reverse',
+        markers: true
       }
     })
       .dissolve(
         container,
-        { duration: 0.8 }
+        { duration: 0.4 }
       )
       .slideTop(
         header,
@@ -111,7 +112,7 @@ onMounted(() => {
     $gsap.timeline({
       scrollTrigger: {
         trigger: container,
-        start: 'top top',
+        start: '-=10% top',
         end: '+=100px',
         toggleActions: 'play none resume reverse'
       }
