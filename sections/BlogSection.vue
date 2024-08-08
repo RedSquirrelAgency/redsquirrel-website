@@ -76,7 +76,14 @@ onMounted(() => {
     onStart: () => player.setCurrentTime(0),
     defaults: { ease: 'none' }
   }).dissolve(overlay, { delay: 0.5 })
-    .slideTop(blogPresentation, { duration: 0.8 }, '>-0.3')
+    .fromTo(blogPresentation,
+      {
+        yPercent: 100
+      },
+      {
+        duration: 0.8,
+        yPercent: 0
+      }, '>-0.3')
 })
 </script>
 
