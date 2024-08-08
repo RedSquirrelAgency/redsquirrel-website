@@ -1,5 +1,5 @@
 <template>
-  <section class="d-flex justify-center">
+  <section>
     <GlassSheet
       class="sheet"
       :fill="0.3"

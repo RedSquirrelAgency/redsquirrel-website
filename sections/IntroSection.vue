@@ -1,8 +1,5 @@
 <template>
-  <div
-    ref="containerRef"
-    class="container"
-  >
+  <section ref="containerRef">
     <component
       :is="slide"
       v-for="(slide, index) in Object.values(slides)"
@@ -11,7 +8,7 @@
       :tl="timelines[index]"
       :loaded="loaded"
     />
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -71,7 +68,7 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-.container {
+section {
   height: 100vh;
   width: 100%;
 }

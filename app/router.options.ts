@@ -1,14 +1,6 @@
 import type { RouterConfig } from '@nuxt/schema'
-import App from '~/app.vue'
 
 export default <RouterConfig>{
-  routes: _routes => [
-    {
-      name: 'Home',
-      path: '/',
-      component: App
-    }
-  ],
   scrollBehavior(to, from, savedPosition) {
     if (to.hash) {
       const elem = document.querySelector(to.hash)

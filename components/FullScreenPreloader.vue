@@ -39,7 +39,7 @@ function formatPercentage(value: number) {
 
 .container {
   position: fixed;
-  z-index: 10;
+  z-index: 20000;
   top: 0;
   left: 0;
 

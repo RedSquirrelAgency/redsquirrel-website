@@ -81,8 +81,7 @@ onMounted(() => {
         trigger: container,
         start: 'bottom bottom',
         end: '+=30%',
-        toggleActions: 'play none resume reverse',
-        markers: true
+        toggleActions: 'play none resume reverse'
       }
     })
       .dissolve(

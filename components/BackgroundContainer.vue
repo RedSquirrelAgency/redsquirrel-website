@@ -1,34 +1,36 @@
 <template>
-  <div class="container">
-    <div
-      v-if="mdAndUp"
-      class="background"
-    >
-      <img
-        class="star"
-        src="/figures/star.svg"
+  <v-app>
+    <div class="container">
+      <div
+        v-if="mdAndUp"
+        class="background"
       >
-      <img
-        class="vector"
-        src="/figures/vector.svg"
-      >
-      <img
-        class="ellipse"
-        src="/figures/ellipse.svg"
-      >
-      <img
-        class="rectangle"
-        src="/figures/rectangle.svg"
-      >
+        <img
+          class="star"
+          src="/figures/star.svg"
+        >
+        <img
+          class="vector"
+          src="/figures/vector.svg"
+        >
+        <img
+          class="ellipse"
+          src="/figures/ellipse.svg"
+        >
+        <img
+          class="rectangle"
+          src="/figures/rectangle.svg"
+        >
+      </div>
+      <div
+        v-else
+        class="background"
+      />
+      <div class="content">
+        <slot />
+      </div>
     </div>
-    <div
-      v-else
-      class="background"
-    />
-    <div class="content">
-      <slot />
-    </div>
-  </div>
+  </v-app>
 </template>
 
 <script setup lang="ts">
