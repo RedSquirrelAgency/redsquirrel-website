@@ -118,7 +118,7 @@
               :position="squirrelPosition"
               :rotation="squirrelRotation"
               :scale="squirrelScale"
-              :sparkle="false"
+              :sparkle="true"
               :transmission="1"
               :roughness="0"
               :thickness="1"
