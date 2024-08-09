@@ -1,18 +1,18 @@
 <template>
   <Text3D
-    font="Poppins_Medium_Regular.json"
-    :text="props.text"
+    :font="font"
+    :text="text"
     :size="relativeSize"
-    :position="props.position"
+    :position="position"
     :height="0"
     :bevel-enabled="false"
-    need-updates
+    :need-updates="needUpdates"
     center
   >
     <TresMeshBasicMaterial
       :map="mapTexture"
       :transparent="opacity < 1"
-      :opacity="props.opacity"
+      :opacity="opacity"
     />
   </Text3D>
 </template>
@@ -21,8 +21,12 @@
 import { SRGBColorSpace, TextureLoader } from 'three'
 import type { Texture } from 'three/src/textures/Texture'
 
-const props = defineProps({
+const { map, size } = defineProps({
   text: {
+    type: String,
+    required: true
+  },
+  font: {
     type: String,
     required: true
   },
@@ -31,40 +35,38 @@ const props = defineProps({
     default: 1
   },
   position: {
-    type: Array as PropType<Array<number>>,
-    required: false
+    type: Array as PropType<Array<number>>
   },
   opacity: {
     type: Number,
-    required: false,
     default: 1
   },
   map: {
     type: String,
-    required: false
+  },
+  needUpdates: {
+    type: Boolean,
+    default: false
   }
 })
 
 const mapTexture = ref<Texture | null>(null)
-const opacity = ref(props.opacity)
-const position = ref(props.position)
-const { width, height } = useWindowSize()
-
-const relativeSize = computed(() => {
-  return ((width.value) / (height.value)) * props.size
-})
+const relativeSize = ref()
 
 onBeforeMount(() => {
-  if (props.map) {
+  if (map) {
     const loader = new TextureLoader()
-    const texture = loader.load(props.map)
+    const texture = loader.load(map)
     texture.colorSpace = SRGBColorSpace
     mapTexture.value = texture
   }
 })
 
-watchEffect(() => {
-  opacity.value = props.opacity
-  position.value = props.position
-})
+const { width, height } = useWindowSize()
+watch([width, height], updateRelativeSize)
+onMounted(updateRelativeSize)
+
+function updateRelativeSize() {
+  relativeSize.value = ((width.value) / (height.value)) * size
+}
 </script>

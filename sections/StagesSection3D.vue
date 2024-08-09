@@ -116,7 +116,7 @@ const stages = [
     title: 'Testing and Delivery',
     subtitle: [
       'Checking website functionality on different devices and browsers',
-      'Basic SEO optimization',
+      'Basic SEO',
       'Preparation of website management instructions',
       'Handover of all source files',
       '30-day free support'

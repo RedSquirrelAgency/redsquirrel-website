@@ -11,6 +11,8 @@ import { EquirectangularReflectionMapping, MeshPhysicalMaterial } from 'three'
 import { RGBELoader } from 'three-stdlib'
 import type { PropType } from 'vue'
 
+const SQUIRREL_MESH_PATH = 'squirrel.obj'
+
 const props = defineProps({
   scale: {
     default: 1,
@@ -43,41 +45,55 @@ const props = defineProps({
   sparkle: {
     default: true,
     type: Boolean
+  },
+  reflectionMap: {
+    type: String
   }
 })
 
 const { position, rotation } = toRefs(props)
+const { width, height } = useWindowSize()
 
-const hdrEquirect = new RGBELoader().load('evening_road_01_puresky_2k.hdr', () => {
-  hdrEquirect.mapping = EquirectangularReflectionMapping
-})
 const material = new MeshPhysicalMaterial({
-  envMap: hdrEquirect,
   color: 'white',
-  envMapIntensity: 0.4
+  envMapIntensity: 0.4,
+  roughness: props.roughness,
+  transmission: props.transmission,
+  thickness: props.thickness,
+  ior: props.ior
 })
 
-const { children } = await useLoader(OBJLoader, 'Squirrel.obj')
+if (props.reflectionMap) {
+  const hdrEquirect = new RGBELoader().load(props.reflectionMap, () => {
+    hdrEquirect.mapping = EquirectangularReflectionMapping
+  })
+  material.envMap = hdrEquirect
+}
+
+const { children } = await useLoader(OBJLoader, SQUIRREL_MESH_PATH)
 const mesh = children[0]
 mesh.material = material
 
-const { width, height } = useWindowSize()
-
-watch([width, height], () => updateMeshPositionAndScale())
-watchEffect(() => {
-  updateMeshPositionAndScale()
-  mesh.rotation.set(...rotation.value)
-  material.roughness = props.roughness
-  material.transmission = props.transmission
-  material.thickness = props.thickness
-  material.ior = props.ior
+onMounted(() => {
+  updateScale()
+  updatePosition()
+  updateRotation()
 })
-onMounted(() => updateMeshPositionAndScale())
 
-function updateMeshPositionAndScale() {
+watch([width, height], updateScale)
+watch(() => props.position, updatePosition)
+watch(() => props.rotation, updateRotation)
+
+function updatePosition() {
+  mesh.position.set(...position.value)
+}
+
+function updateRotation() {
+  mesh.rotation.set(...rotation.value)
+}
+
+function updateScale() {
   const scale = (width.value / height.value) * props.scale
-  const adjustedPosition = [...position.value]
   mesh.scale.set(scale, scale, scale)
-  mesh.position.set(...adjustedPosition)
 }
 </script>

@@ -125,9 +125,10 @@ const stages = [
     ]
   },
   {
-    title: 'Prototyping',
+    title: 'Copywriting & Prototyping',
     subtitle: [
-      'Writing understandable texts',
+      'Writing understandable texts considering the company\'s competitive advantages and positioning',
+      'Development of the structure based on the results of the analytics stage',
       'Prototype development + approval'
     ]
   },
@@ -153,7 +154,7 @@ const stages = [
     title: 'Testing and Delivery',
     subtitle: [
       'Checking website functionality on different devices and browsers',
-      'Basic SEO optimization',
+      'Basic SEO',
       'Preparation of website management instructions',
       'Handover of all source files',
       '30-day free support'
@@ -164,10 +165,10 @@ const stages = [
     subtitle: [
       'Collection and clustering of the semantic core',
       'Optimization of meta-data and landing pages',
-      'Creation and optimization of new pages of the site',
-      'Building a strategy for increasing backlinks and its implementation',
-      'A regular comprehensive audit of the website and competitors, identifying growth opportunities',
-      'Monitoring of rankings and analysis of traffic and behavioral factors'
+      'Creation and optimization of new pages',
+      'Building a strategy for increasing backlinks',
+      'A regular comprehensive audit of indicators',
+      'Monitoring of rankings and analysis of traffic'
     ]
   }
 ]

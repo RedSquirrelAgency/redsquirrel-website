@@ -98,7 +98,7 @@
                 <span class="icon">
                   <MapPinIcon color="#85553D" />
                 </span>
-                <span>{{ $t('Based in Munich') }}</span>
+                <span>{{ $t('Based in Munich, Germany') }}</span>
               </div>
               <i18n-t
                 tag="p"

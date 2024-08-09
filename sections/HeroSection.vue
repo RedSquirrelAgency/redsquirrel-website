@@ -13,7 +13,7 @@
           <div class="button-container">
             <p>
               <HeadingText
-                :text="$t('A website with a creative design and complex SEO promotion')"
+                :text="$t('A website with a creative design and comprehensive SEO promotion')"
                 :line-breaks="[5]"
               />
             </p>
@@ -38,7 +38,7 @@
         <v-row class="footer">
           <p>
             <HeadingText
-              :text="$t('A website with a creative design and complex SEO promotion')"
+              :text="$t('A website with a creative design and comprehensive SEO promotion')"
               :line-breaks="[5]"
             />
           </p>
@@ -53,83 +53,88 @@
     </div>
 
     <div class="canvas">
-      <TresCanvas v-bind="gl">
-        <TextureBackground>
-          <TresPerspectiveCamera
-            :fov="70"
-            :look-at="[0, 0, 0]"
-            :position="cameraPosition"
+      <TresCanvas render-mode="on-demand">
+        <TextureBackground texture="background_gradient.png" />
+        <TresPerspectiveCamera
+          :fov="70"
+          :look-at="[0, 0, 0]"
+          :position="cameraPosition"
+        />
+        <TresDirectionalLight
+          color="white"
+          :position="new Vector3(0, 10, 40)"
+          :intensity="3"
+        />
+        <FloatingStarsParticle
+          alpha-map="star_alpha_map.png"
+          color="#FFD2BB"
+          :radius="50"
+          :depth="40"
+          :count="500"
+          :size="1"
+        />
+        <Suspense v-if="$vuetify.display.mdAndUp">
+          <TexturedText
+            text="REDSQUIRREL"
+            map="text_gradient.png"
+            font="redsquirrel_glyphs.json"
+            :size="0.8"
+            :position="textPosition"
+            :opacity="textOpacity"
+            :need-updates="textNeedUpdates"
           />
-          <TresDirectionalLight
-            color="white"
-            :position="new Vector3(0, 10, 40)"
-            :intensity="3"
-          />
-          <FloatingStarsParticle
-            alpha-map="star_alpha_map.png"
-            color="#FFD2BB"
-            :radius="50"
-            :depth="40"
-            :count="500"
-            :size="1"
-          />
-          <Suspense v-if="$vuetify.display.mdAndUp">
+        </Suspense>
+        <TresGroup
+          v-else
+          :position="textPosition"
+        >
+          <Suspense>
             <TexturedText
+              text="RED"
               map="text_gradient.png"
-              text="REDSQUIRREL"
-              :size="0.8"
-              :position="textPosition"
+              font="redsquirrel_glyphs.json"
+              :size="2.9"
               :opacity="textOpacity"
+              :need-updates="textNeedUpdates"
+              :position="[0, 0.65, 0]"
             />
           </Suspense>
-          <TresGroup
-            v-else
-            :position="textPosition"
-          >
-            <TresMesh>
-              <Suspense>
-                <TexturedText
-                  map="text_gradient.png"
-                  text="RED"
-                  :size="2.9"
-                  :opacity="textOpacity"
-                  :position="[0, 0.65, 0]"
-                />
-              </Suspense>
-              <Suspense>
-                <TexturedText
-                  map="text_gradient.png"
-                  text="SQUIRREL"
-                  :size="1.2"
-                  :opacity="textOpacity"
-                  :position="[0, -0.65, 0]"
-                />
-              </Suspense>
-            </TresMesh>
-          </TresGroup>
-          <Levioso>
-            <Suspense>
-              <SquirrelComponent
-                :position="squirrelPosition"
-                :rotation="squirrelRotation"
-                :scale="squirrelScale"
-                :sparkle="true"
-                :transmission="1"
-                :roughness="0"
-                :thickness="1"
-                :ior="5"
-              />
-            </Suspense>
-          </Levioso>
-        </TextureBackground>
+          <Suspense>
+            <TexturedText
+              text="SQUIRREL"
+              map="text_gradient.png"
+              font="redsquirrel_glyphs.json"
+              :size="1.2"
+              :opacity="textOpacity"
+              :need-updates="textNeedUpdates"
+              :position="[0, -0.65, 0]"
+            />
+          </Suspense>
+        </TresGroup>
+        <Levioso>
+          <Suspense>
+            <SquirrelComponent
+              reflection-map="evening_road_01_puresky_2k.hdr"
+              :position="squirrelPosition"
+              :rotation="squirrelRotation"
+              :scale="squirrelScale"
+              :sparkle="false"
+              :transmission="1"
+              :roughness="0"
+              :thickness="1"
+              :ior="5"
+            />
+          </Suspense>
+        </Levioso>
       </TresCanvas>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { BasicShadowMap, NoToneMapping, SRGBColorSpace, Vector3 } from 'three'
+import { Vector3 } from 'three'
 import { degToRad } from 'three/src/math/MathUtils'
+import Stats from 'three/examples/jsm/libs/stats.module'
 import { useDisplay } from 'vuetify'
 import type { PropType } from 'vue'
 import Timeline = gsap.core.Timeline
@@ -150,15 +155,6 @@ const props = defineProps({
   }
 })
 
-const gl = {
-  shadows: true,
-  alpha: false,
-  antialias: true,
-  shadowMapType: BasicShadowMap,
-  outputColorSpace: SRGBColorSpace,
-  toneMapping: NoToneMapping
-}
-
 const { $gsap } = useNuxtApp()
 const { mdAndUp } = useDisplay()
 
@@ -172,6 +168,7 @@ const getTextPositionVectorDefault = () => mdAndUp.value
   : new Vector3(0, 0.5, -2)
 const textPositionVector = getTextPositionVectorDefault()
 const textPosition = shallowRef(textPositionVector.toArray())
+const textNeedUpdates = shallowRef(false)
 
 const getSquirrelPositionVectorDefault = () => mdAndUp.value
   ? new Vector3(0, -1, 0)
@@ -196,9 +193,17 @@ function onMouseUpdate(e: MouseEvent) {
   squirrelRotation.value = squirrelRotationVector.toArray()
 }
 
+const stats = Stats()
+document.body.appendChild(stats.dom)
+
+const { onLoop } = useRenderLoop()
+onLoop(() => stats.update())
+
 onMounted(() => {
-  document.addEventListener('mouseenter', onMouseUpdate)
-  document.addEventListener('mousemove', onMouseUpdate)
+  if (mdAndUp.value) {
+    document.addEventListener('mouseenter', onMouseUpdate)
+    document.addEventListener('mousemove', onMouseUpdate)
+  }
 
   if (!containerRef.value) {
     return
@@ -234,11 +239,7 @@ onMounted(() => {
         .to(container, { opacity: 1, duration: 0.5 })
     }
     else {
-      const tl = $gsap.timeline({
-        onComplete: () => {
-          container.style.display = 'none'
-        }
-      })
+      const tl = $gsap.timeline()
 
       // Squirrel fly away animation
       tl.to(cameraPositionVector, {
@@ -279,6 +280,8 @@ onMounted(() => {
         {
           z: textPositionVector.z,
           duration: 1,
+          onStart: () => { textNeedUpdates.value = true },
+          onComplete: () => { textNeedUpdates.value = false },
           onUpdate: () => { textPosition.value = textPositionVector.toArray() }
         },
         '<='

@@ -121,7 +121,7 @@ const hoveredItem = ref(-1)
 const advantages = [
   {
     title: 'Expertise',
-    subtitle: 'Our {highlight} of experience in design and development help us create effective strategies and optimal solutions',
+    subtitle: 'Our {highlight} of experience in design, development, and SEO help us create effective strategies and optimal solutions',
     highlight: '12 years'
   },
   {
